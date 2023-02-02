@@ -1,0 +1,12 @@
+.idea/
+venv
+.env
+src/view/client.py
+src/model/server
+src/model/for_data_base/creator_data_base.py
+creator_data_base.py
+src/model/__pycache__/
+convert/
+model/file.doc
+model/file.pdf
+/model/for_data_base/*

@@ -3,11 +3,15 @@ from PyQt5.QtWidgets import QHeaderView
 
 from src.view.widget import my_tree_widget
 
+import src.controller.controller_main_window as controller
+
 
 class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.depth_lvl = None
+        self.list_hierarchy = []
         self.setObjectName("MainWindow")
         self.resize(800, 600)
         self.setupUi()
@@ -38,16 +42,36 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.treeWidget.setObjectName("treeWidget")
 
         item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_0.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_2 = QtWidgets.QTreeWidgetItem(item_1)
+        item_2.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         # item_2 = QtWidgets.QTreeWidgetItem(item_1)
         item_2 = QtWidgets.QTreeWidgetItem(item_1)
+        item_2.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_2 = QtWidgets.QTreeWidgetItem(item_1)
+        item_2.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
+        item_1.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
 
         self.gridLayout.addWidget(self.treeWidget, 0, 0, 1, 1)
         self.frame_3 = QtWidgets.QFrame(self.frame)
@@ -93,44 +117,55 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         # size.setWidth(400)
         # self.treeWidget.headerItem().setSizeHint(1, size)
         self.treeWidget.headerItem().setText(1, _translate("MainWindow", "Название отдела"))
+        # self.treeWidget.headerItem().setText(2, _translate("MainWindow", "идентификатор"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
         self.treeWidget.topLevelItem(0).setText(1, _translate("MainWindow",
                                                               "Заместитель генерального деректора по безопасности"))
-        self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "zgdb"))
+        self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "0"))
+        self.treeWidget.topLevelItem(0).setText(2, _translate("MainWindow", "1"))
 
         self.treeWidget.topLevelItem(0).child(0).setText(0, _translate("MainWindow", "235"))
         self.treeWidget.topLevelItem(0).child(0).setText(1, _translate("MainWindow", "Управление безопасности"))
+        self.treeWidget.topLevelItem(0).child(0).setText(2, _translate("MainWindow", "2"))
 
         self.treeWidget.topLevelItem(0).child(0).child(0).setText(0, _translate("MainWindow", "400"))
         self.treeWidget.topLevelItem(0).child(0).child(0).setText(1, _translate("MainWindow",
                                                                                 "Отдел экономической безопасности"))
+        self.treeWidget.topLevelItem(0).child(0).child(0).setText(2, _translate("MainWindow", "3"))
 
         self.treeWidget.topLevelItem(0).child(0).child(1).setText(0, _translate("MainWindow", "401"))
         self.treeWidget.topLevelItem(0).child(0).child(1).setText(1, _translate("MainWindow",
                                                                                 "Отдел информационной безопасности"))
+        self.treeWidget.topLevelItem(0).child(0).child(1).setText(2, _translate("MainWindow", "4"))
 
         self.treeWidget.topLevelItem(0).child(0).child(2).setText(0, _translate("MainWindow", "402"))
         self.treeWidget.topLevelItem(0).child(0).child(2).setText(1, _translate("MainWindow",
                                                                                 "Отдел по обеспечению физической и информационной техническиой защиты ЯО"))
+        self.treeWidget.topLevelItem(0).child(0).child(2).setText(2, _translate("MainWindow", "5"))
 
         # self.treeWidget.topLevelItem(0).child(0).child(1).setText(0, _translate("MainWindow", "403"))
         self.treeWidget.topLevelItem(0).child(1).setText(0, _translate("MainWindow", "260"))
         self.treeWidget.topLevelItem(0).child(1).setText(1, _translate("MainWindow",
                                                                        "Бюро противодействия иностранным техническим разведкам"))
+        self.treeWidget.topLevelItem(0).child(1).setText(2, _translate("MainWindow", "6"))
 
         self.treeWidget.topLevelItem(0).child(2).setText(0, _translate("MainWindow", "291"))
         self.treeWidget.topLevelItem(0).child(2).setText(1, _translate("MainWindow", "Бюро специальной связи"))
+        self.treeWidget.topLevelItem(0).child(2).setText(2, _translate("MainWindow", "7"))
 
         self.treeWidget.topLevelItem(0).child(3).setText(0, _translate("MainWindow", "236"))
         self.treeWidget.topLevelItem(0).child(3).setText(1, _translate("MainWindow", "Режимно-секретный отдел"))
+        self.treeWidget.topLevelItem(0).child(3).setText(2, _translate("MainWindow", "8"))
 
         self.treeWidget.topLevelItem(0).child(4).setText(0, _translate("MainWindow", "117"))
         self.treeWidget.topLevelItem(0).child(4).setText(1,
                                                          _translate("MainWindow", "Отдел мобилизационной подготовки"))
+        self.treeWidget.topLevelItem(0).child(4).setText(2, _translate("MainWindow", "9"))
 
         self.treeWidget.topLevelItem(0).child(5).setText(0, _translate("MainWindow", "237"))
         self.treeWidget.topLevelItem(0).child(5).setText(1, _translate("MainWindow", "Отдел ГО и ЧС"))
+        self.treeWidget.topLevelItem(0).child(5).setText(2, _translate("MainWindow", "10"))
 
         self.treeWidget.setSortingEnabled(__sortingEnabled)
 
@@ -139,21 +174,25 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.button_delte_row.setText(_translate("MainWindow", "удалить элемент"))
 
     def button_save_press(self):
-        print(self.treeWidget.topLevelItemCount())
+        # print(self.treeWidget.topLevelItemCount())
         for i in range(self.treeWidget.topLevelItemCount()):  # количество элементов верхнего уровня
             item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
-            print(type(item))
+            # print(type(item))
             # print(item.text(0))  # текст элемента в указанном столбце
+            # self.depth_lvl = 0
             self.tree(item)
+            print(self.list_hierarchy)
+            controller.save_hierarchy(self.list_hierarchy)
+            print("save success")
 
     def button_add_row_press(self):
         print("push button")
-        item_for_adedd = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        item_for_adedd.setFlags(
+        item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_for_added.setFlags(
             QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        item_for_adedd.setText(0, "номер")
-        item_for_adedd.setText(1, "новое название")
-        self.treeWidget.addTopLevelItem(item_for_adedd)
+        item_for_added.setText(0, "номер")
+        item_for_added.setText(1, "новое название")
+        self.treeWidget.addTopLevelItem(item_for_added)
 
     def button_delete_row_press(self):
         # index = self.treeWidget.currentIndex().row()
@@ -168,12 +207,23 @@ class TreeHierarchy(QtWidgets.QMainWindow):
     def tree(self, item):
         text = item.text(0)
         print(f"{text}", end="")
+        record_for_db = [0, 0]
         if item.parent() is not None:
+            record_for_db[1] = item.parent().text(2)
             print(f"\tparent: {item.parent().text(0)}")
+        else:
+            record_for_db[1] = None
+            print(f"\tparent: null")
+        record_for_db[0] = item.text(2)
+        self.list_hierarchy.append(record_for_db)
+        print("id = ", item.text(2))
+        print(record_for_db)
         print()
         count_children = item.childCount()
         for index_child in range(count_children):
+            # self.depth_lvl += 1
             self.tree(item.child(index_child))
+        # self.depth_lvl -= 1
 
 
 if __name__ == "__main__":

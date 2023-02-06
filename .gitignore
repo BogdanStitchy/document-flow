@@ -6,6 +6,8 @@ src/model/server
 src/model/for_data_base/creator_data_base.py
 creator_data_base.py
 src/model/__pycache__/
+src/controller/__pycache__/
+src/view/__pycache__/
 convert/
 src/model/file.doc
 src/model/file.pdf

@@ -1,7 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from src.view import tree_wb
-
 from src.view.widget import widget_admins
 from src.view.widget import widget_documents
 from src.view.widget import widget_users

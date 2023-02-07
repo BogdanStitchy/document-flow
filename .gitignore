@@ -8,6 +8,7 @@ creator_data_base.py
 src/model/__pycache__/
 src/controller/__pycache__/
 src/view/__pycache__/
+src/view/widget/__pycache__/
 convert/
 src/model/file.doc
 src/model/file.pdf

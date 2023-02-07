@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from src.view.widget import widget_admins
 from src.view.widget import widget_documents
 from src.view.widget import widget_users
+from src.view.widget import widget_hierarchy_departments
 
 
 class Ui_MainWindow(object):
@@ -374,7 +375,7 @@ class Ui_MainWindow(object):
         self.widget_settings_admins = widget_users.WidgetAdmins()
         self.stackedWidget.addWidget(self.widget_settings_admins)
 
-        self.treeWidget = tree_wb.TreeHierarchy()
+        self.treeWidget = widget_hierarchy_departments.TreeHierarchy()
         self.stackedWidget.addWidget(self.treeWidget)
 
         self.verticalLayout_2.addWidget(self.stackedWidget)

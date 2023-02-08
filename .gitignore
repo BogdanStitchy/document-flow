@@ -9,6 +9,7 @@ src/model/__pycache__/
 src/controller/__pycache__/
 src/view/__pycache__/
 src/view/widget/__pycache__/
+src/view/dialog_window/__pycache__/
 convert/
 src/model/file.doc
 src/model/file.pdf

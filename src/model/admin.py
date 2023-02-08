@@ -54,9 +54,10 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
 
     print(len(str(password)))
     print(len(str(salt)))
-    db_helper.add_record_user_data(last_name, name, patronymic, division_number, current_id, datetime.now())
-    id = db_helper.get_id_user(last_name, name, patronymic)
-    db_helper.create_departments(password.hex(), salt.hex(), id, login, 0)
+    # this get id for division_number
+    id = db_helper.add_record_user_data(last_name, name, patronymic, 2, current_id, datetime.now())
+    # id = db_helper.get_id_user(last_name, name, patronymic)
+    db_helper.add_record_user_login(password.hex(), salt.hex(), id, login, 0)
     print(f"\nUser {last_name} {name} added in data base\n")
 
 
@@ -68,7 +69,7 @@ def check_password(login: str, password: str):
     request = db_helper.get_password(login)
     # print("request =", request)
     global current_id, current_access_level
-    print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
+    # print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
     if request is None:
         print("User not found in data base.")
     else:
@@ -91,7 +92,7 @@ def check_password(login: str, password: str):
 
         # print("passwordik = ", passwordik.hex().encode('utf-8'))
         if password.hex().encode('utf-8') == bytes(received_password):
-            # print(f"wwwwwwwUser {login} login")
+            print(f"This user with username '{login}' login successful")
             # global current_id, current_access_level
             current_id, current_access_level = id_and_access_level
             return True
@@ -122,10 +123,15 @@ if __name__ == '__main__':
     # add_user("super admin", "super admin", "superAdminovich", "235", "superAdmin", "password")
     start_time = time.time()
     # create_super_admin()
-    # add_user("test_name", "test", "test", "333", "login", "privetik")
-    # add_user("user1", "user1", "user1", "333", "login1", "user1")
+
+    # add_user("test_name", "test", "test", "235", "login", "privetik")
+    # add_user("user1", "user1", "user1", "401", "login1", "user1")
+
     # test_binary()
+
+
     check_password("login", "privetik")
     check_password("login1", "user1")
+    check_password("vanya", "vavak")
     print(time.time() - start_time, "seconds")
     # delete_user("test_name", "test", "test")

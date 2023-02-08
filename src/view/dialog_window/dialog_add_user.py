@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QButtonGroup
 from src.model.for_data_base.db_helper_for_hierarchy_derartments import get_all_departments
+from src.controller import controller_main_window as controller
 
 
 class DialogWidgetAddUser(QDialog):
@@ -165,6 +166,14 @@ class DialogWidgetAddUser(QDialog):
         self.pushButton_save.setText(_translate("Dialog_add_user", "Сохранить"))
         self.pushButton_cancel.setText(_translate("Dialog_add_user", "Отмена"))
 
+    def add_radiobutton(self):
+        departments = get_all_departments()
+        print(departments)
+        for department in departments:
+            radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
+            self.verticalLayout_2.addWidget(radio_button)
+            self.group.addButton(radio_button)
+
     def push_save(self):
         last_name = self.lineEdit_last_name.text()
         name = self.lineEdit_name.text()
@@ -177,20 +186,15 @@ class DialogWidgetAddUser(QDialog):
         # print(login)
         # print(password)
         try:
-            print(self.group.checkedButton().text())  # получаем выбранную радиобаттон
+            department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
+            department = department[:3]  # получаем только номер отдела, без его названия
+            print(department)
+            controller.add_user_in_database(last_name, name, patronymic, department, login, password)
         except Exception as ex:
             print("[ERROR] Не выбран ни один радиобаттон\t", ex)
 
     def push_cancel(self):
         self.close()
-
-    def add_radiobutton(self):
-        departments = get_all_departments()
-        print(departments)
-        for department in departments:
-            radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
-            self.verticalLayout_2.addWidget(radio_button)
-            self.group.addButton(radio_button)
 
 
 if __name__ == "__main__":

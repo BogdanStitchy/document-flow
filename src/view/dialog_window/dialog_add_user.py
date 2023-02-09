@@ -189,7 +189,7 @@ class DialogWidgetAddUser(QDialog):
             department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
             department = department[:3]  # получаем только номер отдела, без его названия
             print(department)
-            controller.add_user_in_database(last_name, name, patronymic, department, login, password)
+            controller.add_user_in_database(last_name, name, patronymic, department, login, password, 2)
         except Exception as ex:
             print("[ERROR] Не выбран ни один радиобаттон\t", ex)
 

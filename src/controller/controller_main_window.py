@@ -13,6 +13,7 @@ def get_hierarchy():
     return hierarchy.get_data_about_departments()
 
 
-def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str):
+def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
+                         access_lvl: int):
     # log
-    admin.add_user(last_name, name, patronymic, division_number, login, password)
+    admin.add_user(last_name, name, patronymic, division_number, login, password, access_lvl)

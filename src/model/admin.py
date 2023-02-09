@@ -5,9 +5,10 @@ from datetime import datetime
 
 from src.model.config import config
 from src.model.for_data_base import db_helper
+from src.model.for_data_base import db_helper_for_hierarchy_derartments
 
-current_id = 0
-current_access_level = -1
+current_user_session_id = 0
+current_access_level = 0  # 0 - super admin; 1 - admin; 2 - just user
 
 
 # original_salt = b'\xb1LS\xd6)\x9eZ\xbfT\xbd\x94\xa9\x86\xf9\x8bm'
@@ -22,7 +23,8 @@ def test_binary():
     print(bytes(hsalt, 'utf-8') == bytes(salt.hex(), 'utf-8'))
 
 
-def add_user(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str):
+def add_user(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
+             access_lvl: int):
     salt = os.urandom(16)
     original_salt = salt  # (salt.hex(), 'utf-8')
     print("original salt = ", salt)
@@ -52,12 +54,14 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
         dklen=64
     )
 
-    print(len(str(password)))
-    print(len(str(salt)))
+    # print(len(str(password)))
+    # print(len(str(salt)))
     # this get id for division_number
-    id = db_helper.add_record_user_data(last_name, name, patronymic, 2, current_id, datetime.now())
+    id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+    id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, current_user_session_id,
+                                             datetime.now())
     # id = db_helper.get_id_user(last_name, name, patronymic)
-    db_helper.add_record_user_login(password.hex(), salt.hex(), id, login, 0)
+    db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, access_lvl)
     print(f"\nUser {last_name} {name} added in data base\n")
 
 
@@ -68,7 +72,7 @@ def delete_user(last_name: str, name: str, patronymic: str):
 def check_password(login: str, password: str):
     request = db_helper.get_password(login)
     # print("request =", request)
-    global current_id, current_access_level
+    global current_user_session_id, current_access_level
     # print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
     if request is None:
         print("User not found in data base.")
@@ -94,7 +98,7 @@ def check_password(login: str, password: str):
         if password.hex().encode('utf-8') == bytes(received_password):
             print(f"This user with username '{login}' login successful")
             # global current_id, current_access_level
-            current_id, current_access_level = id_and_access_level
+            current_user_session_id, current_access_level = id_and_access_level
             return True
         else:
             print(f"User {login} no login")
@@ -128,7 +132,6 @@ if __name__ == '__main__':
     # add_user("user1", "user1", "user1", "401", "login1", "user1")
 
     # test_binary()
-
 
     check_password("login", "privetik")
     check_password("login1", "user1")

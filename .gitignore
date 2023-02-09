@@ -10,6 +10,7 @@ src/controller/__pycache__/
 src/view/__pycache__/
 src/view/widget/__pycache__/
 src/view/dialog_window/__pycache__/
+src/view/old/
 convert/
 src/model/file.doc
 src/model/file.pdf

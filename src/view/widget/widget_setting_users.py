@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class WidgetAdmins(QtWidgets.QMainWindow):
+class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -313,7 +313,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     # MainWindow = QtWidgets.QMainWindow()
-    ui = WidgetAdmins()
+    ui = WidgetSettingUser()
     # ui.setupUi(MainWindow)
     # MainWindow.show()
     sys.exit(app.exec_())

@@ -1,17 +1,22 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from src.view.widget import widget_admins
-from src.view.widget import widget_documents
-from src.view.widget import widget_users
-from src.view.widget import widget_hierarchy_departments
+from src.view.widget import widget_setting_admins
+from src.view.widget import widget_setting_documents
+from src.view.widget import widget_setting_users
+from src.view.widget import widget_setting_departments
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1110, 706)
-        MainWindow.setMinimumSize(900, 706)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class WindowSuperAdmin(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(WindowSuperAdmin, self).__init__()
+        self.setObjectName("MainWindow")
+        self.resize(1110, 706)
+        self.setMinimumSize(900, 706)
+        self.setupUi()
+        self.show()
+
+    def setupUi(self):
+        self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
         self.centralwidget.setFont(font)
@@ -366,29 +371,29 @@ class Ui_MainWindow(object):
         self.stackedWidget.acceptDrops()
         self.stackedWidget.setObjectName("stackedWidget")
 
-        self.widget_settings_documents = widget_documents.WidgetDocuments()
+        self.widget_settings_documents = widget_setting_documents.WidgetDocuments()
         self.stackedWidget.addWidget(self.widget_settings_documents)
 
-        self.widget_settings_users = widget_admins.WidgetUsers()
+        self.widget_settings_users = widget_setting_admins.WidgetSettingUsers()
         self.stackedWidget.addWidget(self.widget_settings_users)
 
-        self.widget_settings_admins = widget_users.WidgetAdmins()
+        self.widget_settings_admins = widget_setting_users.WidgetSettingUser()
         self.stackedWidget.addWidget(self.widget_settings_admins)
 
-        self.treeWidget = widget_hierarchy_departments.TreeHierarchy()
+        self.treeWidget = widget_setting_departments.TreeHierarchy()
         self.stackedWidget.addWidget(self.treeWidget)
 
         self.verticalLayout_2.addWidget(self.stackedWidget)
         self.verticalLayout_3.addWidget(self.frame_body)
 
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_departament.setText(_translate("MainWindow", "SUPER ADMIN"))
         self.button_logout.setText(_translate("MainWindow", "выйти"))
         self.label_mode.setText(_translate("MainWindow", "Режим работы:"))
@@ -415,8 +420,5 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    ui = WindowSuperAdmin()
     sys.exit(app.exec_())

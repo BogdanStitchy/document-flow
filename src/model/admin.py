@@ -99,7 +99,8 @@ def check_password(login: str, password: str):
             print(f"This user with username '{login}' login successful")
             # global current_id, current_access_level
             current_user_session_id, current_access_level = id_and_access_level
-            return True
+            print("lvl = ", current_access_level)
+            return current_access_level
         else:
             print(f"User {login} no login")
             return False

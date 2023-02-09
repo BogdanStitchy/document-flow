@@ -74,6 +74,7 @@ class WindowLogin(object):
         self.verticalLayout.addWidget(self.label)
 
         self.line_login = QtWidgets.QLineEdit(self.frame)
+        self.line_login.setClearButtonEnabled(True)
         self.line_login.setMaximumSize(QtCore.QSize(700, 16777215))
         font = QtGui.QFont()
         font.setFamily("Montserrat")
@@ -96,6 +97,7 @@ class WindowLogin(object):
         self.verticalLayout.addWidget(self.line_login)
 
         self.line_password = QtWidgets.QLineEdit(self.frame)
+        self.line_password.setClearButtonEnabled(True)
         self.line_password.setMaximumSize(QtCore.QSize(700, 16777215))
         font = QtGui.QFont()
         font.setFamily("Montserrat")

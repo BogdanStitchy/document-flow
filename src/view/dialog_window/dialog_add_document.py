@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QDialog
 
+from src.controller import controller_main_window as controller
+
 
 class DialogAddDocument(QDialog):
     def __init__(self, main_window):
         QFileDialog.__init__(self)
+        self.name_file = ''
         self.path_to_file = ''
         self.setModal(True)
         self.main_window = main_window
@@ -200,16 +203,23 @@ class DialogAddDocument(QDialog):
     def add_file(self):
         print("button_click")
         self.path_to_file = QtWidgets.QFileDialog.getOpenFileName()[0]
+        self.name_file = self.path_to_file[self.path_to_file.rfind("/") + 1:]
+        print(self.path_to_file.rfind("/"))
+        self.label_name_selected_file.setText(self.name_file)
         # print(self.path_to_file)
 
     def push_save_file(self):
         inner_number = self.lineEdit_inner_number.text()
         output_number = self.lineEdit_output_number.text()
         inner_date = self.dateEdit.text()
+        type_document = self.lineEdit_type_document.text()
         print(inner_number)
         print(output_number)
         print(inner_date)
+        print(type_document)
         print(self.path_to_file)
+        controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number,
+                                            type_document)
 
     def push_cancel(self):
         self.close()

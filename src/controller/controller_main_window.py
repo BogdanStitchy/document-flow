@@ -17,3 +17,9 @@ def add_user_in_database(last_name: str, name: str, patronymic: str, division_nu
                          access_lvl: int):
     # log
     admin.add_user(last_name, name, patronymic, division_number, login, password, access_lvl)
+
+
+def add_document_in_database(path_to_document: str, name_document: str, inner_number: str, output_number: str,
+                             type_document: str):
+    # log
+    admin.add_document(path_to_document, name_document, inner_number, output_number, type_document)

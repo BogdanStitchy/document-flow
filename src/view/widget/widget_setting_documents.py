@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.view.dialog_window import dialog_add_document
+
 
 class WidgetDocuments(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.dialog_window = None
         self.setObjectName("MainWindow")
         self.resize(895, 605)
         self.setupUi()
@@ -39,6 +42,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame_function)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 9)
         self.horizontalLayout.setObjectName("horizontalLayout")
+
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
@@ -59,6 +63,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_home.setObjectName("pushButton_home")
         self.horizontalLayout.addWidget(self.pushButton_home)
+
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
@@ -79,6 +84,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                               "")
         self.pushButton_refresh.setObjectName("pushButton_refresh")
         self.horizontalLayout.addWidget(self.pushButton_refresh)
+
         self.line_edit_search = QtWidgets.QLineEdit(self.frame_function)
         self.line_edit_search.setPlaceholderText("введите запрос")
         self.line_edit_search.setToolTip("поле для поиска по таблице. По умолчанию поиск производится по всем полям")
@@ -89,9 +95,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.line_edit_search.setSizePolicy(sizePolicy)
         self.line_edit_search.setMinimumSize(QtCore.QSize(150, 27))
         self.line_edit_search.setStyleSheet("background-color: rgb(255, 255, 255);"
-                                           "border-radius:5px;")
+                                            "border-radius:5px;")
         self.line_edit_search.setObjectName("lineEdit_search")
         self.horizontalLayout.addWidget(self.line_edit_search)
+
         self.pushButton_find = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
@@ -112,8 +119,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_find.setObjectName("pushButton_find")
         self.horizontalLayout.addWidget(self.pushButton_find)
+
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+
         self.pushButton_period_search = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
@@ -133,14 +142,17 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                     "")
         self.pushButton_period_search.setObjectName("pushButton_period_search")
         self.horizontalLayout.addWidget(self.pushButton_period_search, 0, QtCore.Qt.AlignVCenter)
+
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
+
         self.pushButton_add = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_add.sizePolicy().hasHeightForWidth())
         self.pushButton_add.setSizePolicy(sizePolicy)
+        self.pushButton_add.clicked.connect(self.pushed_button_add_document)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
         font.setPointSize(10)
@@ -199,9 +211,6 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.pushButton_delete.setObjectName("pushButton_delete")
         self.horizontalLayout.addWidget(self.pushButton_delete)
         self.verticalLayout_2.addWidget(self.frame_function)
-
-
-
 
         self.tableWidget = QtWidgets.QTableWidget(self.frame_body)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
@@ -301,6 +310,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Связанные документы"))
         item = self.tableWidget.horizontalHeaderItem(7)
         item.setText(_translate("MainWindow", "Скачать"))
+
+    def pushed_button_add_document(self):
+        print("pushed_button_add_document")
+        self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
 
 if __name__ == "__main__":

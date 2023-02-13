@@ -10,6 +10,7 @@ class DialogWidgetAddUser(QDialog):
         self.setModal(True)
         self.main_window = main_window
         self.setWindowTitle("Добавление пользователя")
+        self.show()
         self.setupUi()
 
     def setupUi(self):

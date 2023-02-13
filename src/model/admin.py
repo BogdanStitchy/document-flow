@@ -7,7 +7,7 @@ from src.model.config import config
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
 
-current_user_session_id = 0
+current_user_session_id = 1
 current_access_level = 0  # 0 - super admin; 1 - admin; 2 - just user
 
 
@@ -122,6 +122,13 @@ def create_super_admin():
 
 def delete_file():
     pass
+
+
+def add_document(path_to_document: str, name_document: str, inner_number: str, output_number: str, type_document: str):
+    id_documents = db_helper.add_data_about_document(inner_number, output_number, name_document, datetime.now(),
+                                                     current_user_session_id, type_document)
+    file = open(path_to_document, 'rb')
+    db_helper.add_file(id_documents, file.read())
 
 
 if __name__ == '__main__':

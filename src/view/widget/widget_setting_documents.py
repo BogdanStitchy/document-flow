@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view.dialog_window import dialog_add_document
+from src.controller import controller_main_window as controller
 
 
 class WidgetDocuments(QtWidgets.QMainWindow):
@@ -65,6 +66,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_home)
 
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_refresh.clicked.connect(self.fill_in_table)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -257,8 +259,8 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(8)
-        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(9)
+        # self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -275,6 +277,8 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setHorizontalHeaderItem(6, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(8, item)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.verticalHeader().setCascadingSectionResizes(False)
         self.verticalLayout_2.addWidget(self.tableWidget)
@@ -297,23 +301,67 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Название"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Входящий номер"))
+        item.setText(_translate("MainWindow", "Входящий №"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Исходящий номер"))
+        item.setText(_translate("MainWindow", "Исходящий №"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Дата исходящая"))
+        item.setText(_translate("MainWindow", "Исходящая дата"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Дата загрузки"))
+        item.setText(_translate("MainWindow", "Тип документа"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Автор"))
+        item.setText(_translate("MainWindow", "Дата загрузки"))
         item = self.tableWidget.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "Связанные документы"))
+        item.setText(_translate("MainWindow", "Автор"))
         item = self.tableWidget.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "Связанные документы"))
+        item = self.tableWidget.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Скачать"))
 
     def pushed_button_add_document(self):
         print("pushed_button_add_document")
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
+
+    def fill_in_table(self):
+        data_about_documents = controller.get_about_documents()
+        print("widget\n", data_about_documents)
+        self.tableWidget.setRowCount(len(data_about_documents))
+        number_row = 0
+        for row in data_about_documents:
+            print("row = ", row)
+            self.tableWidget.setItem(number_row, 0, QtWidgets.QTableWidgetItem(row[1]))  # Установка имени
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row[4])))  # Установка исходящей даты
+            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row[5]))  # Установка типа документа
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка даты загрузки
+            self.tableWidget.setItem(number_row, 6,
+                                     QtWidgets.QTableWidgetItem("Иван Иванович Иванов"))  # Установка автора
+            self.tableWidget.setItem(number_row, 7,
+                                     QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
+            # date = str(row[5])
+            # self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(date))
+
+            button_downlad = QtWidgets.QPushButton(f"скачать")
+            button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"
+                                         "padding: 5;\n"
+                                         "border-radius:5px;\n"
+                                         "border: 1 solid black;\n"
+                                         "")
+            button_downlad.setObjectName(f"{row[0]}")
+            button_downlad.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            button_downlad.clicked.connect(
+                lambda ch, id_document=row[0], name_file=row[1]: self.push_button_download(id_document, name_file))
+
+            self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
+            number_row += 1
+        print("init table finished")
+
+    def push_button_download(self, id_document: int, name_file: str):
+        self.dialog_window = QtWidgets.QFileDialog()
+        path_to_save = f"{self.dialog_window.getExistingDirectory()}/{name_file}"
+        # print(path_to_save)
+        # print(name_file)
+        controller.download_document(id_document, path_to_save)
 
 
 if __name__ == "__main__":

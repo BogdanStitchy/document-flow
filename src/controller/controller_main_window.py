@@ -20,6 +20,18 @@ def add_user_in_database(last_name: str, name: str, patronymic: str, division_nu
 
 
 def add_document_in_database(path_to_document: str, name_document: str, inner_number: str, output_number: str,
-                             type_document: str):
+                             output_date, type_document: str):
     # log
-    admin.add_document(path_to_document, name_document, inner_number, output_number, type_document)
+    admin.add_document(path_to_document, name_document, inner_number, output_number, output_date, type_document)
+
+
+def get_about_documents():
+    # log
+    data = admin.get_data_about_documents()
+    return data
+
+
+def download_document(id_document: int, path_to_save: str):
+    # log
+    admin.download_document(id_document, path_to_save)
+    print("Документ сохранен")

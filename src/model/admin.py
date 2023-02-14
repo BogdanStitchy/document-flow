@@ -124,11 +124,24 @@ def delete_file():
     pass
 
 
-def add_document(path_to_document: str, name_document: str, inner_number: str, output_number: str, type_document: str):
-    id_documents = db_helper.add_data_about_document(inner_number, output_number, name_document, datetime.now(),
+def add_document(path_to_document: str, name_document: str, inner_number: str, output_number: str, output_date,
+                 type_document: str):
+    id_documents = db_helper.add_data_about_document(inner_number, output_number, output_date, name_document,
+                                                     datetime.now(),
                                                      current_user_session_id, type_document)
     file = open(path_to_document, 'rb')
     db_helper.add_file(id_documents, file.read())
+
+
+def get_data_about_documents():
+    return db_helper.get_data_documents_for_department(1)
+
+
+def download_document(id_document: int, path_to_save: str):
+    data_file = db_helper.get_file_by_id(id_document)
+    file = open(path_to_save, 'wb')
+    file.write(bytes(data_file))
+    file.close()
 
 
 if __name__ == '__main__':

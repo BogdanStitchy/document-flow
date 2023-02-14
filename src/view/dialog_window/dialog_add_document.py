@@ -211,15 +211,16 @@ class DialogAddDocument(QDialog):
     def push_save_file(self):
         inner_number = self.lineEdit_inner_number.text()
         output_number = self.lineEdit_output_number.text()
-        inner_date = self.dateEdit.text()
+        output_date = self.dateEdit.text()
         type_document = self.lineEdit_type_document.text()
         print(inner_number)
         print(output_number)
-        print(inner_date)
+        print(output_date)
         print(type_document)
         print(self.path_to_file)
-        controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number,
+        controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number, output_date,
                                             type_document)
+        self.close()
 
     def push_cancel(self):
         self.close()

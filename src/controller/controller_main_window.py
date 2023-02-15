@@ -43,4 +43,10 @@ def delete_document(name_document: str, inner_number: str, output_number: str):
     print(name_document)
     print(inner_number)
     print(output_number)
-    db_helper_for_documents_and_users.delete_file(name_document,inner_number,output_number)
+    db_helper_for_documents_and_users.delete_file(name_document, inner_number, output_number)
+
+
+def edit_document(id_document: int, name_document: str, inner_number: str, output_number: str,
+                  output_date, type_document: str):
+    # log
+    admin.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)

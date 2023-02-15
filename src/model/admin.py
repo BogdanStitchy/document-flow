@@ -133,6 +133,11 @@ def add_document(path_to_document: str, name_document: str, inner_number: str, o
     db_helper.add_file(id_documents, file.read())
 
 
+def edit_document(id_document, name_document: str, inner_number: str, output_number: str, output_date,
+                  type_document: str):
+    db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
+
+
 def get_data_about_documents():
     return db_helper.get_data_documents_for_department(1)
 

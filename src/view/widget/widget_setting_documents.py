@@ -1,7 +1,11 @@
+import datetime
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view.dialog_window import dialog_add_document
+from src.view.dialog_window import dialog_edit_document
 from src.controller import controller_main_window as controller
+from src.view.widget.my_table_widget_item import MyTableWidgetItem
 
 
 class WidgetDocuments(QtWidgets.QMainWindow):
@@ -171,7 +175,9 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                           "")
         self.pushButton_add.setObjectName("pushButton_add")
         self.horizontalLayout.addWidget(self.pushButton_add)
+
         self.pushButton_edit = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_edit.clicked.connect(self.press_button_edit_document)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -262,7 +268,8 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(9)
+        self.tableWidget.setColumnCount(10)
+        self.tableWidget.setColumnHidden(9, True)
         # self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -310,10 +317,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Исходящий №"))
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Исходящая дата"))
+        item.setToolTip("Год-месяц-число")
         item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Тип документа"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Дата загрузки"))
+        item.setToolTip("Год-месяц-число")
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Автор"))
         item = self.tableWidget.horizontalHeaderItem(7)
@@ -335,10 +344,15 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.dialog_window = QtWidgets.QDialog()
             return
         self.tableWidget.setRowCount(len(self.data_about_documents))
+        # self.tableWidget.setColumnCount()
         number_row = 0
         for row in self.data_about_documents:
             # print("row = ", row)
-            self.tableWidget.setItem(number_row, 0, QtWidgets.QTableWidgetItem(row[1]))  # Установка имени
+            # name_item = QtWidgets.QTableWidgetItem(row[1])
+            name_item = MyTableWidgetItem(row[1])
+            # name_item.setText(row[1])
+            name_item.set_additional_data(row[0])
+            self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
             self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
             self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
             self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row[4])))  # Установка исходящей даты
@@ -361,6 +375,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                 lambda ch, id_document=row[0], name_file=row[1]: self.press_button_download(id_document, name_file))
 
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
+            self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
             number_row += 1
         print("init table finished")
 
@@ -379,7 +394,21 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         else:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление документа",
                                                                  "Для удаления документа выделите всю строку "
-                                                                 "(строка станет белой), щелкнув по номеру строку "
+                                                                 "(строка станет белой), щелкнув по номеру строки "
+                                                                 "(крайний левый стоблец).")
+
+    def press_button_edit_document(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 8:
+            q_date = QtCore.QDate(int(items[3].text()[:4]), int(items[3].text()[5:7]), int(items[3].text()[8:10]))
+            self.dialog_window = dialog_edit_document.DialogEditDocument(self, items[0].get_additional_data(),
+                                                                         items[0].text(), items[1].text(),
+                                                                         items[2].text(), items[4].text(),
+                                                                         q_date)
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование документа",
+                                                                 "Для редактирования документа выделите всю строку "
+                                                                 "(строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
 
 

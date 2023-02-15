@@ -1,11 +1,12 @@
-import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper
+import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper_for_hierarchy
+import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
 from src.model import admin
 from src.model.handler_hierarchy import Hierarchy
 
 
 def save_hierarchy(list_hierarchy: []):
     # log
-    db_helper.create_hierarchy(list_hierarchy)
+    db_helper_for_hierarchy.create_hierarchy(list_hierarchy)
 
 
 def get_hierarchy():
@@ -35,3 +36,11 @@ def download_document(id_document: int, path_to_save: str):
     # log
     admin.download_document(id_document, path_to_save)
     print("Документ сохранен")
+
+
+def delete_document(name_document: str, inner_number: str, output_number: str):
+    # log
+    print(name_document)
+    print(inner_number)
+    print(output_number)
+    db_helper_for_documents_and_users.delete_file(name_document,inner_number,output_number)

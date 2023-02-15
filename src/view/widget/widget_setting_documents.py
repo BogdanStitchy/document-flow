@@ -192,6 +192,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.pushButton_edit.setObjectName("pushButton_edit")
         self.horizontalLayout.addWidget(self.pushButton_edit)
         self.pushButton_delete = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_delete.clicked.connect(self.press_button_delete_document)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(10)
@@ -367,6 +368,19 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.dialog_window = QtWidgets.QFileDialog()
         path_to_save = f"{self.dialog_window.getExistingDirectory()}/{name_file}"
         controller.download_document(id_document, path_to_save)
+
+    def press_button_delete_document(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 8:
+            controller.delete_document(items[0].text(), items[1].text(), items[2].text())
+            self.dialog_window = QtWidgets.QMessageBox().information(self, "Удаление документа",
+                                                                     f'Документ "{items[0].text()}" успешно удален из базы.')
+            self.press_button_refresh()
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление документа",
+                                                                 "Для удаления документа выделите всю строку "
+                                                                 "(строка станет белой), щелкнув по номеру строку "
+                                                                 "(крайний левый стоблец).")
 
 
 if __name__ == "__main__":

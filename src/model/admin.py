@@ -127,7 +127,7 @@ def delete_file():
 def add_document(path_to_document: str, name_document: str, inner_number: str, output_number: str, output_date,
                  type_document: str):
     id_documents = db_helper.add_data_about_document(inner_number, output_number, output_date, name_document,
-                                                     datetime.now(),
+                                                     datetime.now().strftime("%d-%m-%Y %H:%M"),
                                                      current_user_session_id, type_document)
     file = open(path_to_document, 'rb')
     db_helper.add_file(id_documents, file.read())
@@ -159,3 +159,5 @@ if __name__ == '__main__':
     check_password("vanya", "vavak")
     print(time.time() - start_time, "seconds")
     # delete_user("test_name", "test", "test")
+    # time = datetime.now()
+    # print(datetime.now().strftime("%d-%m-%Y %H:%M"))

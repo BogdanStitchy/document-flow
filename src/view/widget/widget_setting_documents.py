@@ -335,7 +335,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
     def press_button_refresh(self):
-        self.data_about_documents = controller.get_about_documents()
+        self.data_about_documents = controller.get_data_about_documents()
         self.fill_in_table()
 
     def fill_in_table(self):

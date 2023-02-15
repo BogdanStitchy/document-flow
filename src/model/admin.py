@@ -23,8 +23,7 @@ def test_binary():
     print(bytes(hsalt, 'utf-8') == bytes(salt.hex(), 'utf-8'))
 
 
-def add_user(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
-             access_lvl: int):
+def add_user(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str):
     salt = os.urandom(16)
     original_salt = salt  # (salt.hex(), 'utf-8')
     print("original salt = ", salt)
@@ -61,7 +60,7 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, current_user_session_id,
                                              datetime.now())
     # id = db_helper.get_id_user(last_name, name, patronymic)
-    db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, access_lvl)
+    db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)
     print(f"\nUser {last_name} {name} added in data base\n")
 
 

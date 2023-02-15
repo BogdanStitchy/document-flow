@@ -1,11 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from src.view.dialog_window.dialog_add_user import DialogWidgetAddUser
+
+from src.view.widget.my_table_widget_item import MyTableWidgetItem
+from src.view.dialog_window import dialog_add_user
+from src.controller import controller_main_window as controller
 
 
 class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.dialog_window = None
+        self.data_about_users = None
         self.setObjectName("MainWindow")
         self.resize(895, 605)
         self.setupUi()
@@ -51,6 +56,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
+
         self.pushButton_home.setFont(font)
         self.pushButton_home.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_home.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -60,17 +66,14 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_home.setObjectName("pushButton_home")
         self.horizontalLayout.addWidget(self.pushButton_home)
+
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
+
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_refresh.sizePolicy().hasHeightForWidth())
         self.pushButton_refresh.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_refresh.setFont(font)
         self.pushButton_refresh.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_refresh.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -80,6 +83,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                               "")
         self.pushButton_refresh.setObjectName("pushButton_refresh")
         self.horizontalLayout.addWidget(self.pushButton_refresh)
+
         self.line_edit_search = QtWidgets.QLineEdit(self.frame_function)
         self.line_edit_search.setPlaceholderText("введите запрос")
         self.line_edit_search.setToolTip("поле для поиска по таблице. По умолчанию поиск производится по всем полям")
@@ -93,17 +97,13 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                             "border-radius:5px;")
         self.line_edit_search.setObjectName("lineEdit_search")
         self.horizontalLayout.addWidget(self.line_edit_search)
+
         self.pushButton_find = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_find.sizePolicy().hasHeightForWidth())
         self.pushButton_find.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_find.setFont(font)
         self.pushButton_find.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_find.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -113,18 +113,16 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_find.setObjectName("pushButton_find")
         self.horizontalLayout.addWidget(self.pushButton_find)
+
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+
         self.pushButton_period_search = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_period_search.sizePolicy().hasHeightForWidth())
         self.pushButton_period_search.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setBold(True)
-        font.setPointSize(10)
         self.pushButton_period_search.setFont(font)
         self.pushButton_period_search.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_period_search.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -134,20 +132,17 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                                     "")
         self.pushButton_period_search.setObjectName("pushButton_period_search")
         self.horizontalLayout.addWidget(self.pushButton_period_search, 0, QtCore.Qt.AlignVCenter)
+
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
+
         self.pushButton_add = QtWidgets.QPushButton(self.frame_function)
-        # self.pushButton_add.clicked.connect(DialogWidgetAddUser(self))
+        self.pushButton_add.clicked.connect(self.press_button_add_user)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_add.sizePolicy().hasHeightForWidth())
         self.pushButton_add.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_add.setFont(font)
         self.pushButton_add.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_add.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -157,17 +152,13 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                           "")
         self.pushButton_add.setObjectName("pushButton_add")
         self.horizontalLayout.addWidget(self.pushButton_add)
+
         self.pushButton_edit = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_edit.sizePolicy().hasHeightForWidth())
         self.pushButton_edit.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_edit.setFont(font)
         self.pushButton_edit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_edit.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -177,19 +168,13 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_edit.setObjectName("pushButton_edit")
         self.horizontalLayout.addWidget(self.pushButton_edit)
+
         self.pushButton_delete = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(10)
         sizePolicy.setHeightForWidth(self.pushButton_delete.sizePolicy().hasHeightForWidth())
         self.pushButton_delete.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Monospac821 BT")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setUnderline(False)
-        font.setWeight(75)
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
         self.pushButton_delete.setFont(font)
         self.pushButton_delete.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -200,6 +185,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                              "")
         self.pushButton_delete.setObjectName("pushButton_delete")
         self.horizontalLayout.addWidget(self.pushButton_delete)
+
         self.verticalLayout_2.addWidget(self.frame_function)
 
         self.tableWidget = QtWidgets.QTableWidget(self.frame_body)
@@ -225,23 +211,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
 
         self.tableWidget.setPalette(palette)
         font = QtGui.QFont()
@@ -301,6 +270,50 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Номер отдела"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Добавил в базу"))
+
+    def press_button_add_user(self):
+        print("pushed_button_add_document")
+        self.dialog_window = dialog_add_user.DialogWidgetAddUser(self)
+
+    def press_button_refresh(self):
+        self.data_about_users = controller.get_data_about_users()
+        self.fill_in_table()
+
+    def fill_in_table(self):
+        if self.data_about_users is None:
+            self.dialog_window = QtWidgets.QDialog()
+            return
+        self.tableWidget.setRowCount(len(self.data_about_users))
+        number_row = 0
+        for row in self.data_about_users:
+            name_item = MyTableWidgetItem(row[1])
+            name_item.set_additional_data(row[0])
+            self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row[4])))  # Установка исходящей даты
+            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row[5]))  # Установка типа документа
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка даты загрузки
+            self.tableWidget.setItem(number_row, 6,
+                                     QtWidgets.QTableWidgetItem("Иван Иванович Иванов"))  # Установка автора
+            self.tableWidget.setItem(number_row, 7,
+                                     QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
+
+            button_downlad = QtWidgets.QPushButton(f"скачать")
+            button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"
+                                         "padding: 5;\n"
+                                         "border-radius:5px;\n"
+                                         "border: 1 solid black;\n"
+                                         "")
+            button_downlad.setObjectName(f"{row[0]}")
+            button_downlad.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            button_downlad.clicked.connect(
+                lambda ch, id_document=row[0], name_file=row[1]: self.press_button_download(id_document, name_file))
+
+            self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
+            self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
+            number_row += 1
+        print("init table finished")
 
 
 if __name__ == "__main__":

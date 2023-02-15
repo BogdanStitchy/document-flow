@@ -181,17 +181,14 @@ class DialogWidgetAddUser(QDialog):
         patronymic = self.lineEdit_patronymic.text()
         login = self.lineEdit_login.text()
         password = self.lineEdit_password.text()
-        # print(last_name)
-        # print(name)
-        # print(patronymic)
-        # print(login)
-        # print(password)
         try:
             department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
             department = department[:3]  # получаем только номер отдела, без его названия
             print(department)
-            controller.add_user_in_database(last_name, name, patronymic, department, login, password, 2)
+            controller.add_user_in_database(last_name, name, patronymic, department, login, password)
         except Exception as ex:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Добавление пользователя",
+                                                                 "Для добавления пользователя заполните все поля! ")
             print("[ERROR] Не выбран ни один радиобаттон\t", ex)
 
     def push_cancel(self):

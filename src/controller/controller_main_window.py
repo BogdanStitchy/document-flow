@@ -14,10 +14,9 @@ def get_hierarchy():
     return hierarchy.get_data_about_departments()
 
 
-def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
-                         access_lvl: int):
+def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,):
     # log
-    admin.add_user(last_name, name, patronymic, division_number, login, password, access_lvl)
+    admin.add_user(last_name, name, patronymic, division_number, login, password)
 
 
 def add_document_in_database(path_to_document: str, name_document: str, inner_number: str, output_number: str,
@@ -26,7 +25,7 @@ def add_document_in_database(path_to_document: str, name_document: str, inner_nu
     admin.add_document(path_to_document, name_document, inner_number, output_number, output_date, type_document)
 
 
-def get_about_documents():
+def get_data_about_documents():
     # log
     data = admin.get_data_about_documents()
     return data
@@ -50,3 +49,8 @@ def edit_document(id_document: int, name_document: str, inner_number: str, outpu
                   output_date, type_document: str):
     # log
     admin.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
+
+
+def get_data_about_users():
+    # log
+    pass

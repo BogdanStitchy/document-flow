@@ -7,6 +7,7 @@ from src.controller import controller_main_window as controller
 class DialogAddDocument(QDialog):
     def __init__(self, main_window):
         QFileDialog.__init__(self)
+        self.dialog_window = None
         self.name_file = ''
         self.path_to_file = ''
         self.setModal(True)
@@ -220,6 +221,10 @@ class DialogAddDocument(QDialog):
         print(self.path_to_file)
         controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number, output_date,
                                             type_document)
+        self.main_window.press_button_refresh()
+        self.dialog_window = QtWidgets.QMessageBox.information(self, "добавление документа",
+                                                               f'Документ "{self.name_file}" успешно загружен в базу.')
+
         self.close()
 
     def push_cancel(self):

@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src.view.dialog_window.dialog_add_user import DialogWidgetAddUser
 
 
 class WidgetSettingUser(QtWidgets.QMainWindow):
@@ -136,6 +137,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.pushButton_add = QtWidgets.QPushButton(self.frame_function)
+        # self.pushButton_add.clicked.connect(DialogWidgetAddUser(self))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)

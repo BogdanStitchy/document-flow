@@ -8,6 +8,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.data_about_documents = None
         self.dialog_window = None
         self.setObjectName("MainWindow")
         self.resize(895, 605)
@@ -45,6 +46,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.setObjectName("horizontalLayout")
 
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_home.clicked.connect(self.fill_in_table)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -66,7 +68,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_home)
 
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
-        self.pushButton_refresh.clicked.connect(self.fill_in_table)
+        self.pushButton_refresh.clicked.connect(self.press_button_refresh)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -154,7 +156,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_add.sizePolicy().hasHeightForWidth())
         self.pushButton_add.setSizePolicy(sizePolicy)
-        self.pushButton_add.clicked.connect(self.pushed_button_add_document)
+        self.pushButton_add.clicked.connect(self.press_button_add_document)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
         font.setPointSize(10)
@@ -285,6 +287,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.gridLayout.addWidget(self.frame_body, 0, 0, 1, 1)
         self.setCentralWidget(self.centralwidget)
 
+        self.press_button_refresh()
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -317,17 +320,23 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Скачать"))
 
-    def pushed_button_add_document(self):
+    def press_button_add_document(self):
         print("pushed_button_add_document")
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
+    def press_button_refresh(self):
+        self.data_about_documents = controller.get_about_documents()
+        self.fill_in_table()
+
     def fill_in_table(self):
-        data_about_documents = controller.get_about_documents()
-        print("widget\n", data_about_documents)
-        self.tableWidget.setRowCount(len(data_about_documents))
+        # print("widget\n", self.data_about_documents)
+        if self.data_about_documents is None:
+            self.dialog_window = QtWidgets.QDialog()
+            return
+        self.tableWidget.setRowCount(len(self.data_about_documents))
         number_row = 0
-        for row in data_about_documents:
-            print("row = ", row)
+        for row in self.data_about_documents:
+            # print("row = ", row)
             self.tableWidget.setItem(number_row, 0, QtWidgets.QTableWidgetItem(row[1]))  # Установка имени
             self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
             self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
@@ -338,8 +347,6 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                      QtWidgets.QTableWidgetItem("Иван Иванович Иванов"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
                                      QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
-            # date = str(row[5])
-            # self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(date))
 
             button_downlad = QtWidgets.QPushButton(f"скачать")
             button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -350,17 +357,15 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             button_downlad.setObjectName(f"{row[0]}")
             button_downlad.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             button_downlad.clicked.connect(
-                lambda ch, id_document=row[0], name_file=row[1]: self.push_button_download(id_document, name_file))
+                lambda ch, id_document=row[0], name_file=row[1]: self.press_button_download(id_document, name_file))
 
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
             number_row += 1
         print("init table finished")
 
-    def push_button_download(self, id_document: int, name_file: str):
+    def press_button_download(self, id_document: int, name_file: str):
         self.dialog_window = QtWidgets.QFileDialog()
         path_to_save = f"{self.dialog_window.getExistingDirectory()}/{name_file}"
-        # print(path_to_save)
-        # print(name_file)
         controller.download_document(id_document, path_to_save)
 
 

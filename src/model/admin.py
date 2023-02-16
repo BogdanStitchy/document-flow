@@ -64,8 +64,8 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     print(f"\nUser {last_name} {name} added in data base\n")
 
 
-def delete_user(last_name: str, name: str, patronymic: str):
-    db_helper.delete_user(last_name, name, patronymic)
+def delete_user(id_user:int):
+    db_helper.delete_user(id_user)
 
 
 def check_password(login: str, password: str):  # переписать под проверку в двух таблицах

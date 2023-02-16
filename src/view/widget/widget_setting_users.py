@@ -45,7 +45,9 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame_function)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 9)
         self.horizontalLayout.setObjectName("horizontalLayout")
+
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_home.clicked.connect(self.fill_in_table)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -170,6 +172,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_edit)
 
         self.pushButton_delete = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_delete.clicked.connect(self.press_button_delete)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(10)
@@ -289,7 +292,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         number_row = 0
         for row in self.data_about_users:
             name_item = MyTableWidgetItem(row[1])
-            name_item.set_additional_data(row[0])  # Установка id
+            name_item.set_additional_data(int(row[0]))  # Установка id
 
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка фамилии
             self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка имени
@@ -302,6 +305,22 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
             number_row += 1
         print("init table finished")
+
+    def press_button_delete(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 6:
+            controller.delete_user(items[0].get_additional_data())
+            self.dialog_window = QtWidgets.QMessageBox()
+            self.dialog_window.information(self, "Удаление пользователя",
+                                           f'Пользователь "{items[0].text()} {items[1].text()} {items[2].text()}" '
+                                           f'успешно удален из базы.')
+            self.press_button_refresh()
+
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление пользователя",
+                                                                 "Для удаления пользователя выделите всю строку "
+                                                                 "(строка станет белой), щелкнув по номеру строки "
+                                                                 "(крайний левый стоблец).")
 
 
 if __name__ == "__main__":

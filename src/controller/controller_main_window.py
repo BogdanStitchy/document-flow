@@ -55,3 +55,7 @@ def get_data_about_users():
     # log
     data = admin.get_data_about_users()
     return data
+
+
+def delete_user(id_user: int):
+    admin.delete_user(id_user)

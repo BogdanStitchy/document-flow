@@ -189,7 +189,7 @@ class DialogWidgetAddUser(QDialog):
             controller.add_user_in_database(last_name, name, patronymic, department, login, password)
             self.main_window.press_button_refresh()
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Добавление пользователя",
-                                                                     f'Пользователь "{last_name, name, patronymic}" '
+                                                                     f'Пользователь "{last_name} {name} {patronymic}" '
                                                                      f'успешно добавлен в базу.')
             self.close()
         except Exception as ex:

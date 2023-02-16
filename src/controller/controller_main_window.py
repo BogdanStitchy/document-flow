@@ -14,7 +14,7 @@ def get_hierarchy():
     return hierarchy.get_data_about_departments()
 
 
-def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,):
+def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, ):
     # log
     admin.add_user(last_name, name, patronymic, division_number, login, password)
 
@@ -59,3 +59,9 @@ def get_data_about_users():
 
 def delete_user(id_user: int):
     admin.delete_user(id_user)
+
+
+def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, id_user,
+                   flag_edit_login: bool):
+    # log
+    admin.edit_user_data(last_name, name, patronymic, division_number, login, password, id_user, flag_edit_login)

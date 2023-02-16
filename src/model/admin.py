@@ -64,7 +64,26 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     print(f"\nUser {last_name} {name} added in data base\n")
 
 
-def delete_user(id_user:int):
+def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, id_user,
+                   flag_edit_login: bool):
+    id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+    db_helper.edit_data_user(last_name, name, patronymic, id_department, id_user)
+
+    if password != "":
+        salt = os.urandom(16)
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(salt.hex(), 'utf-8'),
+            200000,
+            dklen=64
+        )
+        db_helper.edit_login_data(login, password.hex(), salt.hex(), id_user)
+    elif flag_edit_login:
+        db_helper.edit_only_login(login, id_user)
+
+
+def delete_user(id_user: int):
     db_helper.delete_user(id_user)
 
 
@@ -154,20 +173,16 @@ def get_data_about_users():
 
 
 if __name__ == '__main__':
-    # # add_user("super admin", "super admin", "superAdminovich", "235", "superAdmin", "password")
-    # start_time = time.time()
-    # # create_super_admin()
-    #
-    # # add_user("test_name", "test", "test", "235", "login", "privetik")
-    # # add_user("user1", "user1", "user1", "401", "login1", "user1")
-    #
-    # # test_binary()
-    #
-    # check_password("login", "privetik")
+    start_time = time.time()
+    # create_super_admin()
+
+    # test_binary()
+
+    check_password("Ivan", "Vanya")
     # check_password("login1", "user1")
     # check_password("vanya", "vavak")
-    # print(time.time() - start_time, "seconds")
-    # # delete_user("test_name", "test", "test")
-    # # time = datetime.now()
-    # # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
-    create_super_admin()
+    print(time.time() - start_time, "seconds")
+    # delete_user("test_name", "test", "test")
+    # time = datetime.now()
+    # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
+

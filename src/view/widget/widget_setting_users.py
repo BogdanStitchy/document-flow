@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
+from src.view.dialog_window import dialog_edit_user
 from src.view.dialog_window import dialog_add_user
 from src.controller import controller_main_window as controller
 
@@ -156,6 +157,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_add)
 
         self.pushButton_edit = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_edit.clicked.connect(self.press_button_edit_user)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -216,14 +218,14 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
 
         self.tableWidget.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
         self.tableWidget.setFont(font)
+        self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.verticalScrollBar().setSingleStep(1)
         self.tableWidget.setFocusPolicy(QtCore.Qt.NoFocus)
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -269,10 +271,12 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Отчество"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Дата регистрации"))
+        item.setText(_translate("MainWindow", "Логин"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Номер отдела"))
+        item.setText(_translate("MainWindow", "Дата регистрации"))
         item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "Номер отдела"))
+        item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Добавил в базу"))
 
     def press_button_add_user(self):
@@ -297,11 +301,12 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка фамилии
             self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка имени
             self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка отчества
-            self.tableWidget.setItem(number_row, 3,
-                                     QtWidgets.QTableWidgetItem(str(row[4])))  # Установка даты регистрации
-            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(str(row[5])))  # Установка номера отдела
-            creator = f"{row[6]} {row[7]} {row[8]}"
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(creator))  # Установка создателя
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row[4]))  # Установка логина
+            self.tableWidget.setItem(number_row, 4,
+                                     QtWidgets.QTableWidgetItem(str(row[5])))  # Установка даты регистрации
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка номера отдела
+            creator = f"{row[7]} {row[8]} {row[9]}"
+            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(creator))  # Установка создателя
 
             number_row += 1
         print("init table finished")
@@ -319,6 +324,19 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         else:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление пользователя",
                                                                  "Для удаления пользователя выделите всю строку "
+                                                                 "(строка станет белой), щелкнув по номеру строки "
+                                                                 "(крайний левый стоблец).")
+
+    def press_button_edit_user(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 7:
+            id_user = items[0].get_additional_data()
+            self.dialog_window = dialog_edit_user.DialogWidgetEditUser(self, items[0].text(), items[1].text(),
+                                                                       items[2].text(), int(items[5].text()),
+                                                                       items[3].text(), id_user)
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование пользователя",
+                                                                 "Для редактирования пользователя выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
 

@@ -200,3 +200,7 @@ def add_admin(last_name, name, patronymic, login, password):
     id_admin = db_helper.add_record_admin_data(last_name, name, patronymic, datetime.now().strftime("%d-%m-%Y %H:%M"))
 
     db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1)
+
+
+def get_data_about_admins():
+    return db_helper.get_data_about_admins()

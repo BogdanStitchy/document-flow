@@ -70,3 +70,9 @@ def edit_user_data(last_name: str, name: str, patronymic: str, division_number: 
 def add_admin_in_database(last_name: str, name: str, patronymic: str, login: str, password: str):
     # log
     admin.add_admin(last_name, name, patronymic, login, password)
+
+
+def get_data_about_admins():
+    # log
+    data = admin.get_data_about_admins()
+    return data

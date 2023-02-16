@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.view.dialog_window import dialog_add_admin
+from src.controller import controller_main_window as controller
+from src.view.widget.my_table_widget_item import MyTableWidgetItem
 
 
 class WidgetSettingUsers(QtWidgets.QMainWindow):
@@ -41,7 +43,9 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame_function)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 9)
         self.horizontalLayout.setObjectName("horizontalLayout")
+
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_home.clicked.connect(self.fill_in_table)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -61,7 +65,9 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_home.setObjectName("pushButton_home")
         self.horizontalLayout.addWidget(self.pushButton_home)
+
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_refresh.clicked.connect(self.press_button_refresh)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -228,23 +234,6 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
 
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-
         self.tableWidget.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -253,7 +242,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -277,6 +266,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.gridLayout.addWidget(self.frame_body, 0, 0, 1, 1)
         self.setCentralWidget(self.centralwidget)
 
+        self.press_button_refresh()
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -298,10 +288,44 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Отчество"))
         item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "Логин"))
+        item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Дата регистрации"))
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "Роль"))
 
     def press_button_add_admin(self):
         self.dialog_window = dialog_add_admin.DialogWidgetAddAdmin(self)
+
+    def press_button_refresh(self):
+        self.data_about_users = controller.get_data_about_admins()
+        print(self.data_about_users)
+        self.fill_in_table()
+
+    def fill_in_table(self):
+        if self.data_about_users is None:
+            self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
+            return
+        self.tableWidget.setRowCount(len(self.data_about_users))
+        number_row = 0
+        for row in self.data_about_users:
+            name_item = MyTableWidgetItem(row[1])
+            name_item.set_additional_data(int(row[0]))  # Установка id
+
+            self.tableWidget.setItem(number_row, 0, name_item)  # Установка фамилии
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка имени
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка отчества
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row[4]))  # Установка логина
+            self.tableWidget.setItem(number_row, 4,
+                                     QtWidgets.QTableWidgetItem(str(row[5])))  # Установка даты регистрации
+            if row[6] == 1:
+                role = "admin"
+            else:
+                role = "superAdmin"
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(role))  # Установка роли
+
+            number_row += 1
+        print("init table finished")
 
 
 if __name__ == "__main__":

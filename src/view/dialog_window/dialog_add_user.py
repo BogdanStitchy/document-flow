@@ -7,6 +7,7 @@ from src.controller import controller_main_window as controller
 class DialogWidgetAddUser(QDialog):
     def __init__(self, main_window):
         QDialog.__init__(self)
+        self.dialog_window = None
         self.setModal(True)
         self.main_window = main_window
         self.setWindowTitle("Добавление пользователя")
@@ -186,6 +187,10 @@ class DialogWidgetAddUser(QDialog):
             department = department[:3]  # получаем только номер отдела, без его названия
             print(department)
             controller.add_user_in_database(last_name, name, patronymic, department, login, password)
+            self.main_window.press_button_refresh()
+            self.dialog_window = QtWidgets.QMessageBox().information(self, "Добавление пользователя",
+                                                                     f'Пользователь "{last_name, name, patronymic}" '
+                                                                     f'успешно добавлен в базу.')
             self.close()
         except Exception as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Добавление пользователя",

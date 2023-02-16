@@ -245,6 +245,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self.retranslateUi()
+        self.press_button_refresh()
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self):
@@ -296,7 +297,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 3,
                                      QtWidgets.QTableWidgetItem(str(row[4])))  # Установка даты регистрации
             self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(str(row[5])))  # Установка номера отдела
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка создателя
+            creator = f"{row[6]} {row[7]} {row[8]}"
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(creator))  # Установка создателя
 
             number_row += 1
         print("init table finished")

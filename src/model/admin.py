@@ -186,3 +186,17 @@ if __name__ == '__main__':
     # time = datetime.now()
     # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
 
+
+def add_admin(last_name, name, patronymic, login, password):
+    salt = os.urandom(16)
+    password = hashlib.pbkdf2_hmac(
+        config.HASH_FUNCTION,
+        password.encode('utf-8'),
+        bytes(salt),
+        200000,
+        dklen=64
+    )
+
+    id_admin = db_helper.add_record_admin_data(last_name, name, patronymic, datetime.now().strftime("%d-%m-%Y %H:%M"))
+
+    db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1)

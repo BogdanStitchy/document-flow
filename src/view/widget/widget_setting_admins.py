@@ -1,10 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src.view.dialog_window import dialog_add_admin
 
 
 class WidgetSettingUsers(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.dialog_window = None
         self.setObjectName("MainWindow")
         self.resize(895, 605)
         self.setupUi()
@@ -135,7 +137,9 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_period_search, 0, QtCore.Qt.AlignVCenter)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
+
         self.pushButton_add = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_add.clicked.connect(self.press_button_add_admin)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -296,6 +300,8 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Дата регистрации"))
 
+    def press_button_add_admin(self):
+        self.dialog_window = dialog_add_admin.DialogWidgetAddAdmin(self)
 
 
 if __name__ == "__main__":

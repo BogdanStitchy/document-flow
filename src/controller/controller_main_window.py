@@ -65,3 +65,8 @@ def edit_user_data(last_name: str, name: str, patronymic: str, division_number: 
                    flag_edit_login: bool):
     # log
     admin.edit_user_data(last_name, name, patronymic, division_number, login, password, id_user, flag_edit_login)
+
+
+def add_admin_in_database(last_name: str, name: str, patronymic: str, login: str, password: str):
+    # log
+    admin.add_admin(last_name, name, patronymic, login, password)

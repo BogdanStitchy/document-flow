@@ -58,7 +58,7 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     # this get id for division_number
     id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
     id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, current_user_session_id,
-                                             datetime.now())
+                                             datetime.now().strftime("%d-%m-%Y %H:%M"))
     # id = db_helper.get_id_user(last_name, name, patronymic)
     db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)
     print(f"\nUser {last_name} {name} added in data base\n")
@@ -68,7 +68,7 @@ def delete_user(last_name: str, name: str, patronymic: str):
     db_helper.delete_user(last_name, name, patronymic)
 
 
-def check_password(login: str, password: str):
+def check_password(login: str, password: str):  # переписать под проверку в двух таблицах
     request = db_helper.get_password(login)
     # print("request =", request)
     global current_user_session_id, current_access_level
@@ -106,7 +106,7 @@ def check_password(login: str, password: str):
 
 
 def create_super_admin():
-    password = 'password'
+    password = 'super'
     salt = os.urandom(16)
     key1 = hashlib.pbkdf2_hmac(
         config.HASH_FUNCTION,
@@ -115,8 +115,8 @@ def create_super_admin():
         200000,
         dklen=64
     )
-    db_helper.add_record_user_data("super admin", "super admin", "superAdminovich", "235", "0", datetime.now())
-    db_helper.create_departments(key1.hex(), salt.hex(), 1, "superAdmin", 2)
+    db_helper.add_record_admin_data("super admin", "super admin", "super", datetime.now())
+    db_helper.add_record_admin_login(key1.hex(), salt.hex(), 1, "super", 0)
 
 
 def delete_file():
@@ -148,20 +148,26 @@ def download_document(id_document: int, path_to_save: str):
     file.close()
 
 
+def get_data_about_users():
+    data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
+    return data
+
+
 if __name__ == '__main__':
-    # add_user("super admin", "super admin", "superAdminovich", "235", "superAdmin", "password")
-    start_time = time.time()
-    # create_super_admin()
-
-    # add_user("test_name", "test", "test", "235", "login", "privetik")
-    # add_user("user1", "user1", "user1", "401", "login1", "user1")
-
-    # test_binary()
-
-    check_password("login", "privetik")
-    check_password("login1", "user1")
-    check_password("vanya", "vavak")
-    print(time.time() - start_time, "seconds")
-    # delete_user("test_name", "test", "test")
-    # time = datetime.now()
-    # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
+    # # add_user("super admin", "super admin", "superAdminovich", "235", "superAdmin", "password")
+    # start_time = time.time()
+    # # create_super_admin()
+    #
+    # # add_user("test_name", "test", "test", "235", "login", "privetik")
+    # # add_user("user1", "user1", "user1", "401", "login1", "user1")
+    #
+    # # test_binary()
+    #
+    # check_password("login", "privetik")
+    # check_password("login1", "user1")
+    # check_password("vanya", "vavak")
+    # print(time.time() - start_time, "seconds")
+    # # delete_user("test_name", "test", "test")
+    # # time = datetime.now()
+    # # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
+    create_super_admin()

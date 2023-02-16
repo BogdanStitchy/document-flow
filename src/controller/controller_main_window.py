@@ -53,4 +53,5 @@ def edit_document(id_document: int, name_document: str, inner_number: str, outpu
 
 def get_data_about_users():
     # log
-    pass
+    data = admin.get_data_about_users()
+    return data

@@ -68,7 +68,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_home)
 
         self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
-
+        self.pushButton_refresh.clicked.connect(self.press_button_refresh)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -277,41 +277,27 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def press_button_refresh(self):
         self.data_about_users = controller.get_data_about_users()
+        print(self.data_about_users)
         self.fill_in_table()
 
     def fill_in_table(self):
         if self.data_about_users is None:
-            self.dialog_window = QtWidgets.QDialog()
+            self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
             return
         self.tableWidget.setRowCount(len(self.data_about_users))
         number_row = 0
         for row in self.data_about_users:
             name_item = MyTableWidgetItem(row[1])
-            name_item.set_additional_data(row[0])
-            self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
-            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
-            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
-            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row[4])))  # Установка исходящей даты
-            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row[5]))  # Установка типа документа
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка даты загрузки
-            self.tableWidget.setItem(number_row, 6,
-                                     QtWidgets.QTableWidgetItem("Иван Иванович Иванов"))  # Установка автора
-            self.tableWidget.setItem(number_row, 7,
-                                     QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
+            name_item.set_additional_data(row[0])  # Установка id
 
-            button_downlad = QtWidgets.QPushButton(f"скачать")
-            button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-                                         "padding: 5;\n"
-                                         "border-radius:5px;\n"
-                                         "border: 1 solid black;\n"
-                                         "")
-            button_downlad.setObjectName(f"{row[0]}")
-            button_downlad.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            button_downlad.clicked.connect(
-                lambda ch, id_document=row[0], name_file=row[1]: self.press_button_download(id_document, name_file))
+            self.tableWidget.setItem(number_row, 0, name_item)  # Установка фамилии
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка имени
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка отчества
+            self.tableWidget.setItem(number_row, 3,
+                                     QtWidgets.QTableWidgetItem(str(row[4])))  # Установка даты регистрации
+            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(str(row[5])))  # Установка номера отдела
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка создателя
 
-            self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
-            self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
             number_row += 1
         print("init table finished")
 

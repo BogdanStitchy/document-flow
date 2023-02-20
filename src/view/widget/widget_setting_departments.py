@@ -14,6 +14,7 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.departments_for_added = []
         self.depth_lvl = None
         self.list_hierarchy = []
+        self.list_departments = []
         self.setObjectName("MainWindow")
         self.resize(800, 600)
         self.setupUi()
@@ -84,83 +85,25 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
         self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Номер отдела"))
         self.treeWidget.header().setResizeContentsPrecision(QHeaderView.ResizeToContents)
-        # size = QSize()
-        # size.setWidth(400)
-        # self.treeWidget.headerItem().setSizeHint(1, size)
         self.treeWidget.headerItem().setText(1, _translate("MainWindow", "Название отдела"))
-        # # self.treeWidget.headerItem().setText(2, _translate("MainWindow", "идентификатор"))
-        # __sortingEnabled = self.treeWidget.isSortingEnabled()
-        # self.treeWidget.setSortingEnabled(False)
-        # self.treeWidget.topLevelItem(0).setText(1, _translate("MainWindow",
-        #                                                       "Заместитель генерального деректора по безопасности"))
-        # self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "0"))
-        # self.treeWidget.topLevelItem(0).setText(2, _translate("MainWindow", "1"))
-        #
-        # self.treeWidget.topLevelItem(0).child(0).setText(0, _translate("MainWindow", "235"))
-        # self.treeWidget.topLevelItem(0).child(0).setText(1, _translate("MainWindow", "Управление безопасности"))
-        # self.treeWidget.topLevelItem(0).child(0).setText(2, _translate("MainWindow", "2"))
-        #
-        # self.treeWidget.topLevelItem(0).child(0).child(0).setText(0, _translate("MainWindow", "400"))
-        # self.treeWidget.topLevelItem(0).child(0).child(0).setText(1, _translate("MainWindow",
-        #                                                                         "Отдел экономической безопасности"))
-        # self.treeWidget.topLevelItem(0).child(0).child(0).setText(2, _translate("MainWindow", "3"))
-        #
-        # self.treeWidget.topLevelItem(0).child(0).child(1).setText(0, _translate("MainWindow", "401"))
-        # self.treeWidget.topLevelItem(0).child(0).child(1).setText(1, _translate("MainWindow",
-        #                                                                         "Отдел информационной безопасности"))
-        # self.treeWidget.topLevelItem(0).child(0).child(1).setText(2, _translate("MainWindow", "4"))
-        #
-        # self.treeWidget.topLevelItem(0).child(0).child(2).setText(0, _translate("MainWindow", "402"))
-        # self.treeWidget.topLevelItem(0).child(0).child(2).setText(1, _translate("MainWindow",
-        #                                                                         "Отдел по обеспечению физической и информационной техническиой защиты ЯО"))
-        # self.treeWidget.topLevelItem(0).child(0).child(2).setText(2, _translate("MainWindow", "5"))
-        #
-        # # self.treeWidget.topLevelItem(0).child(0).child(1).setText(0, _translate("MainWindow", "403"))
-        # self.treeWidget.topLevelItem(0).child(1).setText(0, _translate("MainWindow", "260"))
-        # self.treeWidget.topLevelItem(0).child(1).setText(1, _translate("MainWindow",
-        #                                                                "Бюро противодействия иностранным техническим разведкам"))
-        # self.treeWidget.topLevelItem(0).child(1).setText(2, _translate("MainWindow", "6"))
-        #
-        # self.treeWidget.topLevelItem(0).child(2).setText(0, _translate("MainWindow", "291"))
-        # self.treeWidget.topLevelItem(0).child(2).setText(1, _translate("MainWindow", "Бюро специальной связи"))
-        # self.treeWidget.topLevelItem(0).child(2).setText(2, _translate("MainWindow", "7"))
-        #
-        # self.treeWidget.topLevelItem(0).child(3).setText(0, _translate("MainWindow", "236"))
-        # self.treeWidget.topLevelItem(0).child(3).setText(1, _translate("MainWindow", "Режимно-секретный отдел"))
-        # self.treeWidget.topLevelItem(0).child(3).setText(2, _translate("MainWindow", "8"))
-        #
-        # self.treeWidget.topLevelItem(0).child(4).setText(0, _translate("MainWindow", "117"))
-        # self.treeWidget.topLevelItem(0).child(4).setText(1,
-        #                                                  _translate("MainWindow", "Отдел мобилизационной подготовки"))
-        # self.treeWidget.topLevelItem(0).child(4).setText(2, _translate("MainWindow", "9"))
-        #
-        # self.treeWidget.topLevelItem(0).child(5).setText(0, _translate("MainWindow", "237"))
-        # self.treeWidget.topLevelItem(0).child(5).setText(1, _translate("MainWindow", "Отдел ГО и ЧС"))
-        # self.treeWidget.topLevelItem(0).child(5).setText(2, _translate("MainWindow", "10"))
-        #
-        # self.treeWidget.setSortingEnabled(__sortingEnabled)
 
         self.button_save.setText(_translate("MainWindow", "сохранить изменения"))
         self.button_add_row.setText(_translate("MainWindow", "добавить элемент"))
         self.button_delte_row.setText(_translate("MainWindow", "удалить элемент"))
 
     def button_save_press(self):
-        # print(self.treeWidget.topLevelItemCount())
         for i in range(self.treeWidget.topLevelItemCount()):  # количество элементов верхнего уровня
             item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
-            # print(type(item))
             # print(item.text(0))  # текст элемента в указанном столбце
-
             self.__add_new_departments()
             self.__delete_departments()
 
             self.tree(item)
-            print(self.list_hierarchy)
+            # print("departments:\n", self.list_departments)
+            # print(self.list_hierarchy)
             controller.save_hierarchy(self.list_hierarchy)
+            controller.update_data_departments(self.list_departments)
             print("save success")
-            # print(self.department_for_added[0].text(0))
-            # print(self.department_for_added[0].text(1))
-            # print(self.department_for_added[0].text(2))
 
     def __add_new_departments(self):
         for item in self.departments_for_added:
@@ -192,25 +135,22 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def tree(self, item):
         text = item.text(0)
-        print(f"{text}", end="\t")
-        # print("item with tree: ", item, end="\t")
+        # print(f"{text}", end="\t")
+        self.list_departments.append((item.text(0), item.text(1), int(item.text(2))))
         record_for_db = [0, 0]
         if item.parent() is not None:
             record_for_db[1] = item.parent().text(2)
-            print(f"\tparent: {item.parent().text(0)}", end="\t")
+            # print(f"\tparent: {item.parent().text(0)}", end="\t")
         else:
             record_for_db[1] = None
-            print(f"\tparent: null", end="\t")
+            # print(f"\tparent: null", end="\t")
         record_for_db[0] = item.text(2)
         self.list_hierarchy.append(record_for_db)
-        print("id = ", item.text(2))
-        print(record_for_db)
-        print()
+        # print("id = ", item.text(2))
+        # print(record_for_db, "\n")
         count_children = item.childCount()
         for index_child in range(count_children):
-            # self.depth_lvl += 1
             self.tree(item.child(index_child))
-        # self.depth_lvl -= 1
 
     def init_tree_widget(self):
         # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)

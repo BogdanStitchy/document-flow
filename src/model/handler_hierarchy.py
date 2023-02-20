@@ -51,3 +51,7 @@ def delete_department_in_db(id_department: int):
 if __name__ == '__main__':
     hr = Hierarchy()
     print(hr.get_data_about_departments())
+
+
+def update_data_departments(list_departments: list):
+    db_helper.update_data_departments(list_departments)

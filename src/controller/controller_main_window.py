@@ -95,3 +95,8 @@ def add_department(name_department: str, number_department: int):
 def delete_department(id_department: int):
     # log
     handler_hierarchy.delete_department_in_db(id_department)
+
+
+def update_data_departments(list_departments: list):
+    # log
+    handler_hierarchy.update_data_departments(list_departments)

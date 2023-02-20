@@ -261,9 +261,11 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         self.tableWidget.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
         self.tableWidget.setFont(font)
+        self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.verticalScrollBar().setSingleStep(3)
+        self.tableWidget.horizontalScrollBar().setSingleStep(3)
         self.tableWidget.setFocusPolicy(QtCore.Qt.NoFocus)
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")

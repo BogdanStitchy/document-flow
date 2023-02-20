@@ -220,7 +220,9 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setPalette(palette)
         self.tableWidget.setFont(font)
         self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        self.tableWidget.verticalScrollBar().setSingleStep(1)
+        self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.verticalScrollBar().setSingleStep(3)
+        self.tableWidget.horizontalScrollBar().setSingleStep(3)
         self.tableWidget.setFocusPolicy(QtCore.Qt.NoFocus)
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")

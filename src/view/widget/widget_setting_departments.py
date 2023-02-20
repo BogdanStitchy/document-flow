@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QHeaderView
 
 from src.view.widget import my_tree_widget
+from src.view.dialog_window.dialog_select_department import DialogWidgetSelectDepartment
 
 import src.controller.controller_main_window as controller
 
@@ -15,6 +16,8 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.depth_lvl = None
         self.list_hierarchy = []
         self.list_departments = []
+        self.list_replacement_departments = []
+        self.dialog_window = None
         self.setObjectName("MainWindow")
         self.resize(800, 600)
         self.setupUi()
@@ -95,14 +98,18 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         for i in range(self.treeWidget.topLevelItemCount()):  # количество элементов верхнего уровня
             item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
             # print(item.text(0))  # текст элемента в указанном столбце
-            self.__add_new_departments()
-            self.__delete_departments()
 
+            self.__add_new_departments()
+            controller.change_people_departments(self.list_replacement_departments)
+            self.__delete_departments()
+            
             self.tree(item)
             # print("departments:\n", self.list_departments)
             # print(self.list_hierarchy)
             controller.save_hierarchy(self.list_hierarchy)
             controller.update_data_departments(self.list_departments)
+            self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
+                                                                     "Изменеиня успешно сохранены в базе")
             print("save success")
 
     def __add_new_departments(self):
@@ -127,9 +134,19 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def button_delete_row_press(self):
         selected_elements = self.treeWidget.selectedItems()
+        if len(selected_elements) < 1:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление информации об отделе",
+                                                                 "Для удаления информации об отделе, выделите "
+                                                                 "нужный отдел щелчком мыши")
         print(selected_elements, type(selected_elements))
+        self.dialog_window = DialogWidgetSelectDepartment(self)
+        self.dialog_window.exec()  # ожидание закрытия диалогового окна
+        selected_department = self.dialog_window.get_selected_answer()
+        print("selected_department = ", selected_department)
         for element in selected_elements:
             element.removeChild(element)
+            self.list_replacement_departments.append(
+                (selected_department, int(element.text(2))))  # 1 - то, на что меняем; 2 - то, что заменяем
             self.id_departments_for_delete.append(element.text(2))
             print(element.text(0), element.text(1))
 
@@ -153,36 +170,6 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.tree(item.child(index_child))
 
     def init_tree_widget(self):
-        # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        # item_0.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_2 = QtWidgets.QTreeWidgetItem(item_1)
-        # item_2.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_2 = QtWidgets.QTreeWidgetItem(item_1)
-        # item_2.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_2 = QtWidgets.QTreeWidgetItem(item_1)
-        # item_2.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setFlags(
-        #     QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
         hierarchy = controller.get_hierarchy()
         self.treeWidget.addTopLevelItem(
             hierarchy[1]["item"])  # элемент под 1-ым индексом всегда будет главным (так сохраняется в базе данных)

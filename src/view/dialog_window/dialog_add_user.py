@@ -158,7 +158,7 @@ class DialogWidgetAddUser(QDialog):
 
     def retranslateUi(self, Dialog_add_user):
         _translate = QtCore.QCoreApplication.translate
-        Dialog_add_user.setWindowTitle(_translate("Dialog_add_user", "Dialog"))
+        # Dialog_add_user.setWindowTitle(_translate("Dialog_add_user", "Dialog"))
         self.label_last_name.setText(_translate("Dialog_add_user", "Фамилия:"))
         self.label_patronymic.setText(_translate("Dialog_add_user", "Отчество:"))
         self.label_login.setText(_translate("Dialog_add_user", "Логин:"))

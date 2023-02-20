@@ -17,11 +17,11 @@ class Hierarchy:
 
         :return: {id(int): {"item": value(QTreeWidgetItem), "name": value(str), "number_department": value(int)}}
         """
-        self.__get_naming_all_departments()
+        self.__set_naming_all_departments()
         self.__set_hierarchy_departments()
         return self.__departments
 
-    def __get_naming_all_departments(self):
+    def __set_naming_all_departments(self):
         result = db_helper.get_all_departments()
 
         for row in result:
@@ -48,10 +48,18 @@ def delete_department_in_db(id_department: int):
     db_helper.delete_department(id_department)
 
 
+def update_data_departments(list_departments: list):
+    db_helper.update_data_departments(list_departments)
+
+
 if __name__ == '__main__':
     hr = Hierarchy()
     print(hr.get_data_about_departments())
 
 
-def update_data_departments(list_departments: list):
-    db_helper.update_data_departments(list_departments)
+def create_hierarchy(list_hierarchy: list):
+    db_helper.create_hierarchy(list_hierarchy)
+
+
+def change_people_departments(list_replacement_departments: list):
+    db_helper.change_people_departments(list_replacement_departments)

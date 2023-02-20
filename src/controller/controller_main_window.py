@@ -1,12 +1,11 @@
-import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper_for_hierarchy
 import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
 from src.model import admin
 from src.model import handler_hierarchy
 
 
-def save_hierarchy(list_hierarchy: []):
+def save_hierarchy(list_hierarchy: list):
     # log
-    db_helper_for_hierarchy.create_hierarchy(list_hierarchy)
+    handler_hierarchy.create_hierarchy(list_hierarchy)
 
 
 def get_hierarchy():
@@ -100,3 +99,8 @@ def delete_department(id_department: int):
 def update_data_departments(list_departments: list):
     # log
     handler_hierarchy.update_data_departments(list_departments)
+
+
+def change_people_departments(list_replacement_departments: list):
+    # log
+    handler_hierarchy.change_people_departments(list_replacement_departments)

@@ -78,9 +78,9 @@ def edit_user_data(last_name: str, name: str, patronymic: str, division_number: 
             200000,
             dklen=64
         )
-        db_helper.edit_login_data(login, password.hex(), salt.hex(), id_user)
+        db_helper.edit_user_login_data(login, password.hex(), salt.hex(), id_user)
     elif flag_edit_login:
-        db_helper.edit_only_login(login, id_user)
+        db_helper.edit_only_login_user(login, id_user)
 
 
 def delete_user(id_user: int):
@@ -172,21 +172,6 @@ def get_data_about_users():
     return data
 
 
-if __name__ == '__main__':
-    start_time = time.time()
-    # create_super_admin()
-
-    # test_binary()
-
-    check_password("Ivan", "Vanya")
-    # check_password("login1", "user1")
-    # check_password("vanya", "vavak")
-    print(time.time() - start_time, "seconds")
-    # delete_user("test_name", "test", "test")
-    # time = datetime.now()
-    # print(datetime.now().strftime("%d-%m-%Y %H:%M"))
-
-
 def add_admin(last_name, name, patronymic, login, password):
     salt = os.urandom(16)
     password = hashlib.pbkdf2_hmac(
@@ -208,3 +193,35 @@ def get_data_about_admins():
 
 def delete_admin(id_admin: int):
     db_helper.delete_admin(id_admin)
+
+
+def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):
+    db_helper.edit_data_admin(last_name, name, patronymic, id_admin)
+
+    if password != "":
+        salt = os.urandom(16)
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(salt.hex(), 'utf-8'),
+            200000,
+            dklen=64
+        )
+        db_helper.edit_admin_login_data(login, password.hex(), salt.hex(), id_admin)
+    elif flag_edit_login:
+        db_helper.edit_only_login_admin(login, id_admin)
+
+
+if __name__ == '__main__':
+    start_time = time.time()
+    # create_super_admin()
+
+    # test_binary()
+
+    check_password("Ivan", "Vanya")
+    # check_password("login1", "user1")
+    # check_password("vanya", "vavak")
+    print(time.time() - start_time, "seconds")
+    # delete_user("test_name", "test", "test")
+    # time = datetime.now()
+    # print(datetime.now().strftime("%d-%m-%Y %H:%M"))

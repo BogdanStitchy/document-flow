@@ -1,7 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from src.view.dialog_window import dialog_add_admin
 from src.controller import controller_main_window as controller
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
+from src.view.dialog_window import dialog_edit_admin
 
 
 class WidgetSettingUsers(QtWidgets.QMainWindow):
@@ -166,7 +168,9 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                           "")
         self.pushButton_add.setObjectName("pushButton_add")
         self.horizontalLayout.addWidget(self.pushButton_add)
+
         self.pushButton_edit = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_edit.clicked.connect(self.press_button_edit_admin)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -350,6 +354,20 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление администратора",
                                                                  "Для удаления администратора выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
+                                                                 "(крайний левый стоблец).")
+
+    def press_button_edit_admin(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 6:
+            id_admin = items[0].get_additional_data()
+            self.dialog_window = dialog_edit_admin.DialogWidgetEditAdmin(main_window=self, last_name=items[0].text(),
+                                                                         name=items[1].text(),
+                                                                         patronymic=items[2].text(),
+                                                                         login=items[3].text(), id_admin=id_admin)
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование администратора",
+                                                                 "Для редактирования администратора выделите всю строку"
+                                                                 " (строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
 
 

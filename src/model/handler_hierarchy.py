@@ -44,6 +44,10 @@ def add_department_in_db(name_department: str, number_department: int):
     return db_helper.add_department(name_department, number_department)
 
 
+def delete_department_in_db(id_department: int):
+    db_helper.delete_department(id_department)
+
+
 if __name__ == '__main__':
     hr = Hierarchy()
     print(hr.get_data_about_departments())

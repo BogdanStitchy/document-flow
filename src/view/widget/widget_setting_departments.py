@@ -10,7 +10,8 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.department_for_added = []
+        self.id_departments_for_delete = []
+        self.departments_for_added = []
         self.depth_lvl = None
         self.list_hierarchy = []
         self.setObjectName("MainWindow")
@@ -150,7 +151,8 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             # print(type(item))
             # print(item.text(0))  # текст элемента в указанном столбце
 
-            self.__add_new_department()
+            self.__add_new_departments()
+            self.__delete_departments()
 
             self.tree(item)
             print(self.list_hierarchy)
@@ -160,11 +162,15 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             # print(self.department_for_added[0].text(1))
             # print(self.department_for_added[0].text(2))
 
-    def __add_new_department(self):
-        for item in self.department_for_added:
+    def __add_new_departments(self):
+        for item in self.departments_for_added:
             id_added_department = controller.add_department(name_department=item.text(1),
                                                             number_department=int(item.text(0)))
             item.setText(2, str(id_added_department))
+
+    def __delete_departments(self):
+        for id_department in self.id_departments_for_delete:
+            controller.delete_department(id_department=int(id_department))
 
     def button_add_row_press(self):
         item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)
@@ -174,14 +180,14 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         item_for_added.setText(1, "новое название")
         item_for_added.setText(2, "111")
         self.treeWidget.addTopLevelItem(item_for_added)
-        self.department_for_added.append(item_for_added)
-        print("\n\n\n item with added: ", item_for_added, "\n\n\n")
+        self.departments_for_added.append(item_for_added)
 
     def button_delete_row_press(self):
         selected_elements = self.treeWidget.selectedItems()
         print(selected_elements, type(selected_elements))
         for element in selected_elements:
             element.removeChild(element)
+            self.id_departments_for_delete.append(element.text(2))
             print(element.text(0), element.text(1))
 
     def tree(self, item):

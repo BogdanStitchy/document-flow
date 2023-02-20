@@ -90,3 +90,8 @@ def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patron
 
 def add_department(name_department: str, number_department: int):
     return handler_hierarchy.add_department_in_db(name_department, number_department)
+
+
+def delete_department(id_department: int):
+    # log
+    handler_hierarchy.delete_department_in_db(id_department)

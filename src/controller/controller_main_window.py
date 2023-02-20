@@ -1,7 +1,7 @@
 import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper_for_hierarchy
 import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
 from src.model import admin
-from src.model.handler_hierarchy import Hierarchy
+from src.model import handler_hierarchy
 
 
 def save_hierarchy(list_hierarchy: []):
@@ -10,7 +10,7 @@ def save_hierarchy(list_hierarchy: []):
 
 
 def get_hierarchy():
-    hierarchy = Hierarchy()
+    hierarchy = handler_hierarchy.Hierarchy()
     return hierarchy.get_data_about_departments()
 
 
@@ -86,3 +86,7 @@ def delete_admin(id_admin: int):
 def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patronymic: str, new_login: str,
                     new_password: str, flag_edit_login: bool):
     admin.edit_admin_data(id_admin, new_last_name, new_name, new_patronymic, new_login, new_password, flag_edit_login)
+
+
+def add_department(name_department: str, number_department: int):
+    return handler_hierarchy.add_department_in_db(name_department, number_department)

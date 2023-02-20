@@ -28,9 +28,9 @@ class Hierarchy:
             self.__departments[row[0]] = {"item": QTreeWidgetItem(), "name": row[1], "number_department": row[2]}
             self.__departments[row[0]]["item"].setFlags(
                 QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-            self.__departments[row[0]]["item"].setText(0, str(row[2]))
-            self.__departments[row[0]]["item"].setText(1, row[1])
-            self.__departments[row[0]]["item"].setText(2, str(row[0]))
+            self.__departments[row[0]]["item"].setText(0, str(row[2]))  # установка имени на итем
+            self.__departments[row[0]]["item"].setText(1, row[1])  # установка номера отдела на итем
+            self.__departments[row[0]]["item"].setText(2, str(row[0]))  # установка id на итем
 
     def __set_hierarchy_departments(self):
         hierarchy = db_helper.get_hierarchy()
@@ -38,6 +38,10 @@ class Hierarchy:
             if dependence[1] is None:
                 continue
             self.__departments[dependence[1]]["item"].addChild(self.__departments[dependence[0]]["item"])
+
+
+def add_department_in_db(name_department: str, number_department: int):
+    return db_helper.add_department(name_department, number_department)
 
 
 if __name__ == '__main__':

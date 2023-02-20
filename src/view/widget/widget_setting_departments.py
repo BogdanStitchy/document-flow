@@ -10,6 +10,7 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.department_for_added = []
         self.depth_lvl = None
         self.list_hierarchy = []
         self.setObjectName("MainWindow")
@@ -148,41 +149,52 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
             # print(type(item))
             # print(item.text(0))  # текст элемента в указанном столбце
-            # self.depth_lvl = 0
+
+            self.__add_new_department()
+
             self.tree(item)
             print(self.list_hierarchy)
             controller.save_hierarchy(self.list_hierarchy)
             print("save success")
+            # print(self.department_for_added[0].text(0))
+            # print(self.department_for_added[0].text(1))
+            # print(self.department_for_added[0].text(2))
+
+    def __add_new_department(self):
+        for item in self.department_for_added:
+            id_added_department = controller.add_department(name_department=item.text(1),
+                                                            number_department=int(item.text(0)))
+            item.setText(2, str(id_added_department))
 
     def button_add_row_press(self):
-        print("push button")
         item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)
         item_for_added.setFlags(
             QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        item_for_added.setText(0, "номер")
+        item_for_added.setText(0, "0")
         item_for_added.setText(1, "новое название")
+        item_for_added.setText(2, "111")
         self.treeWidget.addTopLevelItem(item_for_added)
+        self.department_for_added.append(item_for_added)
+        print("\n\n\n item with added: ", item_for_added, "\n\n\n")
 
     def button_delete_row_press(self):
-        # index = self.treeWidget.currentIndex().row()
         selected_elements = self.treeWidget.selectedItems()
-        print(selected_elements)
+        print(selected_elements, type(selected_elements))
         for element in selected_elements:
-            self.treeWidget.removeItemWidget(element, 0)
-        # self.treeWidget.removeItemWidget()
-        # item = model.item(index)
-        # print(item.text())
+            element.removeChild(element)
+            print(element.text(0), element.text(1))
 
     def tree(self, item):
         text = item.text(0)
-        print(f"{text}", end="")
+        print(f"{text}", end="\t")
+        # print("item with tree: ", item, end="\t")
         record_for_db = [0, 0]
         if item.parent() is not None:
             record_for_db[1] = item.parent().text(2)
-            print(f"\tparent: {item.parent().text(0)}")
+            print(f"\tparent: {item.parent().text(0)}", end="\t")
         else:
             record_for_db[1] = None
-            print(f"\tparent: null")
+            print(f"\tparent: null", end="\t")
         record_for_db[0] = item.text(2)
         self.list_hierarchy.append(record_for_db)
         print("id = ", item.text(2))

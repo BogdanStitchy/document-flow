@@ -204,3 +204,7 @@ def add_admin(last_name, name, patronymic, login, password):
 
 def get_data_about_admins():
     return db_helper.get_data_about_admins()
+
+
+def delete_admin(id_admin: int):
+    db_helper.delete_admin(id_admin)

@@ -8,6 +8,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.data_about_users = None
         self.dialog_window = None
         self.setObjectName("MainWindow")
         self.resize(895, 605)
@@ -185,7 +186,9 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                            "")
         self.pushButton_edit.setObjectName("pushButton_edit")
         self.horizontalLayout.addWidget(self.pushButton_edit)
+
         self.pushButton_delete = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_delete.clicked.connect(self.press_button_delete)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(10)
@@ -326,6 +329,28 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
             number_row += 1
         print("init table finished")
+
+    def press_button_delete(self):
+        items = self.tableWidget.selectedItems()
+        if len(items) == 6:
+            id_admin_for_delete = items[0].get_additional_data()
+            if id_admin_for_delete == 1:
+                self.dialog_window = QtWidgets.QMessageBox().warning(self, "Попытка удаления супер администратора",
+                                                                     f'Супер администратора невозможно '
+                                                                     f'удалить из базы!')
+                return
+            controller.delete_admin(id_admin_for_delete)
+            self.dialog_window = QtWidgets.QMessageBox()
+            self.dialog_window.information(self, "Удаление администратора",
+                                           f'администратор "{items[0].text()} {items[1].text()} {items[2].text()}" '
+                                           f'успешно удален из базы.')
+            self.press_button_refresh()
+
+        else:
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление администратора",
+                                                                 "Для удаления администратора выделите всю строку "
+                                                                 "(строка станет белой), щелкнув по номеру строки "
+                                                                 "(крайний левый стоблец).")
 
 
 if __name__ == "__main__":

@@ -76,3 +76,8 @@ def get_data_about_admins():
     # log
     data = admin.get_data_about_admins()
     return data
+
+
+def delete_admin(id_admin: int):
+    # log
+    admin.delete_admin(id_admin)

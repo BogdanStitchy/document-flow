@@ -6,6 +6,10 @@ from src.model import handler_hierarchy
 admin = Client("admin").client
 
 
+def check_login(login: str, password: str):
+    admin.check_password(login, password)
+
+
 def save_hierarchy(list_hierarchy: list):
     # log
     handler_hierarchy.create_hierarchy(list_hierarchy)

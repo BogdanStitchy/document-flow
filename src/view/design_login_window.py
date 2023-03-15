@@ -49,6 +49,7 @@ class WindowLogin(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout.setContentsMargins(-1, 10, 10, -1)
         self.verticalLayout.setSpacing(9)
@@ -144,8 +145,8 @@ class WindowLogin(object):
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "BZ document flow"))
-        self.label.setWhatsThis(
-            _translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
+        # self.label.setWhatsThis(
+        #     _translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.button_login.setText(_translate("MainWindow", "Войти"))
 
 

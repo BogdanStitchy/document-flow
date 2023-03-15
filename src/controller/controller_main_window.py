@@ -1,6 +1,9 @@
 import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
-from src.model import admin
+# from src.model import admin
+from src.model.main_model import Client
 from src.model import handler_hierarchy
+
+admin = Client("admin").client
 
 
 def save_hierarchy(list_hierarchy: list):

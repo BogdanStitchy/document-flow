@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.view import window_login
 from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
 from src.view.widget import widget_setting_users
@@ -57,6 +58,7 @@ class WindowAdmin(QtWidgets.QMainWindow):
         spacerItem1 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
         self.button_logout = QtWidgets.QPushButton(self.frame_data)
+        self.button_logout.clicked.connect(self.logout)
         font = QtGui.QFont()
         font.setPointSize(9)
         font.setBold(True)
@@ -180,6 +182,11 @@ class WindowAdmin(QtWidgets.QMainWindow):
 
     def set_1_page_users(self):
         self.stackedWidget.setCurrentIndex(1)
+
+    def logout(self):
+        self.login = window_login.HandlerWindowLogin()
+        self.login.show()
+        self.close()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.view import window_login
 from widget import widget_setting_documents
 
 
@@ -53,15 +54,16 @@ class WindowUser(QtWidgets.QMainWindow):
         self.label_departament.setObjectName("label_departament")
         self.horizontalLayout.addWidget(self.label_departament)
 
-        self.pushButton = QtWidgets.QPushButton(self.frame_data)
-        self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("padding: 5;\n"
-                                      "border-radius:5px;\n"
-                                      "border: 1 solid black;\n"
-                                      "")
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_logout = QtWidgets.QPushButton(self.frame_data)
+        self.pushButton_logout.clicked.connect(self.logout)
+        self.pushButton_logout.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton_logout.setFont(font)
+        self.pushButton_logout.setStyleSheet("padding: 5;\n"
+                                             "border-radius:5px;\n"
+                                             "border: 1 solid black;\n"
+                                             "")
+        self.pushButton_logout.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton_logout)
 
         self.verticalLayout.addWidget(self.frame_data)
         self.verticalLayout.addWidget(widget_setting_documents.WidgetDocuments())
@@ -76,7 +78,12 @@ class WindowUser(QtWidgets.QMainWindow):
         self.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_name.setText(_translate("MainWindow", "Иван Иванович Иванов"))
         self.label_departament.setText(_translate("MainWindow", "отдел 235"))
-        self.pushButton.setText(_translate("MainWindow", "выйти"))
+        self.pushButton_logout.setText(_translate("MainWindow", "выйти"))
+
+    def logout(self):
+        self.login = window_login.HandlerWindowLogin()
+        self.login.show()
+        self.close()
 
 
 if __name__ == "__main__":

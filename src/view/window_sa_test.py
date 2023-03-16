@@ -4,6 +4,7 @@ from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
 from src.view.widget import widget_setting_users
 from src.view.widget import widget_setting_departments
+import window_login
 
 
 class WindowSuperAdmin(QtWidgets.QMainWindow):
@@ -56,7 +57,9 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
         self.horizontalLayout_3.addWidget(self.label_departament)
         spacerItem1 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
+
         self.button_logout = QtWidgets.QPushButton(self.frame_data)
+        self.button_logout.clicked.connect(self.logout)
         font = QtGui.QFont()
         font.setPointSize(9)
         font.setBold(True)
@@ -414,6 +417,11 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
 
     def set_3_page_hierarchy(self):  # correct
         self.stackedWidget.setCurrentIndex(3)
+
+    def logout(self):
+        self.login = window_login.HandlerWindowLogin()
+        self.login.show()
+        self.close()
 
 
 if __name__ == "__main__":

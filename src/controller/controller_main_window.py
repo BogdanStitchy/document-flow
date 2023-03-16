@@ -127,3 +127,8 @@ def update_data_departments(list_departments: list):
 def change_people_departments(list_replacement_departments: list):
     # log
     handler_hierarchy.change_people_departments(list_replacement_departments)
+
+
+def change_password(password: str):
+    # log
+    client.change_password(password)

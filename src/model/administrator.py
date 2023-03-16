@@ -42,6 +42,19 @@ class Administrator(User):
                 print(f"Admin {login} no login")
                 return False
 
+    def change_password(self, password: str):
+        # self.CURRENT_ID = 5
+        salt = os.urandom(16)
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(salt.hex(), 'utf-8'),
+            200000,
+            dklen=64
+        )
+        db_helper.changes_password_admin(self.CURRENT_ID, password.hex(), salt.hex(),
+                                         datetime.now().strftime("%d-%m-%Y %H:%M"))
+
     @staticmethod
     def get_data_about_users():
         data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
@@ -85,7 +98,8 @@ class Administrator(User):
         #                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
         id_user = 14
         # id = db_helper.get_id_user(last_name, name, patronymic)
-        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)  # old version
+        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2,
+                                        datetime.now().strftime("%d-%m-%Y %H:%M"))  # old version
         # db_helper.add_record_user_login(password, salt, id_user, login, 2)
         print(f"\nUser {last_name} {name} added in data base\n")
 

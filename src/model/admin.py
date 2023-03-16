@@ -60,7 +60,8 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, current_user_session_id,
                                              datetime.now().strftime("%d-%m-%Y %H:%M"))
     # id = db_helper.get_id_user(last_name, name, patronymic)
-    db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)
+    db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2,
+                                    datetime.now().strftime("%d-%m-%Y %H:%M"))
     print(f"\nUser {last_name} {name} added in data base\n")
 
 
@@ -135,7 +136,7 @@ def create_super_admin():
         dklen=64
     )
     db_helper.add_record_admin_data("super", "admin", "superadminovich", datetime.now().strftime("%d-%m-%Y %H:%M"))
-    db_helper.add_record_admin_login(key1.hex(), salt.hex(), 1, "super", 0)
+    db_helper.add_record_admin_login(key1.hex(), salt.hex(), 1, "super", 0, datetime.now().strftime("%d-%m-%Y %H:%M"))
 
 
 # def delete_file():
@@ -184,7 +185,8 @@ def add_admin(last_name, name, patronymic, login, password):
 
     id_admin = db_helper.add_record_admin_data(last_name, name, patronymic, datetime.now().strftime("%d-%m-%Y %H:%M"))
 
-    db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1)
+    db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1,
+                                     datetime.now().strftime("%d-%m-%Y %H:%M"))
 
 
 def get_data_about_admins():

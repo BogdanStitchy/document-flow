@@ -1,4 +1,5 @@
 import hashlib
+import os
 from datetime import datetime
 
 from src.model.config import config
@@ -49,6 +50,19 @@ class User:
                 print(f"User {login} no login")
                 return False
 
+    def change_password(self, password: str):
+        # self.CURRENT_ID = 5
+        salt = os.urandom(16)
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(salt.hex(), 'utf-8'),
+            200000,
+            dklen=64
+        )
+        db_helper.changes_password_user(self.CURRENT_ID, password.hex(), salt.hex(),
+                                        datetime.now().strftime("%d-%m-%Y %H:%M"))
+
     def delete_file(self):
         pass
 
@@ -76,3 +90,8 @@ class User:
         file = open(path_to_save, 'wb')
         file.write(bytes(data_file))
         file.close()
+
+
+if __name__ == '__main__':
+    user = User()
+    user.change_password("Ivan")

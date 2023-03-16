@@ -12,9 +12,6 @@ class SuperAdmin(Administrator):
         super().__init__()
         self.LVL_ACCESS = 0
 
-    def check_password(self, login: str, password: str):
-        pass
-
     @staticmethod
     def add_admin(last_name, name, patronymic, login, password):
         salt = os.urandom(16)
@@ -29,7 +26,8 @@ class SuperAdmin(Administrator):
         id_admin = db_helper.add_record_admin_data(last_name, name, patronymic,
                                                    datetime.now().strftime("%d-%m-%Y %H:%M"))
 
-        db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1)
+        db_helper.add_record_admin_login(password.hex(), salt.hex(), id_admin, login, 1,
+                                         datetime.now().strftime("%d-%m-%Y %H:%M"))
 
     @staticmethod
     def get_data_about_admins():

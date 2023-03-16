@@ -122,6 +122,17 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.line_password.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.line_password)
 
+        self.hBox = QtWidgets.QHBoxLayout()
+        self.radio_user = QtWidgets.QRadioButton('пользователь')
+        self.radio_user.setMinimumSize(150, 10)
+        self.radio_user.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.radio_user.setChecked(True)
+        self.radio_admin = QtWidgets.QRadioButton('админ')
+        self.radio_admin.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.hBox.addWidget(self.radio_user)
+        self.hBox.addWidget(self.radio_admin)
+        self.verticalLayout.addLayout(self.hBox)
+
         self.button_login = QtWidgets.QPushButton(self.frame)
         self.button_login.clicked.connect(self.button_login_press)
         self.button_login.setShortcut(QtGui.QKeySequence("Return"))  # нажата клавиша enter
@@ -155,27 +166,33 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.button_login.setText(_translate("MainWindow", "Войти"))
 
     def button_login_press(self):
+        if self.radio_user.isChecked():
+            print("User radio")
+            role = 'user'
+        if self.radio_admin.isChecked():
+            print("Admin radio")
+            role = 'admin'
         input_login = self.line_login.text()
         input_password = self.line_password.text()
-        print(f"login = {input_login}\tpassword = {input_password}")
-        login_flag = controller.check_login(input_login, input_password)
+        # print(f"login = {input_login}\tpassword = {input_password}")
+        login_flag = controller.check_login(input_login, input_password, role)
         print("login_flag in view = ", login_flag)
-        if type(login_flag) != int:
-            print(" self.clear_password_line()")
-            self.clear_password_line()
-        elif login_flag == 0:
+        if login_flag == 'superAdmin':
             print("current = super admin")
             self.admin = window_sa_test.WindowSuperAdmin()
             self.admin.show()
             self.close()
-        elif login_flag == 1:
+        elif login_flag == 'admin':
             print("current = admin")
             self.window_admin = window_admin.WindowAdmin()
             self.close()
-        elif login_flag == 2:
+        elif login_flag == 'user':
             print("current = user")
             self.window_user = window_user.WindowUser()
             self.close()
+        else:  # type(login_flag) != int:
+            print(" self.clear_password_line()")
+            self.clear_password_line()
 
     def clear_password_line(self):
         self.line_password.setText('')

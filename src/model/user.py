@@ -44,7 +44,7 @@ class User:
                 # global current_id, current_access_level
                 self.CURRENT_ID, current_access_level = id_and_access_level
                 print("lvl = ", current_access_level)
-                return current_access_level
+                return 'user'
             else:
                 print(f"User {login} no login")
                 return False

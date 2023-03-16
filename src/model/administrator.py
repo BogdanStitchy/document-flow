@@ -34,10 +34,12 @@ class Administrator(User):
                 print(f"This Admin with username '{login}' login successful")
                 # global current_id, current_access_level
                 self.CURRENT_ID, current_access_level = id_and_access_level
+                if current_access_level == 0:
+                    return 'superAdmin'
                 print("lvl = ", current_access_level)
-                return current_access_level
+                return 'admin'
             else:
-                print(f"User {login} no login")
+                print(f"Admin {login} no login")
                 return False
 
     @staticmethod

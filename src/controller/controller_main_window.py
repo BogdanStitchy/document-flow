@@ -143,3 +143,11 @@ def get_last_password_change():
 def get_login():
     # log
     return client.get_login()
+
+
+def get_full_name():
+    return client.get_full_name()
+
+
+def get_number_department():
+    return client.get_number_department()

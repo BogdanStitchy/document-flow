@@ -396,7 +396,7 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.setWindowTitle(_translate("MainWindow", "BZ document flow (Super Admin mode)"))
         self.label_departament.setText(_translate("MainWindow", "SUPER ADMIN"))
         self.button_logout.setText(_translate("MainWindow", "выйти"))
         self.label_mode.setText(_translate("MainWindow", "Режим работы:"))

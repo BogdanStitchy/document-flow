@@ -12,6 +12,11 @@ class Administrator(User):
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 1
+        self.CURRENT_ID_DEPARTMENT = 1
+
+    def set_full_name(self):
+        self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_admin(
+            self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
         request = db_helper.get_password_admin(login)
@@ -31,16 +36,22 @@ class Administrator(User):
             )
 
             if password.hex().encode('utf-8') == bytes(received_password):
+                self.CURRENT_LOGIN = login
                 print(f"This Admin with username '{login}' login successful")
                 # global current_id, current_access_level
                 self.CURRENT_ID, current_access_level = id_and_access_level
                 if current_access_level == 0:
                     return 'superAdmin'
+                self.set_full_name()
                 print("lvl = ", current_access_level)
                 return 'admin'
             else:
                 print(f"Admin {login} no login")
                 return False
+
+    def get_last_change_password(self):
+        # self.CURRENT_ID = 6
+        return db_helper.get_last_change_password_admin(self.CURRENT_ID)
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5

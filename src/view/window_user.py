@@ -80,9 +80,9 @@ class WindowUser(QtWidgets.QMainWindow):
 
     def retranslateUi(self, ):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_name.setText(_translate("MainWindow", "Иван Иванович Иванов"))
-        self.label_departament.setText(_translate("MainWindow", "отдел 235"))
+        self.setWindowTitle(_translate("MainWindow", "BZ document flow"))
+        self.label_name.setText(_translate("MainWindow", controller.get_full_name()))
+        self.label_departament.setText(_translate("MainWindow", f"отдел {controller.get_number_department()}"))
         self.pushButton_logout.setText(_translate("MainWindow", "выйти"))
 
     def logout(self):
@@ -104,7 +104,7 @@ class WindowUser(QtWidgets.QMainWindow):
             if delta_date.days > 180:
                 self.dialog = DialogWidgetChangePassword(self)
                 result = self.dialog.exec()
-                print("result exit: ", result)
+                # print("result exit: ", result)
 
 
 if __name__ == "__main__":

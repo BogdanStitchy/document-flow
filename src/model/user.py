@@ -15,6 +15,8 @@ class User:
         self.CURRENT_LAST_NAME: str = None
         self.CURRENT_PATRONYMIC: str = None
         self.CURRENT_LOGIN: str = None
+        self.CURRENT_ID_DEPARTMENT: int = None
+        self.CURRENT_NUMBER_DEPARTMENT: int = None
 
     def get_lvl_access(self):
         return self.LVL_ACCESS
@@ -24,6 +26,16 @@ class User:
 
     def get_full_name(self):
         return f"{self.CURRENT_LAST_NAME} {self.CURRENT_NAME} {self.CURRENT_PATRONYMIC}"
+
+    def get_number_department(self):
+        return self.CURRENT_NUMBER_DEPARTMENT
+
+    def set_full_name(self):
+        self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_user(
+            self.CURRENT_ID)
+
+    def set_department_data(self):
+        self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_user(self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
         request = db_helper.get_password_user(login)
@@ -55,6 +67,8 @@ class User:
                 self.CURRENT_LOGIN = login
                 print(f"This user with username '{login}' login successful")
                 self.CURRENT_ID, current_access_level = id_and_access_level
+                self.set_full_name()
+                self.set_department_data()
                 print("lvl = ", current_access_level)
                 return 'user'
             else:

@@ -1,10 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import datetime
 
 from src.view import window_login
 from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
 from src.view.widget import widget_setting_users
 from src.view.widget import widget_setting_departments
+from src.view.dialog_window.dialog_password_change import DialogWidgetChangePassword
+from src.controller import controller_main_window as controller
 
 
 class WindowAdmin(QtWidgets.QMainWindow):
@@ -15,6 +18,7 @@ class WindowAdmin(QtWidgets.QMainWindow):
         self.setMinimumSize(900, 706)
         self.setupUi()
         self.show()
+        self.check_needs_password_change()
 
     def setupUi(self):
         self.centralwidget = QtWidgets.QWidget(self)
@@ -169,8 +173,8 @@ class WindowAdmin(QtWidgets.QMainWindow):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_departament.setText(_translate("MainWindow", "SUPER ADMIN"))
+        self.setWindowTitle(_translate("MainWindow", "BZ document flow (Admin mode)"))
+        self.label_departament.setText(_translate("MainWindow", f"ADMIN {controller.get_full_name()}"))
         self.button_logout.setText(_translate("MainWindow", "выйти"))
         self.label_mode.setText(_translate("MainWindow", "Режим работы:"))
 
@@ -187,6 +191,22 @@ class WindowAdmin(QtWidgets.QMainWindow):
         self.login = window_login.HandlerWindowLogin()
         self.login.show()
         self.close()
+
+    def check_needs_password_change(self):
+        change = controller.get_last_password_change()
+        # print(change)
+        # print(type(change))
+        if change is None:
+            self.dialog = DialogWidgetChangePassword(self)
+            result = self.dialog.exec()
+            print("result exit: ", result)
+        else:
+            delta_date = datetime.datetime.now() - change
+            # print("days:", delta_date.days)
+            if delta_date.days > 180:
+                self.dialog = DialogWidgetChangePassword(self)
+                result = self.dialog.exec()
+                print("result exit: ", result)
 
 
 if __name__ == "__main__":

@@ -97,10 +97,16 @@ class DialogWidgetChangePassword(QDialog):
     def save_password(self):
         password = self.lineEdit_password.text()
         password_repeat = self.lineEdit_password_repeat.text()
+        status_check_password = controller.check_password_strength(password)
         if password != password_repeat:
             QtWidgets.QMessageBox.warning(self, "Предупреждение", "Введеные пароли не сходятся!")
+            return
         if password == "":
             QtWidgets.QMessageBox.warning(self, "Предупреждение", "Введите пароль!")
+            return
+        if type(status_check_password) == str:
+            QtWidgets.QMessageBox.warning(self, "Предупреждение", status_check_password)
+            return
         else:
             if controller.change_password(password):
                 self.flag_success_exit = True

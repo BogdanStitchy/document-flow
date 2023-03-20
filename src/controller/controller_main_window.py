@@ -151,3 +151,7 @@ def get_full_name():
 
 def get_number_department():
     return client.get_number_department()
+
+
+def check_password_strength(password: str):
+    return client.check_password_strength(password)

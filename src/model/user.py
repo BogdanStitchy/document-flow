@@ -123,12 +123,42 @@ class User:
         file.write(bytes(data_file))
         file.close()
 
+    def check_password_strength(self, password: str):
+        """
+        Function for check security password.
+        If password was security function return True, else return password vulnerability report.
+        """
+
+        # Проверяем длину пароля
+        if len(password) < 12:
+            return "Пароль должен содержать больше 12 символов"
+
+        # Проверяем наличие хотя бы одной цифры
+        if not any(char.isdigit() for char in password):
+            return "Пароль должен содержать хотя бы одну цифру"
+
+        # Проверяем наличие хотя бы одной буквы в верхнем регистре
+        if not any(char.isupper() for char in password):
+            return "Пароль должен содержать хотя бы одну заглавнуюю букву"
+
+        # Проверяем наличие хотя бы одной буквы в нижнем регистре
+        if not any(char.islower() for char in password):
+            return "Пароль должен содержать хотя бы одну прописную букву"
+
+        # Проверяем наличие хотя бы одного специального символа
+        special_chars = """!@#$%^&*()_+-={}|[]\:;"'<>?,./"""
+        if not any(char in special_chars for char in password):
+            return f"Пароль должен содержать хотя бы один специальный символ ({special_chars})"
+
+        # Проверяем на сходство с логином
+        if password == self.CURRENT_LOGIN:
+            return "Пароль не должен сходится с логином"
+
+        # Если все проверки пройдены, то пароль сильный
+        return True
+
 
 if __name__ == '__main__':
     user = User()
     # user.change_password("Ivan")
-    changes = user.get_last_change_password()
-    print(changes)
-    print(type(changes))
-    dtr = datetime.datetime.now()
-    delta = dtr - changes
+    print(user.check_password_strength("Ghbdtasdfsad1@"))

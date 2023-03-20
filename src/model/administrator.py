@@ -55,6 +55,8 @@ class Administrator(User):
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5
+        if self.check_password(self.CURRENT_LOGIN, password) == 'admin' or 'superAdmin':
+            return False
         salt = os.urandom(16)
         password = hashlib.pbkdf2_hmac(
             config.HASH_FUNCTION,
@@ -65,6 +67,7 @@ class Administrator(User):
         )
         db_helper.changes_password_admin(self.CURRENT_ID, password.hex(), salt.hex(),
                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
+        return True
 
     @staticmethod
     def get_data_about_users():

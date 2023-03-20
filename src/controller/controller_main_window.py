@@ -7,20 +7,23 @@ from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
 
 client = SuperAdmin  # Client("admin").client
+role_client: str = ""
 
 
 def check_login(login: str, password: str, role: str):
     # client.check_password(login, password)
-    global client
+    global client, role_client
     if role == 'admin':
 
         client = Administrator()
         result = client.check_password(login, password)  # true, false, superAdmin
+        role_client = result
         if result == 'superAdmin':
             client = SuperAdmin()
             return 'superAdmin'
         return result
     elif role == 'user':
+        role_client = role
         client = User()
         result = client.check_password(login, password)  # true, false
         return result

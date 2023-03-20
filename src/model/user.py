@@ -127,6 +127,9 @@ class User:
         """
         Function for check security password.
         If password was security function return True, else return password vulnerability report.
+
+        :param password: str
+        :return: True, if the password is secure, else message (str) password vulnerability
         """
 
         # Проверяем длину пароля

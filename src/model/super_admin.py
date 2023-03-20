@@ -11,6 +11,10 @@ class SuperAdmin(Administrator):
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 0
+        self.CURRENT_ID = 1
+        self.CURRENT_LAST_NAME = "Супер"
+        self.CURRENT_NAME = "Админ"
+        self.CURRENT_PATRONYMIC = "СА"
 
     @staticmethod
     def add_admin(last_name, name, patronymic, login, password):

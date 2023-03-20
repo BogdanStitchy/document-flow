@@ -131,4 +131,15 @@ def change_people_departments(list_replacement_departments: list):
 
 def change_password(password: str):
     # log
-    client.change_password(password)
+    return client.change_password(password)
+
+
+def get_last_password_change():
+    # log
+    # client = User()
+    return client.get_last_change_password()
+
+
+def get_login():
+    # log
+    return client.get_login()

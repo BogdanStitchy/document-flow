@@ -1,7 +1,11 @@
+import datetime
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view import window_login
 from widget import widget_setting_documents
+from src.controller import controller_main_window as controller
+from src.view.dialog_window.dialog_password_change import DialogWidgetChangePassword
 
 
 class WindowUser(QtWidgets.QMainWindow):
@@ -12,6 +16,7 @@ class WindowUser(QtWidgets.QMainWindow):
         self.setMinimumSize(900, 706)
         self.setupUi()
         self.show()
+        self.check_needs_password_change()
 
     def setupUi(self):
         self.centralwidget = QtWidgets.QWidget(self)
@@ -85,10 +90,27 @@ class WindowUser(QtWidgets.QMainWindow):
         self.login.show()
         self.close()
 
+    def check_needs_password_change(self):
+        change = controller.get_last_password_change()
+        # print(change)
+        # print(type(change))
+        if change is None:
+            self.dialog = DialogWidgetChangePassword(self)
+            result = self.dialog.exec()
+            print("result exit: ", result)
+        else:
+            delta_date = datetime.datetime.now() - change
+            # print("days:", delta_date.days)
+            if delta_date.days > 180:
+                self.dialog = DialogWidgetChangePassword(self)
+                result = self.dialog.exec()
+                print("result exit: ", result)
+
 
 if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
     ui = WindowUser()
+    ui.check_needs_password_change()
     sys.exit(app.exec_())

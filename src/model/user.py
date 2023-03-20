@@ -1,6 +1,7 @@
 import hashlib
 import os
 from datetime import datetime
+import datetime
 
 from src.model.config import config
 from src.model.for_data_base import db_helper
@@ -10,11 +11,21 @@ class User:
     def __init__(self):
         self.LVL_ACCESS = 2
         self.CURRENT_ID: int = None
+        self.CURRENT_NAME: str = None
+        self.CURRENT_LAST_NAME: str = None
+        self.CURRENT_PATRONYMIC: str = None
+        self.CURRENT_LOGIN: str = None
 
     def get_lvl_access(self):
         return self.LVL_ACCESS
 
-    def check_password(self, login: str, password: str):  # переписать под проверку в двух таблицах
+    def get_login(self):
+        return self.CURRENT_LOGIN
+
+    def get_full_name(self):
+        return f"{self.CURRENT_LAST_NAME} {self.CURRENT_NAME} {self.CURRENT_PATRONYMIC}"
+
+    def check_password(self, login: str, password: str):
         request = db_helper.get_password_user(login)
         # print("request =", request)
         # global current_user_session_id, current_access_level
@@ -41,8 +52,8 @@ class User:
 
             # print("passwordik = ", passwordik.hex().encode('utf-8'))
             if password.hex().encode('utf-8') == bytes(received_password):
+                self.CURRENT_LOGIN = login
                 print(f"This user with username '{login}' login successful")
-                # global current_id, current_access_level
                 self.CURRENT_ID, current_access_level = id_and_access_level
                 print("lvl = ", current_access_level)
                 return 'user'
@@ -52,6 +63,8 @@ class User:
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5
+        if self.check_password(self.CURRENT_LOGIN, password) == "user":
+            return False  # старый и новый пароли сходятся
         salt = os.urandom(16)
         password = hashlib.pbkdf2_hmac(
             config.HASH_FUNCTION,
@@ -61,7 +74,12 @@ class User:
             dklen=64
         )
         db_helper.changes_password_user(self.CURRENT_ID, password.hex(), salt.hex(),
-                                        datetime.now().strftime("%d-%m-%Y %H:%M"))
+                                        datetime.datetime.now().strftime("%d-%m-%Y %H:%M"))
+        return True
+
+    def get_last_change_password(self):
+        # self.CURRENT_ID = 6
+        return db_helper.get_last_change_password_user(self.CURRENT_ID)
 
     def delete_file(self):
         pass
@@ -94,4 +112,9 @@ class User:
 
 if __name__ == '__main__':
     user = User()
-    user.change_password("Ivan")
+    # user.change_password("Ivan")
+    changes = user.get_last_change_password()
+    print(changes)
+    print(type(changes))
+    dtr = datetime.datetime.now()
+    delta = dtr - changes

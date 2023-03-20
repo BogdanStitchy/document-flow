@@ -63,7 +63,7 @@ class Administrator(User):
     def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str):
         salt = os.urandom(16)
         # original_salt = salt  # (salt.hex(), 'utf-8')
-        print("original salt = ", salt)
+        # print("original salt = ", salt)
         # password = 'password'
         # password2 = 'passworasdgasdgsdfgsdfhsdfhd'
         # start_time = time.time()
@@ -94,13 +94,10 @@ class Administrator(User):
         # print(len(str(salt)))
         # this get id for division_number
         id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
-        # id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
-        #                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
-        id_user = 14
-        # id = db_helper.get_id_user(last_name, name, patronymic)
-        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2,
-                                        datetime.now().strftime("%d-%m-%Y %H:%M"))  # old version
-        # db_helper.add_record_user_login(password, salt, id_user, login, 2)
+        id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
+                                                 datetime.now().strftime("%d-%m-%Y %H:%M"))
+        # id_user = 14
+        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)
         print(f"\nUser {last_name} {name} added in data base\n")
 
     @staticmethod

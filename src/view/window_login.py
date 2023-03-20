@@ -167,10 +167,8 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
 
     def button_login_press(self):
         if self.radio_user.isChecked():
-            print("User radio")
             role = 'user'
         if self.radio_admin.isChecked():
-            print("Admin radio")
             role = 'admin'
         input_login = self.line_login.text()
         input_password = self.line_password.text()
@@ -180,7 +178,6 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         if login_flag == 'superAdmin':
             print("current = super admin")
             self.admin = window_sa_test.WindowSuperAdmin()
-            self.admin.show()
             self.close()
         elif login_flag == 'admin':
             print("current = admin")

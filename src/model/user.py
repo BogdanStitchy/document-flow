@@ -104,7 +104,7 @@ class User:
                      output_date,
                      type_document: str):
         id_documents = db_helper.add_data_about_document(inner_number, output_number, output_date, name_document,
-                                                         datetime.now().strftime("%d-%m-%Y %H:%M"),
+                                                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
                                                          self.CURRENT_ID, type_document)
         file = open(path_to_document, 'rb')
         db_helper.add_file(id_documents, file.read())
@@ -119,6 +119,10 @@ class User:
         # print("USER")
         access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
         return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
+
+    def search_data_about_documents(self, search_string: str):
+        access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
+        return db_helper.search_data_documents_for_user(access_id_departments, search_string)
 
     @staticmethod
     def download_document(id_document: int, path_to_save: str):

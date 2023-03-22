@@ -352,9 +352,9 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
     def fill_in_table(self, data_for_filling):
         # print("widget\n", self.data_about_documents)
-        if data_for_filling is None:
-            data_for_filling = QtWidgets.QDialog()
-            return
+        if len(data_for_filling) == 0:
+            # data_for_filling = QtWidgets.QDialog()
+            return False
         self.tableWidget.setRowCount(len(data_for_filling))
         # self.tableWidget.setColumnCount()
         number_row = 0
@@ -390,6 +390,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
             number_row += 1
         print("init table documents finished")
+        return True
 
     def press_button_download(self, id_document: int, name_file: str):
         self.dialog_window = QtWidgets.QFileDialog()
@@ -425,7 +426,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
     def press_button_search_documents(self):
         self.result_searching = controller.search_documents(self.line_edit_search.text())
-        self.fill_in_table(self.result_searching)
+        flag_result = self.fill_in_table(self.result_searching)
+        if not flag_result:
+            QtWidgets.QMessageBox().information(self, "Результат поиска", f'По запросу "{self.line_edit_search.text()}"'
+                                                                          f' не найдено результатов')
 
 
 if __name__ == "__main__":

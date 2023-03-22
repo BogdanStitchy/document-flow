@@ -351,7 +351,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.fill_in_table(self.data_about_documents)
 
     def fill_in_table(self, data_for_filling):
-        # print("widget\n", self.data_about_documents)
+        print("widget\n", self.data_about_documents)
         if len(data_for_filling) == 0:
             # data_for_filling = QtWidgets.QDialog()
             return False
@@ -371,7 +371,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row[5]))  # Установка типа документа
             self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка даты загрузки
             self.tableWidget.setItem(number_row, 6,
-                                     QtWidgets.QTableWidgetItem("Иван Иванович Иванов"))  # Установка автора
+                                     QtWidgets.QTableWidgetItem(f"{row[7]} {row[8]} {row[9]}"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
                                      QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
 

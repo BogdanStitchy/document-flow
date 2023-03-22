@@ -115,8 +115,8 @@ class User:
         db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
 
     def get_data_about_documents(self):
-        print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
-        print("USER")
+        # print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
+        # print("USER")
         access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
         return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
 

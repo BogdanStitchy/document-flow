@@ -12,6 +12,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.result_searching = None
         self.data_about_documents = None
         self.dialog_window = None
         self.setObjectName("MainWindow")
@@ -50,7 +51,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.setObjectName("horizontalLayout")
 
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
-        self.pushButton_home.clicked.connect(self.fill_in_table)
+        self.pushButton_home.clicked.connect(self.press_button_home)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -108,6 +109,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.line_edit_search)
 
         self.pushButton_find = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_find.clicked.connect(self.press_button_search_documents)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -343,17 +345,20 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
     def press_button_refresh(self):
         self.data_about_documents = controller.get_data_about_documents()
-        self.fill_in_table()
+        self.fill_in_table(self.data_about_documents)
 
-    def fill_in_table(self):
+    def press_button_home(self):
+        self.fill_in_table(self.data_about_documents)
+
+    def fill_in_table(self, data_for_filling):
         # print("widget\n", self.data_about_documents)
-        if self.data_about_documents is None:
-            self.dialog_window = QtWidgets.QDialog()
+        if data_for_filling is None:
+            data_for_filling = QtWidgets.QDialog()
             return
-        self.tableWidget.setRowCount(len(self.data_about_documents))
+        self.tableWidget.setRowCount(len(data_for_filling))
         # self.tableWidget.setColumnCount()
         number_row = 0
-        for row in self.data_about_documents:
+        for row in data_for_filling:
             # print("row = ", row)
             # name_item = QtWidgets.QTableWidgetItem(row[1])
             name_item = MyTableWidgetItem(row[1])
@@ -384,7 +389,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
             self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
             number_row += 1
-        print("init table finished")
+        print("init table documents finished")
 
     def press_button_download(self, id_document: int, name_file: str):
         self.dialog_window = QtWidgets.QFileDialog()
@@ -417,6 +422,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                  "Для редактирования документа выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
+
+    def press_button_search_documents(self):
+        self.result_searching = controller.search_documents(self.line_edit_search.text())
+        self.fill_in_table(self.result_searching)
 
 
 if __name__ == "__main__":

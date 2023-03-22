@@ -70,9 +70,11 @@ class Administrator(User):
         return True
 
     def get_data_about_documents(self):
-        print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
-        print("ADMINISTRATOR GET DOCUMENTS ")
         return db_helper.get_data_documents_for_admin()
+
+    @staticmethod
+    def search_data_about_documents(search_string: str):
+        return db_helper.search_data_documents_for_admin(search_string)
 
     @staticmethod
     def get_data_about_users():

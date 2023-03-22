@@ -52,8 +52,7 @@ def add_document_in_database(path_to_document: str, name_document: str, inner_nu
 
 def get_data_about_documents():
     # log
-    data = client.get_data_about_documents()
-    return data
+    return client.get_data_about_documents()
 
 
 def download_document(id_document: int, path_to_save: str):
@@ -158,3 +157,8 @@ def get_number_department():
 
 def check_password_strength(password: str):
     return client.check_password_strength(password)
+
+
+def search_documents(search_string: str):
+    # log
+    return client.search_data_about_documents(search_string)

@@ -56,7 +56,7 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
     # print(len(str(password)))
     # print(len(str(salt)))
     # this get id for division_number
-    id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+    id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
     id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, current_user_session_id,
                                              datetime.now().strftime("%d-%m-%Y %H:%M"))
     # id = db_helper.get_id_user(last_name, name, patronymic)
@@ -67,7 +67,7 @@ def add_user(last_name: str, name: str, patronymic: str, division_number: str, l
 
 def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, id_user,
                    flag_edit_login: bool):
-    id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+    id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
     db_helper.edit_data_user(last_name, name, patronymic, id_department, id_user)
 
     if password != "":

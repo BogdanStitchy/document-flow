@@ -333,12 +333,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Скачать"))
 
     def press_button_add_document(self):
-        print("pushed_button_add_document")
-        print(controller.role_client)
+        # print("pushed_button_add_document")
+        # print(controller.role_client)
         if controller.role_client != 'user':
             QtWidgets.QMessageBox.warning(self, "Предупреждение",
                                           "Добавлять документы могут тольуо пользователи, не администраторы!")
-            return 
+            return
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
     def press_button_refresh(self):

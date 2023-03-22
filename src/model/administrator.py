@@ -12,7 +12,7 @@ class Administrator(User):
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 1
-        self.CURRENT_ID_DEPARTMENT = 1
+        # self.CURRENT_ID_DEPARTMENT = 1
 
     def set_full_name(self):
         self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_admin(
@@ -69,6 +69,11 @@ class Administrator(User):
                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True
 
+    def get_data_about_documents(self):
+        print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
+        print("ADMINISTRATOR GET DOCUMENTS ")
+        return db_helper.get_data_documents_for_admin()
+
     @staticmethod
     def get_data_about_users():
         data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
@@ -107,7 +112,7 @@ class Administrator(User):
         # print(len(str(password)))
         # print(len(str(salt)))
         # this get id for division_number
-        id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+        id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
         id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
                                                  datetime.now().strftime("%d-%m-%Y %H:%M"))
         # id_user = 14
@@ -118,7 +123,7 @@ class Administrator(User):
     def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
                        id_user,
                        flag_edit_login: bool):
-        id_department = db_helper_for_hierarchy_derartments.get_id_department(int(division_number))
+        id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
         db_helper.edit_data_user(last_name, name, patronymic, id_department, id_user)
 
         if password != "":

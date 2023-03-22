@@ -5,6 +5,7 @@ import datetime
 
 from src.model.config import config
 from src.model.for_data_base import db_helper
+from src.model.for_data_base import db_helper_for_hierarchy_derartments as db_helper_departments
 
 
 class User:
@@ -35,7 +36,8 @@ class User:
             self.CURRENT_ID)
 
     def set_department_data(self):
-        self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_user(self.CURRENT_ID)
+        self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_for_one_user(
+            self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
         request = db_helper.get_password_user(login)
@@ -112,9 +114,11 @@ class User:
                       type_document: str):
         db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
 
-    @staticmethod
-    def get_data_about_documents():
-        return db_helper.get_data_documents_for_department(1)
+    def get_data_about_documents(self):
+        print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
+        print("USER")
+        access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
+        return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
 
     @staticmethod
     def download_document(id_document: int, path_to_save: str):

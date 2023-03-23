@@ -182,20 +182,21 @@ class DialogSelectDate(QDialog):
             self.frame_date_download.setEnabled(False)
 
     def apply_params_period(self):
-        # self.main_window
-        # start_date_output = self.dateEdit_start_date_output.text()
-        # end_date_output = self.dateEdit_end_date_output.text()
-        # start_date_download = self.dateEdit_start_date_download.text()
-        # end_date_download = self.dateEdit_end_date_download.text()
+        if not self.checkBox_date_output.isChecked() and not self.checkBox_date_download.isChecked():
+            QtWidgets.QMessageBox.critical(self, "Ошибка периода", "Необходимо выбрать параметры париода!")
+            return
         res = controller.apply_period_searching(flag_date_output=self.checkBox_date_output.isChecked(),
                                                 flag_date_download=self.checkBox_date_download.isChecked(),
                                                 start_date_output=self.dateEdit_start_date_output.text(),
                                                 end_date_output=self.dateEdit_end_date_output.text(),
                                                 start_date_download=self.dateEdit_start_date_download.text(),
                                                 end_date_download=self.dateEdit_end_date_download.text())
-        self.main_window.fill_in_table(res)
         self.set_new_name_main_window_button()
         self.close()
+        if len(res) > 0:
+            self.main_window.fill_in_table(res)
+        else:
+            QtWidgets.QMessageBox.warning(self, "Ошибка периода", "Данные в заданном периоде не найдены")
 
     def set_new_name_main_window_button(self):
         new_name_button_period = ""

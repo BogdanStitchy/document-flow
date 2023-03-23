@@ -194,6 +194,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.verticalLayout_2.addWidget(self.frame_function)
 
         self.tableWidget = QtWidgets.QTableWidget(self.frame_body)
+        self.tableWidget.setSortingEnabled(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         # self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)

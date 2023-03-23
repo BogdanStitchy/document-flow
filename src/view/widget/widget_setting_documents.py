@@ -19,6 +19,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(895, 605)
         self.setupUi()
+        self.resize(900, 605)
         self.show()
 
     def setupUi(self):
@@ -237,35 +238,35 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setSizePolicy(sizePolicy)
         self.tableWidget.setMinimumSize(QtCore.QSize(877, 498))
         self.tableWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.tableWidget.setPalette(palette)
+        # palette = QtGui.QPalette()
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
+        # brush.setStyle(QtCore.Qt.SolidPattern)
+        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        # self.tableWidget.setPalette(palette)
         self.tableWidget.setFont(font)
         self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
@@ -277,6 +278,15 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(10)
         self.tableWidget.setColumnHidden(9, True)
+        # # column_widths = [20, 8, 8, 12, 10, 12, 15]
+        # column_widths = [20, 10, 10, 10, 10, 10, 10, 10, 10]
+        # total_widths = sum(column_widths)
+        # print("self.tableWidget.width() = ", self.width())
+        # for i in range(9):
+        #     width = int(column_widths[i] / total_widths * self.width())
+        #     print(f"i = {i}\twidth = {width}")
+        #     self.tableWidget.setColumnWidth(i, width)
+        #     # self.tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
         # self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -337,9 +347,17 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Скачать"))
 
+    # def resizeEvent(self, event):
+    #     print("resize")
+    #     column_widths = [20, 10, 10, 10, 10, 10, 10, 10, 10]
+    #     total_widths = sum(column_widths)
+    #     print("self.tableWidget.width() = ", self.tableWidget.width())
+    #     for i in range(9):
+    #         width = int(column_widths[i] / total_widths * self.tableWidget.width()-2)
+    #         # print(f"i = {i}\twidth = {width}")
+    #         self.tableWidget.setColumnWidth(i, width)
+
     def press_button_add_document(self):
-        # print("pushed_button_add_document")
-        # print(controller.role_client)
         if controller.role_client != 'user':
             QtWidgets.QMessageBox.warning(self, "Предупреждение",
                                           "Добавлять документы могут тольуо пользователи, не администраторы!")
@@ -403,6 +421,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         controller.download_document(id_document, path_to_save)
 
     def press_button_delete_document(self):
+        if controller.role_client == 'user':
+            QtWidgets.QMessageBox.information(self, "Ошибка доступа",
+                                              "Удалять документы могут тольуо администраторы!\n"
+                                              "Для удаления документа обратитесь к администратору.")
+            self.pushButton_delete.setEnabled(False)
+            return
         items = self.tableWidget.selectedItems()
         if len(items) == 8:
             controller.delete_document(items[0].text(), items[1].text(), items[2].text())
@@ -416,6 +440,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                  "(крайний левый стоблец).")
 
     def press_button_edit_document(self):
+        if controller.role_client == 'user':
+            QtWidgets.QMessageBox.information(self, "Ошибка доступа",
+                                              "Редактировать документы могут тольуо администраторы!\n"
+                                              "Для редактирования документа обратитесь к администратору.")
+            self.pushButton_edit.setEnabled(False)
+            return
         items = self.tableWidget.selectedItems()
         if len(items) == 8:
             q_date = QtCore.QDate(int(items[3].text()[:4]), int(items[3].text()[5:7]), int(items[3].text()[8:10]))

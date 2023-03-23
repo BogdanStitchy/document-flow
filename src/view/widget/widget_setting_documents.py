@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view.dialog_window import dialog_add_document
 from src.view.dialog_window import dialog_edit_document
+from src.view.dialog_window import dialog_select_date_search
 from src.controller import controller_main_window as controller
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
 
@@ -134,6 +135,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.horizontalLayout.addItem(spacerItem)
 
         self.pushButton_period_search = QtWidgets.QPushButton(self.frame_function)
+        self.pushButton_period_search.clicked.connect(self.press_button_period)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -344,14 +346,16 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
     def press_button_refresh(self):
+        self.pushButton_period_search.setText("период")
         self.data_about_documents = controller.get_data_about_documents()
         self.fill_in_table(self.data_about_documents)
 
     def press_button_home(self):
+        self.pushButton_period_search.setText("период")
         self.fill_in_table(self.data_about_documents)
 
     def fill_in_table(self, data_for_filling):
-        print("widget\n", self.data_about_documents)
+        # print("widget\n", self.data_about_documents)
         if len(data_for_filling) == 0:
             # data_for_filling = QtWidgets.QDialog()
             return False
@@ -425,11 +429,15 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                  "(крайний левый стоблец).")
 
     def press_button_search_documents(self):
+        self.pushButton_period_search.setText("период")
         self.result_searching = controller.search_documents(self.line_edit_search.text())
         flag_result = self.fill_in_table(self.result_searching)
         if not flag_result:
             QtWidgets.QMessageBox().information(self, "Результат поиска", f'По запросу "{self.line_edit_search.text()}"'
                                                                           f' не найдено результатов')
+
+    def press_button_period(self):
+        self.dialog_window = dialog_select_date_search.DialogSelectDate(self)
 
 
 if __name__ == "__main__":

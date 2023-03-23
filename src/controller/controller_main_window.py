@@ -161,4 +161,13 @@ def check_password_strength(password: str):
 
 def search_documents(search_string: str):
     # log
-    return client.search_data_about_documents(search_string)
+    return client.search_string_in_documents(search_string)
+
+
+def apply_period_searching(flag_date_output: bool, flag_date_download: bool,
+                           start_date_output: str = None, end_date_output: str = None,
+                           start_date_download: str = None, end_date_download: str = None):
+    # log
+    return client.apply_period_searching(flag_date_output, flag_date_download,
+                                         start_date_output=start_date_output, end_date_output=end_date_output,
+                                         start_date_download=start_date_download, end_date_download=end_date_download)

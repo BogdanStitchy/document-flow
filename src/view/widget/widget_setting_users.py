@@ -288,7 +288,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def press_button_refresh(self):
         self.data_about_users = controller.get_data_about_users()
-        print(self.data_about_users)
+        # print(self.data_about_users)
         self.fill_in_table()
 
     def fill_in_table(self):
@@ -298,6 +298,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setRowCount(len(self.data_about_users))
         number_row = 0
         for row in self.data_about_users:
+            print(row)
             name_item = MyTableWidgetItem(row[1])
             name_item.set_additional_data(int(row[0]))  # Установка id
 

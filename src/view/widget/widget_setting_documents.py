@@ -418,6 +418,8 @@ class WidgetDocuments(QtWidgets.QMainWindow):
     def press_button_download(self, id_document: int, name_file: str):
         self.dialog_window = QtWidgets.QFileDialog()
         path_to_save = f"{self.dialog_window.getExistingDirectory()}/{name_file}"
+        if path_to_save[1:] == name_file:
+            return
         controller.download_document(id_document, path_to_save)
 
     def press_button_delete_document(self):

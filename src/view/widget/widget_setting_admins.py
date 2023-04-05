@@ -252,7 +252,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -303,13 +303,15 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Дата регистрации"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Роль"))
+        item = self.tableWidget.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "Деактивирован"))
 
     def press_button_add_admin(self):
         self.dialog_window = dialog_add_admin.DialogWidgetAddAdmin(self)
 
     def press_button_refresh(self):
         self.data_about_users = controller.get_data_about_admins()
-        print(self.data_about_users)
+        # print(self.data_about_users)
         self.fill_in_table()
 
     def fill_in_table(self):
@@ -328,11 +330,11 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row[4]))  # Установка логина
             self.tableWidget.setItem(number_row, 4,
                                      QtWidgets.QTableWidgetItem(str(row[5])))  # Установка даты регистрации
-            if row[6] == 1:
-                role = "admin"
-            else:
-                role = "superAdmin"
+
+            role = "admin" if row[6] == 1 else "superAdmin"
             self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(role))  # Установка роли
+            status_active = "" if row[7] else "Деактивирован"
+            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1
         print("init table finished")

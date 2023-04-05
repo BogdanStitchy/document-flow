@@ -228,8 +228,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                        "border-radius: 10;")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(7)
-        self.tableWidget.setRowCount(0)
+        self.tableWidget.setColumnCount(8)
+        # self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -246,6 +246,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setHorizontalHeaderItem(6, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(8, item)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.verticalHeader().setCascadingSectionResizes(False)
         self.verticalLayout_2.addWidget(self.tableWidget)
@@ -281,6 +283,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Номер отдела"))
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Добавил в базу"))
+        item = self.tableWidget.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "Деактивирован"))
 
     def press_button_add_user(self):
         print("pushed_button_add_document")
@@ -298,7 +302,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setRowCount(len(self.data_about_users))
         number_row = 0
         for row in self.data_about_users:
-            print(row)
+            # print(row)
             name_item = MyTableWidgetItem(row[1])
             name_item.set_additional_data(int(row[0]))  # Установка id
 
@@ -311,6 +315,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка номера отдела
             creator = f"{row[7]} {row[8]} {row[9]}"
             self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(creator))  # Установка создателя
+            status_active = "" if row[10] else "Деактивирован"
+            self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1
         print("init table finished")

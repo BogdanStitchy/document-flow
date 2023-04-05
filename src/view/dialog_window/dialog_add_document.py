@@ -12,7 +12,6 @@ class DialogAddDocument(QDialog):
         self.path_to_file = ''
         self.setModal(True)
         self.main_window = main_window
-        self.setWindowTitle("добавление документа")
         self.show()
         self.setupUi()
 
@@ -189,7 +188,7 @@ class DialogAddDocument(QDialog):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Dialog_add_user", "Dialog"))
+        self.setWindowTitle("добавление документа")
         self.label_inner_number.setText(_translate("Dialog_add_user", "Входящий номер:"))
         self.label_output_date.setText(_translate("Dialog_add_user", "Исходящий номер:"))
         self.label_type_document.setText(_translate("Dialog_add_user", "Тип документа:"))

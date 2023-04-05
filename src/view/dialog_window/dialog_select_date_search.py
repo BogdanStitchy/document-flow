@@ -11,7 +11,6 @@ class DialogSelectDate(QDialog):
         self.setModal(True)
         self.main_window = main_window
         self.flag_success_exit = False
-        self.setWindowTitle("Смена пароля")
         self.show()
         self.setupUi()
 
@@ -159,7 +158,7 @@ class DialogSelectDate(QDialog):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Dialog", "Выбор периода поиска"))
+        self.setWindowTitle("Выбор периода поиска")
         self.checkBox_date_output.setText(_translate("Dialog", "Исходящая дата"))
         self.label_date_output.setText(_translate("Dialog", "Исходящая дата (д.м.г):"))
         self.label_dash_output.setText(_translate("Dialog", "-"))

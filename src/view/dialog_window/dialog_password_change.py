@@ -9,7 +9,6 @@ class DialogWidgetChangePassword(QDialog):
         self.setModal(True)
         self.main_window = main_window
         self.flag_success_exit = False
-        self.setWindowTitle("Смена пароля")
         self.show()
         self.setupUi()
 
@@ -88,6 +87,7 @@ class DialogWidgetChangePassword(QDialog):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle("Смена пароля")
         self.label_user.setText(_translate("Dialog", "Пользователь: "))
         self.label_password.setText(_translate("Dialog", "Введите пароль:"))
         self.label_password_repeat.setText(_translate("Dialog", "Подтвердите пароль:"))

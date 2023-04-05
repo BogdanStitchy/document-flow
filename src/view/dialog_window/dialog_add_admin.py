@@ -15,7 +15,6 @@ class DialogWidgetAddAdmin(QDialog):
 
     def setupUi(self):
         self.show()
-        # self.setWindowTitle("Добавление пользователя")
         self.setObjectName("Dialog_add_user")
         self.resize(550, 250)
         self.setMinimumSize(QtCore.QSize(320, 250))
@@ -135,12 +134,12 @@ class DialogWidgetAddAdmin(QDialog):
         self.pushButton_cancel.setObjectName("pushButton_cancel")
         self.verticalLayout.addWidget(self.pushButton_cancel)
 
-        self.retranslateUi(self)
+        self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
 
-    def retranslateUi(self, Dialog_add_user):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        Dialog_add_user.setWindowTitle(_translate("Dialog_add_user", "Dialog"))
+        self.setWindowTitle("Добавление администратора")
         self.label_last_name.setText(_translate("Dialog_add_user", "Фамилия:"))
         self.label_patronymic.setText(_translate("Dialog_add_user", "Отчество:"))
         self.label_login.setText(_translate("Dialog_add_user", "Логин:"))

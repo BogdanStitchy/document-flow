@@ -267,7 +267,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.pushButton_period_search.setText(_translate("MainWindow", "период"))
         self.pushButton_add.setText(_translate("MainWindow", "добавить"))
         self.pushButton_edit.setText(_translate("MainWindow", "редактировать"))
-        self.pushButton_delete.setText(_translate("MainWindow", "удалить"))
+        self.pushButton_delete.setText(_translate("MainWindow", "актив/деактив"))
 
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Фамилия"))
@@ -323,23 +323,29 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def press_button_delete(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 6:
-            controller.delete_user(items[0].get_additional_data())
+        if len(items) == 8:
+            controller.change_activation_status(items[0].get_additional_data())
             self.dialog_window = QtWidgets.QMessageBox()
-            self.dialog_window.information(self, "Удаление пользователя",
+            if items[7].text() == "":
+                title = "Деактивация пользователя"
+                message = "успешно деактивирован"
+            else:
+                title = "Активация пользователя"
+                message = "успешно активирован"
+            self.dialog_window.information(self, title,
                                            f'Пользователь "{items[0].text()} {items[1].text()} {items[2].text()}" '
-                                           f'успешно удален из базы.')
+                                           f'{message}.')
             self.press_button_refresh()
 
         else:
-            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление пользователя",
-                                                                 "Для удаления пользователя выделите всю строку "
-                                                                 "(строка станет белой), щелкнув по номеру строки "
-                                                                 "(крайний левый стоблец).")
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Изменение статуса активности пользователя",
+                                                                 "Для изменения статуса активности пользователя "
+                                                                 "выделите всю строку (строка станет белой), щелкнув "
+                                                                 "по номеру строки (крайний левый стоблец).")
 
     def press_button_edit_user(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 7:
+        if len(items) == 8:
             id_user = items[0].get_additional_data()
             self.dialog_window = dialog_edit_user.DialogWidgetEditUser(self, items[0].text(), items[1].text(),
                                                                        items[2].text(), int(items[5].text()),

@@ -81,8 +81,8 @@ def get_data_about_users():
     return data
 
 
-def delete_user(id_user: int):
-    client.delete_user(id_user)
+def change_activation_status(id_user: int):
+    client.change_activation_status(id_user)
 
 
 def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, id_user,
@@ -102,9 +102,9 @@ def get_data_about_admins():
     return data
 
 
-def delete_admin(id_admin: int):
+def change_activation_status_admin(id_admin: int):
     # log
-    client.delete_admin(id_admin)
+    client.change_activation_status_admin(id_admin)
 
 
 def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patronymic: str, new_login: str,

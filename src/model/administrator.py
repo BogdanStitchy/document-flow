@@ -157,8 +157,9 @@ class Administrator(User):
             db_helper.edit_only_login_user(login, id_user)
 
     @staticmethod
-    def delete_user(id_user: int):
-        db_helper.delete_user(id_user)
+    def change_activation_status(id_user: int):
+        # db_helper.delete_user(id_user)
+        db_helper.change_activation_status_user(id_user)
 
 
 if __name__ == '__main__':

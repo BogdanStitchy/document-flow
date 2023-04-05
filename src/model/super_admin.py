@@ -37,8 +37,8 @@ class SuperAdmin(Administrator):
         return db_helper.get_data_about_admins()
 
     @staticmethod
-    def delete_admin(id_admin: int):
-        db_helper.delete_admin(id_admin)
+    def change_activation_status_admin(id_admin: int):
+        db_helper.change_activation_status_admin(id_admin)
 
     @staticmethod
     def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):

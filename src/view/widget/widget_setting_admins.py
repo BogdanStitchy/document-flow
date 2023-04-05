@@ -289,7 +289,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.pushButton_period_search.setText(_translate("MainWindow", "период"))
         self.pushButton_add.setText(_translate("MainWindow", "добавить"))
         self.pushButton_edit.setText(_translate("MainWindow", "редактировать"))
-        self.pushButton_delete.setText(_translate("MainWindow", "удалить"))
+        self.pushButton_delete.setText(_translate("MainWindow", "актив/деактив"))
 
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Фамилия"))
@@ -341,29 +341,35 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
     def press_button_delete(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 6:
+        if len(items) == 7:
             id_admin_for_delete = items[0].get_additional_data()
             if id_admin_for_delete == 1:
-                self.dialog_window = QtWidgets.QMessageBox().warning(self, "Попытка удаления супер администратора",
-                                                                     f'Супер администратора невозможно '
-                                                                     f'удалить из базы!')
+                self.dialog_window = QtWidgets.QMessageBox().warning(self, "Попытка деактивации супер администратора",
+                                                                     f'Невозможно деактивировать супер администратора!')
                 return
-            controller.delete_admin(id_admin_for_delete)
+
+            controller.change_activation_status_admin(id_admin_for_delete)
+            if items[6].text() == "":
+                title = "Деактивация администратора"
+                message = "успешно деактивирован"
+            else:
+                title = "Активация администратора"
+                message = "успешно активирован"
             self.dialog_window = QtWidgets.QMessageBox()
-            self.dialog_window.information(self, "Удаление администратора",
-                                           f'администратор "{items[0].text()} {items[1].text()} {items[2].text()}" '
-                                           f'успешно удален из базы.')
+            self.dialog_window.information(self, title,
+                                           f'Администратор "{items[0].text()} {items[1].text()} {items[2].text()}" '
+                                           f'{message}.')
             self.press_button_refresh()
 
         else:
-            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление администратора",
-                                                                 "Для удаления администратора выделите всю строку "
-                                                                 "(строка станет белой), щелкнув по номеру строки "
-                                                                 "(крайний левый стоблец).")
+            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Изменение статуса активности администратора",
+                                                                 "Для изменения статуса активности администратора "
+                                                                 "выделите всю строку (строка станет белой), щелкнув "
+                                                                 "по номеру строки (крайний левый стоблец).")
 
     def press_button_edit_admin(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 6:
+        if len(items) == 7:
             id_admin = items[0].get_additional_data()
             self.dialog_window = dialog_edit_admin.DialogWidgetEditAdmin(main_window=self, last_name=items[0].text(),
                                                                          name=items[1].text(),

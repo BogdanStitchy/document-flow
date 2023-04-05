@@ -19,7 +19,7 @@ class Administrator(User):
             self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
-        request = db_helper.get_password_admin(login)
+        request = db_helper.get_login_data_admin(login)
 
         if request is None:
             print("Admin not found in data base.")
@@ -27,7 +27,11 @@ class Administrator(User):
                           "Проверьте логин и выбранную роль пользователя"
         else:
             print("Admin found in data base")
-            received_password, salt, *id_and_access_level = request
+            received_password, salt, id_admin, access_level, active = request
+
+            if not active:
+                return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
+                              "Для активации учетной записи обратитесь к супер администратору."
 
             password = hashlib.pbkdf2_hmac(
                 config.HASH_FUNCTION,
@@ -41,11 +45,11 @@ class Administrator(User):
                 self.CURRENT_LOGIN = login
                 print(f"This Admin with username '{login}' login successful")
                 # global current_id, current_access_level
-                self.CURRENT_ID, current_access_level = id_and_access_level
-                if current_access_level == 0:
+                self.CURRENT_ID = id_admin
+                if access_level == 0:
                     return 'superAdmin', False
                 self.set_full_name()
-                print("lvl = ", current_access_level)
+                # print("lvl = ", access_level)
                 return 'admin', False
             else:
                 print(f"Admin {login} no login")

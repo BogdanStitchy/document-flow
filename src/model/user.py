@@ -40,7 +40,7 @@ class User:
             self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
-        request = db_helper.get_password_user(login)
+        request = db_helper.get_login_data_user(login)
         # print("request =", request)
         # global current_user_session_id, current_access_level
         # print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
@@ -50,14 +50,16 @@ class User:
                           "Проверьте логин и выбранную роль пользователя"
         else:
             print("User found in data base")
-            received_password, salt, *id_and_access_level = request
+            received_password, salt, id_user, active = request
             # print("id_and_access_level = ", id_and_access_level)
             # print('\n')
             # print("rp = ", bytes(received_password))
             # print("original_salt = ", bytes(original_salt.hex(), 'utf-8'))
             # print("salt = ", bytes(salt))
             # print('\n')
-
+            if not active:
+                return False, "Учетная запись пользователя с указанными данными деактивирована.\n" \
+                              "Для активации учетной записи обратитесь к администратору."
             password = hashlib.pbkdf2_hmac(
                 config.HASH_FUNCTION,
                 password.encode('utf-8'),
@@ -70,7 +72,7 @@ class User:
             if password.hex().encode('utf-8') == bytes(received_password):
                 self.CURRENT_LOGIN = login
                 print(f"This user with username '{login}' login successful")
-                self.CURRENT_ID, current_access_level = id_and_access_level
+                self.CURRENT_ID = id_user
                 self.set_full_name()
                 self.set_department_data()
                 # print("lvl = ", current_access_level)

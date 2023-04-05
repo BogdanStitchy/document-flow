@@ -23,6 +23,8 @@ class Administrator(User):
 
         if request is None:
             print("Admin not found in data base.")
+            return False, "Администратор с указанным логином не найден в базе!\n" \
+                          "Проверьте логин и выбранную роль пользователя"
         else:
             print("Admin found in data base")
             received_password, salt, *id_and_access_level = request
@@ -41,13 +43,13 @@ class Administrator(User):
                 # global current_id, current_access_level
                 self.CURRENT_ID, current_access_level = id_and_access_level
                 if current_access_level == 0:
-                    return 'superAdmin'
+                    return 'superAdmin', False
                 self.set_full_name()
                 print("lvl = ", current_access_level)
-                return 'admin'
+                return 'admin', False
             else:
                 print(f"Admin {login} no login")
-                return False
+                return False, "Указан неправильный пароль"
 
     def get_last_change_password(self):
         # self.CURRENT_ID = 6

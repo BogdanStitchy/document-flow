@@ -172,24 +172,28 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
             role = 'admin'
         input_login = self.line_login.text()
         input_password = self.line_password.text()
-        # print(f"login = {input_login}\tpassword = {input_password}")
+        if input_password == "":
+            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода пароля", "Введите пароль!")
+            return
+        print(f"login = {input_login}\tpassword = {input_password}")
         login_flag = controller.check_login(input_login, input_password, role)
-        print("login_flag in view = ", login_flag)
-        if login_flag == 'superAdmin':
+        print(f"login_flag in view = {login_flag}\ttype = {type(login_flag)}")
+        if login_flag[0] == 'superAdmin':
             print("current = super admin")
             self.admin = window_sa_test.WindowSuperAdmin()
             self.close()
-        elif login_flag == 'admin':
+        elif login_flag[0] == 'admin':
             print("current = admin")
             self.window_admin = window_admin.WindowAdmin()
             self.close()
-        elif login_flag == 'user':
+        elif login_flag[0] == 'user':
             print("current = user")
             self.window_user = window_user.WindowUser()
             self.close()
         else:  # type(login_flag) != int:
-            print(" self.clear_password_line()")
+            # print(" self.clear_password_line()")
             self.clear_password_line()
+            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", login_flag[1])
 
     def clear_password_line(self):
         self.line_password.setText('')

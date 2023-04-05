@@ -46,6 +46,8 @@ class User:
         # print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
         if request is None:
             print("User not found in data base.")
+            return False, "Пользователь с указанным логином не найден в базе!\n" \
+                          "Проверьте логин и выбранную роль пользователя"
         else:
             print("User found in data base")
             received_password, salt, *id_and_access_level = request
@@ -71,11 +73,11 @@ class User:
                 self.CURRENT_ID, current_access_level = id_and_access_level
                 self.set_full_name()
                 self.set_department_data()
-                print("lvl = ", current_access_level)
-                return 'user'
+                # print("lvl = ", current_access_level)
+                return 'user', False
             else:
                 print(f"User {login} no login")
-                return False
+                return False, "Указан неправильный пароль"
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5

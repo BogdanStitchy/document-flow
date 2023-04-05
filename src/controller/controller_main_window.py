@@ -17,10 +17,10 @@ def check_login(login: str, password: str, role: str):
 
         client = Administrator()
         result = client.check_password(login, password)  # true, false, superAdmin
-        role_client = result
-        if result == 'superAdmin':
+        role_client = result[0]
+        if result[0] == 'superAdmin':
             client = SuperAdmin()
-            return 'superAdmin'
+            return result
         return result
     elif role == 'user':
         role_client = role

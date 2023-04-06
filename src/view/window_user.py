@@ -1,5 +1,5 @@
 import datetime
-
+from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view import window_login
@@ -14,6 +14,11 @@ class WindowUser(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
+        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        print("path in user = ", (str(Path(path_to_images, "logo.png"))))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         self.setupUi()
         self.show()
         self.check_needs_password_change()

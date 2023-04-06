@@ -1,5 +1,6 @@
 .idea/
 venv
+pictures
 .env
 src/view/client.py
 src/model/server

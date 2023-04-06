@@ -1,9 +1,8 @@
 import sys
 
 from PyQt5 import QtGui, QtWidgets, QtCore
-# from src.view.design_login_window import WindowLogin
-# from src.controller import controller_window_login as controller
 from src.controller import controller_main_window as controller
+from pathlib import Path
 
 import window_sa_test
 import window_user
@@ -19,10 +18,12 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.setEnabled(True)
         self.resize(341, 296)
-        self.setMinimumSize(QtCore.QSize(330, 270))
+        self.setMinimumSize(QtCore.QSize(500, 470))
         self.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:/Users/B_Karkhanin/Pictures/logo1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.setStyleSheet(
             "background-color: qconicalgradient(cx:1, cy:0, angle:0,"
@@ -72,7 +73,10 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
                                  "text-align: center;\n"
                                  "color: rgb(0, 0, 255);height:40%;font-size:15vh;")
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("C:/Users/B_Karkhanin/Pictures/logo1.png"))
+        pixmap = QtGui.QPixmap(str(Path(path_to_images, "login_window_frame.jpg")))
+        self.label.setPixmap(pixmap)
+        self.label.setScaledContents(True)
+        self.label.resize(pixmap.width(), pixmap.height())
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
@@ -200,9 +204,35 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.repaint()
 
 
+def test_main():
+    from PyQt5.QtGui import QPixmap, QPalette
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import QApplication, QFrame, QHBoxLayout, QWidget
+
+    app = QApplication([])
+    widget = QWidget()
+    widget.resize(341, 296)
+    layout = QHBoxLayout(widget)
+
+    frame = QFrame()
+    pixmap = QPixmap('C:/Users/B_Karkhanin/PycharmProjects/document_flow/pictures/login_window_frame.jpg')
+    palette = QPalette()
+    palette.setBrush(QPalette.Background, QtGui.QBrush(pixmap))
+    frame.setPalette(palette)
+    # frame.set
+    frame.setPalette(palette)
+    frame.setAutoFillBackground(True)
+    layout.addWidget(frame)
+
+    widget.setLayout(layout)
+    widget.show()
+    app.exec()
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     application = HandlerWindowLogin()
     application.show()
 
     sys.exit(app.exec())
+    # test_main()

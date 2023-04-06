@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pathlib import Path
 
 from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
@@ -13,6 +14,10 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
+        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         self.setupUi()
         self.show()
 

@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import datetime
+from pathlib import Path
 
 from src.view import window_login
 from src.view.widget import widget_setting_admins
@@ -16,6 +17,10 @@ class WindowAdmin(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
+        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         self.setupUi()
         self.show()
         self.check_needs_password_change()

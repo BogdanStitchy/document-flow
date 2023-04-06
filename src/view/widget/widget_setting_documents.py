@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view.dialog_window import dialog_add_document
 from src.view.dialog_window import dialog_edit_document
-from src.view.dialog_window import dialog_select_date_search
+from src.view.dialog_window import dialog_select_period_documents
 from src.controller import controller_main_window as controller
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
 
@@ -470,7 +470,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                           f' не найдено результатов')
 
     def press_button_period(self):
-        self.dialog_window = dialog_select_date_search.DialogSelectDate(self)
+        self.dialog_window = dialog_select_period_documents.DialogSelectDate(self)
 
 
 if __name__ == "__main__":

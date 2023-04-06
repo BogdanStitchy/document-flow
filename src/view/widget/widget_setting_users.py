@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
 from src.view.dialog_window import dialog_edit_user
 from src.view.dialog_window import dialog_add_user
+from src.view.dialog_window import dialog_select_period_registration
 from src.controller import controller_main_window as controller
 
 
@@ -48,7 +49,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.horizontalLayout.setObjectName("horizontalLayout")
 
         self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
-        self.pushButton_home.clicked.connect(self.fill_in_table)
+        self.pushButton_home.clicked.connect(self.press_button_home)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -125,6 +126,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_period_search.sizePolicy().hasHeightForWidth())
+        self.pushButton_period_search.clicked.connect(self.press_button_period)
         self.pushButton_period_search.setSizePolicy(sizePolicy)
         self.pushButton_period_search.setFont(font)
         self.pushButton_period_search.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -204,21 +206,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setSizePolicy(sizePolicy)
         self.tableWidget.setMinimumSize(QtCore.QSize(877, 498))
         self.tableWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-
-        self.tableWidget.setPalette(palette)
+        self.tableWidget.setSortingEnabled(True)
         self.tableWidget.setFont(font)
         self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
@@ -291,17 +279,22 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.dialog_window = dialog_add_user.DialogWidgetAddUser(self)
 
     def press_button_refresh(self):
+        self.pushButton_period_search.setText("период")
         self.data_about_users = controller.get_data_about_users()
         # print(self.data_about_users)
-        self.fill_in_table()
+        self.fill_in_table(self.data_about_users)
 
-    def fill_in_table(self):
-        if self.data_about_users is None:
+    def press_button_home(self):
+        self.pushButton_period_search.setText("период")
+        self.fill_in_table(self.data_about_users)
+
+    def fill_in_table(self, data_about_users):
+        if data_about_users is None:
             self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
             return
-        self.tableWidget.setRowCount(len(self.data_about_users))
+        self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
-        for row in self.data_about_users:
+        for row in data_about_users:
             # print(row)
             name_item = MyTableWidgetItem(row[1])
             name_item.set_additional_data(int(row[0]))  # Установка id
@@ -355,6 +348,9 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                                                  "Для редактирования пользователя выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
+
+    def press_button_period(self):
+        self.dialog_window = dialog_select_period_registration.DialogSelectPeriodRegistration(self, "user")
 
 
 if __name__ == "__main__":

@@ -164,10 +164,21 @@ def search_documents(search_string: str):
     return client.search_string_in_documents(search_string)
 
 
-def apply_period_searching(flag_date_output: bool, flag_date_download: bool,
-                           start_date_output: str = None, end_date_output: str = None,
-                           start_date_download: str = None, end_date_download: str = None):
+def apply_period_searching_documents(flag_date_output: bool, flag_date_download: bool,
+                                     start_date_output: str = None, end_date_output: str = None,
+                                     start_date_download: str = None, end_date_download: str = None):
     # log
-    return client.apply_period_searching(flag_date_output, flag_date_download,
-                                         start_date_output=start_date_output, end_date_output=end_date_output,
-                                         start_date_download=start_date_download, end_date_download=end_date_download)
+    return client.apply_period_searching_documents(flag_date_output, flag_date_download,
+                                                   start_date_output=start_date_output, end_date_output=end_date_output,
+                                                   start_date_download=start_date_download,
+                                                   end_date_download=end_date_download)
+
+
+def apply_period_registration_admins(start_date_download: str, end_date_download: str):
+    return client.apply_period_registration_admins(start_date_download, end_date_download)
+    # return []
+
+
+def apply_period_searching_registration_users(start_date_download: str, end_date_download: str):
+    return client.apply_period_registration_users(start_date_download, end_date_download)
+    # return []

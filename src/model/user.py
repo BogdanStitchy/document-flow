@@ -128,9 +128,9 @@ class User:
         access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
         return db_helper.search_string_in_documents_for_user(access_id_departments, search_string)
 
-    def apply_period_searching(self, flag_date_output: bool, flag_date_download: bool,
-                               start_date_output: str = None, end_date_output: str = None,
-                               start_date_download: str = None, end_date_download: str = None):
+    def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
+                                         start_date_output: str = None, end_date_output: str = None,
+                                         start_date_download: str = None, end_date_download: str = None):
         access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
         return db_helper.apply_period_searching_for_user(access_id_departments, flag_date_output, flag_date_download,
                                                          start_date_output=start_date_output,

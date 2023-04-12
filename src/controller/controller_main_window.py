@@ -174,6 +174,11 @@ def apply_period_searching_documents(flag_date_output: bool, flag_date_download:
                                                    end_date_download=end_date_download)
 
 
+def search_users(search_string: str):
+    # log
+    return client.search_string_in_users(search_string)
+
+
 def apply_period_registration_admins(start_date_download: str, end_date_download: str):
     return client.apply_period_registration_admins(start_date_download, end_date_download)
     # return []

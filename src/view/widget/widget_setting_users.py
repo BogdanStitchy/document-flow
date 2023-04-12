@@ -107,6 +107,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButton_find.sizePolicy().hasHeightForWidth())
+        self.pushButton_find.clicked.connect(self.press_button_search_users)
         self.pushButton_find.setSizePolicy(sizePolicy)
         self.pushButton_find.setFont(font)
         self.pushButton_find.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -291,7 +292,7 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
     def fill_in_table(self, data_about_users):
         if data_about_users is None:
             self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
-            return
+            return False
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
         for row in data_about_users:
@@ -312,7 +313,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1
-        print("init table finished")
+        print("init table users finished")
+        return True
 
     def press_button_delete(self):
         items = self.tableWidget.selectedItems()
@@ -348,6 +350,14 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
                                                                  "Для редактирования пользователя выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
+
+    def press_button_search_users(self):
+        self.pushButton_period_search.setText("период")
+        self.result_searching = controller.search_users(self.line_edit_search.text())
+        flag_result = self.fill_in_table(self.result_searching)
+        if not flag_result:
+            QtWidgets.QMessageBox().information(self, "Результат поиска", f'По запросу "{self.line_edit_search.text()}"'
+                                                                          f' не найдено результатов')
 
     def press_button_period(self):
         self.dialog_window = dialog_select_period_registration.DialogSelectPeriodRegistration(self, "user")

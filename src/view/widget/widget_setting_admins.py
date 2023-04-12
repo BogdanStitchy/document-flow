@@ -104,6 +104,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                             "border-radius:5px;")
         self.line_edit_search.setObjectName("lineEdit_search")
         self.horizontalLayout.addWidget(self.line_edit_search)
+
         self.pushButton_find = QtWidgets.QPushButton(self.frame_function)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(2)
@@ -115,6 +116,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
+        self.pushButton_find.clicked.connect(self.press_button_search_users)
         self.pushButton_find.setFont(font)
         self.pushButton_find.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_find.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -311,7 +313,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
     def fill_in_table(self, data_about_users):
         if data_about_users is None:
             self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
-            return
+            return False
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
         for row in data_about_users:
@@ -331,6 +333,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1
+        return True
         print("init table finished")
 
     def press_button_delete(self):
@@ -374,6 +377,14 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                                                  "Для редактирования администратора выделите всю строку"
                                                                  " (строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
+
+    def press_button_search_users(self):
+        self.pushButton_period_search.setText("период")
+        self.result_searching = controller.search_admins(self.line_edit_search.text())
+        flag_result = self.fill_in_table(self.result_searching)
+        if not flag_result:
+            QtWidgets.QMessageBox().information(self, "Результат поиска", f'По запросу "{self.line_edit_search.text()}"'
+                                                                          f' не найдено результатов')
 
     def press_button_period(self):
         self.dialog_window = dialog_select_period_registration.DialogSelectPeriodRegistration(self, "admin")

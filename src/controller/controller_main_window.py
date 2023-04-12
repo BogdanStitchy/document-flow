@@ -179,6 +179,11 @@ def search_users(search_string: str):
     return client.search_string_in_users(search_string)
 
 
+def search_admins(search_string: str):
+    # log
+    return client.search_string_in_admins(search_string)
+
+
 def apply_period_registration_admins(start_date_download: str, end_date_download: str):
     return client.apply_period_registration_admins(start_date_download, end_date_download)
     # return []

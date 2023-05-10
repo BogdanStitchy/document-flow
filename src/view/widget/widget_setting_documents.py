@@ -343,7 +343,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Автор"))
         item = self.tableWidget.horizontalHeaderItem(7)
-        item.setText(_translate("MainWindow", "Связанные документы"))
+        item.setText(_translate("MainWindow", "Примечание"))
         item = self.tableWidget.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Скачать"))
 

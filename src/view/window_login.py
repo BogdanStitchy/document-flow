@@ -164,7 +164,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
 
     def retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "BZ document flow"))
+        self.setWindowTitle(_translate("MainWindow", "ДБ_Архив"))
         # self.label.setWhatsThis(
         #     _translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.button_login.setText(_translate("MainWindow", "Войти"))

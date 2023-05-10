@@ -116,7 +116,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_find.clicked.connect(self.press_button_search_users)
+        self.pushButton_find.clicked.connect(self.press_button_search_admins)
         self.pushButton_find.setFont(font)
         self.pushButton_find.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_find.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -378,9 +378,14 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
                                                                  " (строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
 
-    def press_button_search_users(self):
+    def press_button_search_admins(self):
         self.pushButton_period_search.setText("период")
         self.result_searching = controller.search_admins(self.line_edit_search.text())
+        print("type(self.result_searching) = ", type(self.result_searching))
+        if type(self.result_searching) != list:
+            QtWidgets.QMessageBox().critical(self, "Ошибка поиска", f"В результате запроса возникла ошибка\n"
+                                                                    f"([ERROR]{self.result_searching})")
+            return
         flag_result = self.fill_in_table(self.result_searching)
         if not flag_result:
             QtWidgets.QMessageBox().information(self, "Результат поиска", f'По запросу "{self.line_edit_search.text()}"'

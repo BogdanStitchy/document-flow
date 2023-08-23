@@ -32,7 +32,7 @@ class Administrator(User):
             if not active:
                 return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
                               "Для активации учетной записи обратитесь к супер администратору."
-
+            # print("bytes(salt) = ", bytes(salt))
             password = hashlib.pbkdf2_hmac(
                 config.HASH_FUNCTION,
                 password.encode('utf-8'),
@@ -40,7 +40,9 @@ class Administrator(User):
                 200000,
                 dklen=64
             )
-
+            # print(f"bytes(received_password) = {bytes(received_password)}\npassword = {password}"
+            #       f"\npassword.hex() = {password.hex()}"
+            #       f"\npassword.hex().encode('utf-8') = {password.hex().encode('utf-8')}")
             if password.hex().encode('utf-8') == bytes(received_password):
                 self.CURRENT_LOGIN = login
                 print(f"This Admin with username '{login}' login successful")
@@ -112,7 +114,8 @@ class Administrator(User):
         data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
         return data
 
-    def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str):
+    def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
+                 flag_leader: bool):
         salt = os.urandom(16)
         # original_salt = salt  # (salt.hex(), 'utf-8')
         # print("original salt = ", salt)
@@ -149,7 +152,7 @@ class Administrator(User):
         id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
                                                  datetime.now().strftime("%d-%m-%Y %H:%M"))
         # id_user = 14
-        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2)
+        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2, flag_leader)
         print(f"\nUser {last_name} {name} added in data base\n")
 
     @staticmethod

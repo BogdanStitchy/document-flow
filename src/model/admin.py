@@ -135,8 +135,8 @@ def create_super_admin():
         200000,
         dklen=64
     )
-    db_helper.add_record_admin_data("super", "admin", "superadminovich", datetime.now().strftime("%d-%m-%Y %H:%M"))
-    db_helper.add_record_admin_login(key1.hex(), salt.hex(), 1, "super", 0, datetime.now().strftime("%d-%m-%Y %H:%M"))
+    # db_helper.add_record_admin_data("super", "admin", "superadminovich", datetime.now().strftime("%d-%m-%Y %H:%M"))
+    db_helper.add_record_admin_login(key1.hex(), salt, 1, "super", 0)
 
 
 # def delete_file():
@@ -216,11 +216,11 @@ def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag
 
 if __name__ == '__main__':
     start_time = time.time()
-    # create_super_admin()
+    create_super_admin()
 
     # test_binary()
 
-    check_password("Ivan", "Vanya")
+    # check_password("Ivan", "Vanya")
     # check_password("login1", "user1")
     # check_password("vanya", "vavak")
     print(time.time() - start_time, "seconds")

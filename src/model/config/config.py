@@ -7,7 +7,8 @@ def load_dotenv():
     # print("path:", working_dir)
     # print(Path.cwd().parent)
     # print(Path(Path.cwd()))
-    path = Path(Path.home(), "PycharmProjects", "document_flow", "src", "model", "config", ".env")
+    # path = Path(Path.home(), "PycharmProjects", "document_flow", "src", "model", "config", ".env")
+    path = "B:\работа\проекты с работы\document_flow\src\model\config\.env"
     # print(path)
     with open(path, 'r') as file:
         lines = file.readlines()

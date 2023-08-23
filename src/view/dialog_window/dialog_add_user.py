@@ -17,7 +17,7 @@ class DialogWidgetAddUser(QDialog):
         self.show()
         # self.setWindowTitle("Добавление пользователя")
         self.setObjectName("Dialog_add_user")
-        self.resize(550, 500)
+        self.resize(610, 600)
         self.setMinimumSize(QtCore.QSize(320, 340))
         # self.setMaximumSize(QtCore.QSize(400, 380))
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
@@ -122,6 +122,14 @@ class DialogWidgetAddUser(QDialog):
         self.lineEdit_password.setStyleSheet(style_for_line_edit)
         self.formLayout.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.lineEdit_password)
 
+        self.checkBox_flag_leader = QtWidgets.QCheckBox(self)
+        self.checkBox_flag_leader.setMinimumSize(QtCore.QSize(0, 23))
+        self.checkBox_flag_leader.setText("Начальник отдела (отметить, если уч. запись для руководителя)")
+        self.checkBox_flag_leader.setFont(font)
+        self.checkBox_flag_leader.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.checkBox_flag_leader.setObjectName("checkBox_flag_leader")
+        self.formLayout.setWidget(8, QtWidgets.QFormLayout.SpanningRole, self.checkBox_flag_leader)
+
         self.label_name = QtWidgets.QLabel(self.main_frame)
         self.label_name.setFont(font)
         self.label_name.setObjectName("label_name")
@@ -181,11 +189,12 @@ class DialogWidgetAddUser(QDialog):
         patronymic = self.lineEdit_patronymic.text()
         login = self.lineEdit_login.text()
         password = self.lineEdit_password.text()
+        flag_leader = self.checkBox_flag_leader.isChecked()
         try:
             department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
             department = department[:3]  # получаем только номер отдела, без его названия
             print(department)
-            controller.add_user_in_database(last_name, name, patronymic, department, login, password)
+            controller.add_user_in_database(last_name, name, patronymic, department, login, password, flag_leader)
             self.main_window.press_button_refresh()
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Добавление пользователя",
                                                                      f'Пользователь "{last_name} {name} {patronymic}" '

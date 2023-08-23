@@ -90,11 +90,24 @@ class DialogAddDocument(QDialog):
         self.lineEdit_type_document.setFont(font)
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.lineEdit_type_document)
 
+        self.label_note = QtWidgets.QLabel(self.main_frame)
+        self.label_note.setFont(font)
+        self.label_note.setObjectName("label_type_document")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_note)
+
+        self.lineEdit_note = QtWidgets.QLineEdit(self.main_frame)
+        self.lineEdit_note.setObjectName("lineEdit_type_document")
+        self.lineEdit_note.setStyleSheet(style_for_line_edit)
+        self.lineEdit_note.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_note.setMinimumSize(QtCore.QSize(0, 23))
+        self.lineEdit_note.setFont(font)
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.lineEdit_note)
+
         self.label_date = QtWidgets.QLabel(self.main_frame)
         self.label_date.setFont(font)
         self.label_date.setStyleSheet("")
         self.label_date.setObjectName("label_date")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_date)
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_date)
 
         self.frame_for_drop = QtWidgets.QFrame(self.main_frame)
         self.frame_for_drop.setAcceptDrops(False)
@@ -147,7 +160,7 @@ class DialogAddDocument(QDialog):
         self.pushButton_select_file.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_select_file.setObjectName("pushButton_select_file")
         self.verticalLayout_2.addWidget(self.pushButton_select_file)
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.SpanningRole, self.frame_for_drop)
+        self.formLayout.setWidget(5, QtWidgets.QFormLayout.SpanningRole, self.frame_for_drop)
 
         self.dateEdit = QtWidgets.QDateEdit(self.main_frame)
         self.dateEdit.setStyleSheet(style_for_line_edit)
@@ -156,7 +169,7 @@ class DialogAddDocument(QDialog):
         self.dateEdit.setFont(font)
         self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(2020, 1, 1), QtCore.QTime(0, 0, 0)))
         self.dateEdit.setObjectName("dateEdit")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.dateEdit)
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.dateEdit)
         self.verticalLayout.addWidget(self.main_frame)
 
         self.pushButton_save = QtWidgets.QPushButton(self)
@@ -192,6 +205,7 @@ class DialogAddDocument(QDialog):
         self.label_inner_number.setText(_translate("Dialog_add_user", "Входящий номер:"))
         self.label_output_date.setText(_translate("Dialog_add_user", "Исходящий номер:"))
         self.label_type_document.setText(_translate("Dialog_add_user", "Тип документа:"))
+        self.label_note.setText(_translate("Dialog_add_user", "Примечание:"))
         self.label_date.setText(_translate("Dialog_add_user", "Исходящая дата:"))
         self.label_name_selected_file.setText(
             _translate("Dialog_add_user", "Выберите файл или перетащите его в эту область"))

@@ -23,6 +23,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         path_to_images = Path(Path().cwd().parent.parent, "pictures")
 
         icon = QtGui.QIcon()
+        print(str(Path(path_to_images, "logo.png")))
         icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.setStyleSheet(
@@ -73,7 +74,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
                                  "text-align: center;\n"
                                  "color: rgb(0, 0, 255);height:40%;font-size:15vh;")
         self.label.setText("")
-        pixmap = QtGui.QPixmap(str(Path(path_to_images, "login_window_frame.jpg")))
+        pixmap = QtGui.QPixmap(str(Path(path_to_images, "logo2.png")))
         self.label.setPixmap(pixmap)
         self.label.setScaledContents(True)
         self.label.resize(pixmap.width(), pixmap.height())

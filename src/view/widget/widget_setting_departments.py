@@ -86,9 +86,9 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
-        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Номер отдела"))
+        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Номер подразделения"))
         self.treeWidget.header().setResizeContentsPrecision(QHeaderView.ResizeToContents)
-        self.treeWidget.headerItem().setText(1, _translate("MainWindow", "Название отдела"))
+        self.treeWidget.headerItem().setText(1, _translate("MainWindow", "Название подразделения"))
 
         self.button_save.setText(_translate("MainWindow", "сохранить изменения"))
         self.button_add_row.setText(_translate("MainWindow", "добавить элемент"))

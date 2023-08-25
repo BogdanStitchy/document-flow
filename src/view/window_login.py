@@ -4,9 +4,9 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 from src.controller import controller_main_window as controller
 from pathlib import Path
 
-import window_sa_test
-import window_user
-import window_admin
+from src.view import window_sa_test
+from src.view import window_user
+from src.view import window_admin
 
 
 class HandlerWindowLogin(QtWidgets.QMainWindow):
@@ -20,7 +20,8 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.resize(341, 296)
         self.setMinimumSize(QtCore.QSize(500, 470))
         self.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        path_to_images = Path(Path().cwd(), "pictures")
+        print(path_to_images)
 
         icon = QtGui.QIcon()
         print(str(Path(path_to_images, "logo.png")))

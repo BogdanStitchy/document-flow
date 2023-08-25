@@ -5,7 +5,7 @@ from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
 from src.view.widget import widget_setting_users
 from src.view.widget import widget_setting_departments
-import window_login
+from src.view import window_login
 
 
 class WindowSuperAdmin(QtWidgets.QMainWindow):

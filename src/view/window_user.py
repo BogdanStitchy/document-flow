@@ -3,7 +3,7 @@ from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from src.view import window_login
-from widget import widget_setting_documents
+from src.view.widget import widget_setting_documents
 from src.controller import controller_main_window as controller
 from src.view.dialog_window.dialog_password_change import DialogWidgetChangePassword
 

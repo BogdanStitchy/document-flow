@@ -27,7 +27,8 @@ class Administrator(User):
                           "Проверьте логин и выбранную роль пользователя"
         else:
             print("Admin found in data base")
-            received_password, salt, id_admin, access_level, active = request
+            print("request", request)
+            received_password, salt, id_admin, super_admin_flag, active = request
 
             if not active:
                 return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
@@ -48,7 +49,7 @@ class Administrator(User):
                 print(f"This Admin with username '{login}' login successful")
                 # global current_id, current_access_level
                 self.CURRENT_ID = id_admin
-                if access_level == 0:
+                if super_admin_flag:
                     return 'superAdmin', False
                 self.set_full_name()
                 # print("lvl = ", access_level)

@@ -23,13 +23,13 @@ class Hierarchy:
 
     def __set_naming_all_departments(self):
         result = db_helper.get_all_departments()
-
+        print("__set_naming_all_departments reult =\t", result)
         for row in result:
             self.__departments[row[0]] = {"item": QTreeWidgetItem(), "name": row[1], "number_department": row[2]}
             self.__departments[row[0]]["item"].setFlags(
                 QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-            self.__departments[row[0]]["item"].setText(0, str(row[2]))  # установка имени на итем
-            self.__departments[row[0]]["item"].setText(1, row[1])  # установка номера отдела на итем
+            self.__departments[row[0]]["item"].setText(0, str(row[2]))  # установка номера отдела на итем
+            self.__departments[row[0]]["item"].setText(1, str(row[1]))  # установка имени на итем
             self.__departments[row[0]]["item"].setText(2, str(row[0]))  # установка id на итем
 
     def __set_hierarchy_departments(self):

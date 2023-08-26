@@ -135,8 +135,8 @@ def create_super_admin():
         200000,
         dklen=64
     )
-    # db_helper.add_record_admin_data("super", "admin", "superadminovich", datetime.now().strftime("%d-%m-%Y %H:%M"))
-    db_helper.add_record_admin_login(key1.hex(), salt, 1, "super", 0)
+    db_helper.add_record_admin_data("super", "admin", "superadminovich", datetime.now().strftime("%d-%m-%Y %H:%M"))
+    db_helper.add_record_admin_login(key1.hex(), salt, 1, "super", True)
 
 
 # def delete_file():

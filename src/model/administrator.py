@@ -44,7 +44,7 @@ class Administrator(User):
             # print(f"bytes(received_password) = {bytes(received_password)}\npassword = {password}"
             #       f"\npassword.hex() = {password.hex()}"
             #       f"\npassword.hex().encode('utf-8') = {password.hex().encode('utf-8')}")
-            if password.hex().encode('utf-8') == bytes(received_password):
+            if password == bytes(received_password):
                 self.CURRENT_LOGIN = login
                 print(f"This Admin with username '{login}' login successful")
                 # global current_id, current_access_level

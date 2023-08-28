@@ -1,16 +1,5 @@
 import os
-from pathlib import Path
-
-
-def load_dotenv():
-    path = Path(Path.cwd(), "src", "model", "config", ".env")
-
-    with open(path, 'r') as file:
-        lines = file.readlines()
-
-    for line in lines:
-        os.environ[line[:line.find('=')]] = line[line.find('=') + 1: line.find('\\')]
-
+from dotenv import load_dotenv
 
 load_dotenv()
 

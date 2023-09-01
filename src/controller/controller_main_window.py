@@ -1,32 +1,38 @@
 import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
-# from src.model import admin
-# from src.model.main_model import Client
+
 from src.model import handler_hierarchy
 from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
 
+from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError
+
 client = SuperAdmin  # Client("admin").client
 role_client: str = ""
 
 
-def check_login(login: str, password: str, role: str):
-    # client.check_password(login, password)
+def check_login(login: str, password: str, role: str) -> str:
     global client, role_client
-    if role == 'admin':
+    try:
+        if role == 'admin':
+            client = Administrator()
+            result = client.check_password(login, password)  # superAdmin or Admin
+            role_client = result
+            if role_client == 'superAdmin':
+                client = SuperAdmin()
+            return role_client
 
-        client = Administrator()
-        result = client.check_password(login, password)  # true, false, superAdmin
-        role_client = result[0]
-        if result[0] == 'superAdmin':
-            client = SuperAdmin()
+        elif role == 'user':
+            role_client = role
+            client = User()
+            result = client.check_password(login, password)
             return result
-        return result
-    elif role == 'user':
-        role_client = role
-        client = User()
-        result = client.check_password(login, password)  # true, false
-        return result
+    except (ClientActiveError, ClientNotFoundError, ClientPasswordError) as ex:
+        print("check_login my exception: ", str(ex))
+        return str(ex)
+    except Exception as ex:
+        print(f"check_login unknown exception {ex}")
+        return f"Неизвестная ошибка, обратитесь к разработчикам. \nКод ошибки: 001"
 
 
 def save_hierarchy(list_hierarchy: list):

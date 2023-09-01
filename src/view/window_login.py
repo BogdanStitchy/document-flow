@@ -12,6 +12,8 @@ from src.view import window_admin
 class HandlerWindowLogin(QtWidgets.QMainWindow):
     def __init__(self):
         super(HandlerWindowLogin, self).__init__()
+        self.window_client = None
+        self.information_window = None
         self.setup_ui()
 
     def setup_ui(self):
@@ -172,63 +174,46 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.button_login.setText(_translate("MainWindow", "Войти"))
 
     def button_login_press(self):
+        role = None
         if self.radio_user.isChecked():
             role = 'user'
         if self.radio_admin.isChecked():
             role = 'admin'
         input_login = self.line_login.text()
         input_password = self.line_password.text()
+
         if input_password == "":
             self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода пароля", "Введите пароль!")
             return
-        print(f"login = {input_login}\tpassword = {input_password}")
-        login_flag = controller.check_login(input_login, input_password, role)
-        print(f"login_flag in view = {login_flag}\ttype = {type(login_flag)}")
-        if login_flag[0] == 'superAdmin':
+
+        result_checking = controller.check_login(input_login, input_password, role)
+        self.create_window(data_window=result_checking)
+
+    def create_window(self, data_window: str):
+        """
+        method create window role authorized client or QMessageBox.critical with information about error login
+        :param data_window: str
+        :return:
+        """
+        if data_window == 'superAdmin':
             print("current = super admin")
-            self.admin = window_sa_test.WindowSuperAdmin()
+            self.window_client = window_sa_test.WindowSuperAdmin()
             self.close()
-        elif login_flag[0] == 'admin':
+        elif data_window == 'admin':
             print("current = admin")
-            self.window_admin = window_admin.WindowAdmin()
+            self.window_client = window_admin.WindowAdmin()
             self.close()
-        elif login_flag[0] == 'user':
+        elif data_window == 'user':
             print("current = user")
-            self.window_user = window_user.WindowUser()
+            self.window_client = window_user.WindowUser()
             self.close()
-        else:  # type(login_flag) != int:
-            # print(" self.clear_password_line()")
+        else:
             self.clear_password_line()
-            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", login_flag[1])
+            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", data_window)
 
     def clear_password_line(self):
         self.line_password.setText('')
         self.repaint()
-
-
-def test_main():
-    from PyQt5.QtGui import QPixmap, QPalette
-    from PyQt5.QtCore import Qt
-    from PyQt5.QtWidgets import QApplication, QFrame, QHBoxLayout, QWidget
-
-    app = QApplication([])
-    widget = QWidget()
-    widget.resize(341, 296)
-    layout = QHBoxLayout(widget)
-
-    frame = QFrame()
-    pixmap = QPixmap('C:/Users/B_Karkhanin/PycharmProjects/document_flow/pictures/login_window_frame.jpg')
-    palette = QPalette()
-    palette.setBrush(QPalette.Background, QtGui.QBrush(pixmap))
-    frame.setPalette(palette)
-    # frame.set
-    frame.setPalette(palette)
-    frame.setAutoFillBackground(True)
-    layout.addWidget(frame)
-
-    widget.setLayout(layout)
-    widget.show()
-    app.exec()
 
 
 if __name__ == '__main__':

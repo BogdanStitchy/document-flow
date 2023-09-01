@@ -7,6 +7,10 @@ from src.model.config import config
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments as db_helper_departments
 
+from src.db.methods.user_db_methods import UserDB
+
+from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError
+
 
 class User:
     def __init__(self):
@@ -18,6 +22,7 @@ class User:
         self.CURRENT_LOGIN: str = None
         self.CURRENT_ID_DEPARTMENT: int = None
         self.CURRENT_NUMBER_DEPARTMENT: int = None
+        self.date_last_changes_password = None
 
     def get_lvl_access(self):
         return self.LVL_ACCESS
@@ -31,55 +36,45 @@ class User:
     def get_number_department(self):
         return self.CURRENT_NUMBER_DEPARTMENT
 
-    def set_full_name(self):
-        self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_user(
-            self.CURRENT_ID)
+    def set_self_data(self, data_user: {}, login_user: str):
+        self.CURRENT_LOGIN = login_user
+        self.CURRENT_ID = data_user['id']
+        self.CURRENT_NAME = data_user['name']
+        self.CURRENT_PATRONYMIC = data_user['patronymic']
+        self.CURRENT_LAST_NAME = data_user['last_name']
+        self.date_last_changes_password = data_user['date_last_changes_password']
 
     def set_department_data(self):
         self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_for_one_user(
             self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
-        request = db_helper.get_login_data_user(login)
-        # print("request =", request)
-        # global current_user_session_id, current_access_level
-        # print(f"current id = {current_id}\tcurrent access lvl = {current_access_level}")
-        if request is None:
-            print("User not found in data base.")
-            return False, "Пользователь с указанным логином не найден в базе!\n" \
-                          "Проверьте логин и выбранную роль пользователя"
-        else:
-            print("User found in data base")
-            received_password, salt, id_user, active = request
-            # print("id_and_access_level = ", id_and_access_level)
-            # print('\n')
-            # print("rp = ", bytes(received_password))
-            # print("original_salt = ", bytes(original_salt.hex(), 'utf-8'))
-            # print("salt = ", bytes(salt))
-            # print('\n')
-            if not active:
-                return False, "Учетная запись пользователя с указанными данными деактивирована.\n" \
-                              "Для активации учетной записи обратитесь к администратору."
-            password = hashlib.pbkdf2_hmac(
-                config.HASH_FUNCTION,
-                password.encode('utf-8'),
-                bytes(salt),
-                200000,
-                dklen=64
-            )
+        # request = db_helper.get_login_data_user(login)
+        data_user: {} = UserDB.check_password(login)
 
-            # print("passwordik = ", passwordik.hex().encode('utf-8'))
-            if password.hex().encode('utf-8') == bytes(received_password):
-                self.CURRENT_LOGIN = login
-                print(f"This user with username '{login}' login successful")
-                self.CURRENT_ID = id_user
-                self.set_full_name()
-                self.set_department_data()
-                # print("lvl = ", current_access_level)
-                return 'user', False
-            else:
-                print(f"User {login} no login")
-                return False, "Указан неправильный пароль"
+        if data_user is None:
+            raise ClientNotFoundError("Пользователь с указанным логином не найден в базе!\n"
+                                      "Проверьте логин и выбранную роль пользователя")
+
+        if not data_user['active']:
+            raise ClientActiveError("Учетная запись пользователя с указанными данными деактивирована.\n"
+                                    "Для активации учетной записи обратитесь к администратору.")
+
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(data_user['salt']),
+            200000,
+            dklen=64
+        )
+
+        if password != bytes(data_user['password']):
+            raise ClientPasswordError("Указан неправильный пароль")
+
+        # user successful login in system
+        self.set_self_data(data_user=data_user, login_user=login)
+        self.set_department_data()
+        return 'user'
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5

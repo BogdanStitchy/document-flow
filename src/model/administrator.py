@@ -7,6 +7,7 @@ from src.model.user import User
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
 from src.db.methods.admin_db_methods import AdminDB
+from src.model.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
 
 
 class Administrator(User):
@@ -15,11 +16,6 @@ class Administrator(User):
         self.LVL_ACCESS = 1
         self.date_last_changes_password = None
         # self.CURRENT_ID_DEPARTMENT = 1
-
-    # # отказаться от этого
-    # def set_full_name(self):
-    #     self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_admin(
-    #         self.CURRENT_ID)
 
     def set_self_data(self, data_admin: {}, login_admin: str):
         self.CURRENT_LOGIN = login_admin
@@ -34,12 +30,12 @@ class Administrator(User):
         data_about_admin: {} = AdminDB.check_password(login)
 
         if data_about_admin is None:
-            return False, "Администратор с указанным логином не найден в базе!\n" \
-                          "Проверьте логин и выбранную роль пользователя"
+            raise ClientNotFoundError("Администратор с указанным логином не найден в базе!\n"
+                                      "Проверьте логин и выбранную роль пользователя")
 
         if not data_about_admin['active']:
-            return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
-                          "Для активации учетной записи обратитесь к супер администратору."
+            raise ClientActiveError("Учетная запись администратора с указанными данными деактивирована.\n"
+                                    "Для активации учетной записи обратитесь к супер администратору.")
 
         password = hashlib.pbkdf2_hmac(
             config.HASH_FUNCTION,
@@ -50,14 +46,14 @@ class Administrator(User):
         )
 
         if password != bytes(data_about_admin['password']):
-            return False, "Указан неправильный пароль"
+            raise ClientPasswordError("Указан неправильный пароль")
 
         # admin successful login in system
         self.set_self_data(data_admin=data_about_admin, login_admin=login)
 
         if data_about_admin['super_admin_flag']:
-            return 'superAdmin', False
-        return 'admin', False
+            return 'superAdmin'
+        return 'admin'
 
     # отказаться
     def get_last_change_password(self):
@@ -186,5 +182,4 @@ class Administrator(User):
 
 if __name__ == '__main__':
     admin = Administrator()
-    # admin.add_user("Степкин", "Степан", "Степанович", "235", "stepa", "password")
-    admin.check_password("Nura@hr.ru", "Nura")
+    admin.check_password("Nur.ru", "Nur")

@@ -6,58 +6,60 @@ from src.model.config import config
 from src.model.user import User
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
+from src.db.methods.admin_db_methods import AdminDB
 
 
 class Administrator(User):
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 1
+        self.date_last_changes_password = None
         # self.CURRENT_ID_DEPARTMENT = 1
 
-    def set_full_name(self):
-        self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_admin(
-            self.CURRENT_ID)
+    # # отказаться от этого
+    # def set_full_name(self):
+    #     self.CURRENT_LAST_NAME, self.CURRENT_NAME, self.CURRENT_PATRONYMIC = db_helper.get_full_name_admin(
+    #         self.CURRENT_ID)
+
+    def set_self_data(self, data_admin: {}, login_admin: str):
+        self.CURRENT_LOGIN = login_admin
+        self.CURRENT_ID = data_admin['id']
+        self.CURRENT_NAME = data_admin['name']
+        self.CURRENT_PATRONYMIC = data_admin['patronymic']
+        self.CURRENT_LAST_NAME = data_admin['last_name']
+        self.date_last_changes_password = data_admin['date_last_changes_password']
 
     def check_password(self, login: str, password: str):
-        request = db_helper.get_login_data_admin(login)
+        # request = db_helper.get_login_data_admin(login)
+        data_about_admin: {} = AdminDB.check_password(login)
 
-        if request is None:
-            print("Admin not found in data base.")
+        if data_about_admin is None:
             return False, "Администратор с указанным логином не найден в базе!\n" \
                           "Проверьте логин и выбранную роль пользователя"
-        else:
-            print("Admin found in data base")
-            print("request", request)
-            received_password, salt, id_admin, super_admin_flag, active = request
 
-            if not active:
-                return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
-                              "Для активации учетной записи обратитесь к супер администратору."
-            # print("bytes(salt) = ", bytes(salt))
-            password = hashlib.pbkdf2_hmac(
-                config.HASH_FUNCTION,
-                password.encode('utf-8'),
-                bytes(salt),
-                200000,
-                dklen=64
-            )
-            # print(f"bytes(received_password) = {bytes(received_password)}\npassword = {password}"
-            #       f"\npassword.hex() = {password.hex()}"
-            #       f"\npassword.hex().encode('utf-8') = {password.hex().encode('utf-8')}")
-            if password == bytes(received_password):
-                self.CURRENT_LOGIN = login
-                print(f"This Admin with username '{login}' login successful")
-                # global current_id, current_access_level
-                self.CURRENT_ID = id_admin
-                if super_admin_flag:
-                    return 'superAdmin', False
-                self.set_full_name()
-                # print("lvl = ", access_level)
-                return 'admin', False
-            else:
-                print(f"Admin {login} no login")
-                return False, "Указан неправильный пароль"
+        if not data_about_admin['active']:
+            return False, "Учетная запись администратора с указанными данными деактивирована.\n" \
+                          "Для активации учетной записи обратитесь к супер администратору."
 
+        password = hashlib.pbkdf2_hmac(
+            config.HASH_FUNCTION,
+            password.encode('utf-8'),
+            bytes(data_about_admin["salt"]),
+            200000,
+            dklen=64
+        )
+
+        if password != bytes(data_about_admin['password']):
+            return False, "Указан неправильный пароль"
+
+        # admin successful login in system
+        self.set_self_data(data_admin=data_about_admin, login_admin=login)
+
+        if data_about_admin['super_admin_flag']:
+            return 'superAdmin', False
+        return 'admin', False
+
+    # отказаться
     def get_last_change_password(self):
         # self.CURRENT_ID = 6
         return db_helper.get_last_change_password_admin(self.CURRENT_ID)

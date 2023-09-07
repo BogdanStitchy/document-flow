@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from .models import base
-from src.model.config import config
+from src.config import config
 
 # "``dialect[+driver]://user:password@host/dbname[?key=value..]``"
 engine = create_engine(

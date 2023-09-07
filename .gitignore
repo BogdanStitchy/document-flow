@@ -17,4 +17,4 @@ src/model/file.doc
 src/model/file.pdf
 src/model/for_data_base/
 *.pyc
-src/model/config/__pycache__/
+src/config/__pycache__/

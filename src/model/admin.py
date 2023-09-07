@@ -3,7 +3,7 @@ import hashlib
 import time
 from datetime import datetime
 
-from src.model.config import config
+from src.config import config
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
 

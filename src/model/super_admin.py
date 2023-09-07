@@ -1,7 +1,7 @@
 import os
 import hashlib
 from datetime import datetime
-from src.model.config import config
+from src.config import config
 
 from src.model.administrator import Administrator
 from src.model.for_data_base import db_helper

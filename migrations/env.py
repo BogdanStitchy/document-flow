@@ -7,7 +7,7 @@ from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from src.model.config.config import DIALECT_DB, LOGIN_DB, PASSWORD_DB, HOST, PORT, NAME_DB
+from src.config.config import DIALECT_DB, LOGIN_DB, PASSWORD_DB, HOST, PORT, NAME_DB
 from src.db.models.base import Base
 
 

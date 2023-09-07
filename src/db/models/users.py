@@ -22,6 +22,6 @@ class Users(Base):
     date_creating = mapped_column(DateTime, nullable=False, server_default=func.now())
 
     id_department = mapped_column(Integer, ForeignKey("departments.id", ondelete="RESTRICT"))
-    creator_id = mapped_column(Integer, ForeignKey("admins_data.id", ondelete="SET NULL"))
+    creator_id = mapped_column(Integer, ForeignKey("admins.id", ondelete="SET NULL"))
 
-    __table_args__ = (UniqueConstraint('last_name', 'name', 'patronymic', name='_uq_user_name'),)
+    __table_args__ = (UniqueConstraint('last_name', 'name', 'patronymic', name='_uniq_user_name'),)

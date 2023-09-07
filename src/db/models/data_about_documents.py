@@ -14,4 +14,4 @@ class DataAboutDocuments(Base):
     type_document = mapped_column(String(100), nullable=False)
     name = mapped_column(String(100), nullable=False)
     date_creating = mapped_column(DateTime, nullable=False)
-    id_creator = mapped_column(Integer, ForeignKey("users_data.id", ondelete='SET NULL'))
+    id_creator = mapped_column(Integer, ForeignKey("users.id", ondelete='SET NULL'))

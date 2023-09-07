@@ -22,4 +22,4 @@ class Admins(Base):
     date_creating = mapped_column(DateTime, nullable=False, server_default=func.now())
     date_last_changes_password = mapped_column(DateTime)
 
-    __table_args__ = (UniqueConstraint('last_name', 'name', 'patronymic', name='_uq_admin_name'),)
+    __table_args__ = (UniqueConstraint('last_name', 'name', 'patronymic', name='_uniq_admin_name'),)

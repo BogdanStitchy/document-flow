@@ -23,8 +23,8 @@ class UserDB:
                         UsersLogin.password,
                         UsersLogin.salt,
                         UsersLogin.date_last_changes_password
-                    ).
-                        join_from(UsersData, UsersLogin).
-                        where(UsersLogin.login == login))
+                    ).join_from(
+                        UsersData, UsersLogin
+                    ).where(UsersLogin.login == login))
             result = result.mappings().fetchone()
             return result

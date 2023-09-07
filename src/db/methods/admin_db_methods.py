@@ -24,8 +24,8 @@ class AdminDB:
                         AdminsLogin.salt,
                         AdminsLogin.super_admin_flag,
                         AdminsLogin.date_last_changes_password
-                    ).
-                        join_from(AdminsData, AdminsLogin).
-                        where(AdminsLogin.login == login))
+                    ).join_from(
+                        AdminsData, AdminsLogin
+                    ).where(AdminsLogin.login == login))
             result = result.mappings().fetchone()
             return result

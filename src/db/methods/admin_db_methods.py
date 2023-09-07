@@ -4,8 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import engine
-from src.db.models.admins_login import AdminsLogin
-from src.db.models.admins_data import AdminsData
+from src.db.models.admins import Admins
 
 
 class AdminDB:
@@ -15,17 +14,15 @@ class AdminDB:
             with session.begin():
                 result = session.execute(
                     select(
-                        AdminsData.id,
-                        AdminsData.last_name,
-                        AdminsData.name,
-                        AdminsData.patronymic,
-                        AdminsLogin.active,
-                        AdminsLogin.password,
-                        AdminsLogin.salt,
-                        AdminsLogin.super_admin_flag,
-                        AdminsLogin.date_last_changes_password
-                    ).join_from(
-                        AdminsData, AdminsLogin
-                    ).where(AdminsLogin.login == login))
+                        Admins.id,
+                        Admins.last_name,
+                        Admins.name,
+                        Admins.patronymic,
+                        Admins.active,
+                        Admins.password,
+                        Admins.salt,
+                        Admins.super_admin_flag,
+                        Admins.date_last_changes_password
+                    ).where(Admins.login == login))
             result = result.mappings().fetchone()
             return result

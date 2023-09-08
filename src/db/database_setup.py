@@ -9,7 +9,16 @@ engine = create_engine(
     f"{config.PORT}/{config.NAME_DB}",
     echo=True)
 
-print(engine.connect())
+
+def set_new_engine(new_engine: create_engine):
+    global engine
+    engine = new_engine
+
+
+def get_engine() -> create_engine:
+    global engine
+    return engine
+
 
 if __name__ == "__main__":
     with Session(engine) as session:

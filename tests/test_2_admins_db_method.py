@@ -30,10 +30,16 @@ def database_admin():
     (("None", "sdaf", None, "asdf", os.urandom(16), os.urandom(16), 1), ValidationError)
 ])
 def test_add_user(database_admin, data, expected_exception):
-    print("DATA: ", *data)
     if expected_exception is None:
         id_added_user = database_admin.add_user(*data)
         assert type(id_added_user) == int
     else:
         with pytest.raises(expected_exception):
             database_admin.add_user(*data)
+
+
+def test_remaining_user(database_admin):
+    data = ("uniq", "uniq", "uniq", "uniq_usr_log", os.urandom(16), os.urandom(16), 1, 1)
+    database_admin.add_user(*data)
+    with pytest.raises(IntegrityError):
+        database_admin.add_user(*data)

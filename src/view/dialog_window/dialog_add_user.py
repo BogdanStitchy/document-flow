@@ -180,6 +180,7 @@ class DialogWidgetAddUser(QDialog):
         print(departments)
         for department in departments:
             radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
+            radio_button.setObjectName(str(department[0]))
             self.verticalLayout_2.addWidget(radio_button)
             self.group.addButton(radio_button)
 
@@ -192,8 +193,10 @@ class DialogWidgetAddUser(QDialog):
         flag_leader = self.checkBox_flag_leader.isChecked()
         try:
             department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
+            id_department = int(self.group.checkedButton().objectName())
             department = department[:3]  # получаем только номер отдела, без его названия
             print(department)
+            print()
             controller.add_user_in_database(last_name, name, patronymic, department, login, password, flag_leader)
             self.main_window.press_button_refresh()
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Добавление пользователя",

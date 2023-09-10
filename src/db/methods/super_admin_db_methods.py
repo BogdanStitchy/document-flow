@@ -6,6 +6,7 @@ import pydantic
 
 from src.db.database_setup import get_engine
 from src.db.models.admins import Admins
+from src.db.models.departments import Departments
 from src.db.methods.admin_db_methods import AdminDB
 
 
@@ -24,3 +25,12 @@ class SuperAdminDB(AdminDB):
                 session.add(new_admin)
                 session.commit()
             return new_admin.id
+
+    @staticmethod
+    @pydantic.validate_arguments
+    def add_department(name_department: str, number_department: int) -> None:
+        with Session(get_engine()) as session:
+            with session.begin():
+                new_department = Departments(name_department=name_department, number_department=number_department)
+                session.add(new_department)
+                session.commit()

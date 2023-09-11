@@ -1,16 +1,9 @@
 from pydantic import ValidationError
-from sqlalchemy import create_engine
 import pytest
 import os
 from sqlalchemy.exc import IntegrityError
 
-from conftest import create_database
-from src.db.models import base
 from src.db.methods import super_admin_db_methods as sa_methods
-from src.db.database_setup import set_new_engine
-
-data_base_local = "sqlite:///B:/работа/проекты с работы/document_flow/tests/testDB.db"
-data_base_memory = "sqlite:///:memory:"
 
 
 @pytest.fixture(scope="module")

@@ -1,22 +1,13 @@
 from pydantic import ValidationError
-from sqlalchemy import create_engine
 import pytest
 import os
-
 from sqlalchemy.exc import IntegrityError
 
-from src.db.models import base
 from src.db.methods import admin_db_methods
-from src.db.database_setup import set_new_engine
-
-data_base_local = "sqlite:///B:/работа/проекты с работы/document_flow/tests/testDB.db"
-data_base_memory = "sqlite:///:memory:"
 
 
 @pytest.fixture(scope="module")
 def database_admin():
-    # engine = create_engine(data_base_memory)
-    # set_new_engine(engine)
     admin_methods = admin_db_methods.AdminDB()
     yield admin_methods
 
@@ -43,3 +34,34 @@ def test_remaining_user(database_admin):
     database_admin.add_user(*data)
     with pytest.raises(IntegrityError):
         database_admin.add_user(*data)
+
+
+def test_get_all_users(database_admin):
+    users = database_admin.get_all_users()
+    assert len(users) == 3  # сколько раз добавляем в тестах
+
+
+def test_get_one_user(database_admin):
+    user1 = database_admin.get_one_user(1)
+    assert len(user1) == 12
+
+
+@pytest.mark.parametrize("id_user, kwargs, expected_exception", [
+    (1, {"name": "Dima", "last_name": "Ivanov"}, None),
+    (2, {"name": "Stas"}, None),
+    (3, {"name": ""}, None),
+    (1, (123, 234), TypeError),
+    (5, {"name": "Test"}, ValueError)
+])
+def test_update_user(database_admin, id_user, kwargs, expected_exception):
+    if expected_exception is None:
+        database_admin.update_user(id_user, **kwargs)
+        new_user = database_admin.get_one_user(id_user)
+        for key, update_value in kwargs.items():
+            if update_value != "" and update_value is not None:
+                assert update_value == new_user[key]
+            else:
+                assert new_user[key] is not None and new_user[key] != ''
+    else:
+        with pytest.raises(expected_exception):
+            database_admin.update_user(id_user, **kwargs)

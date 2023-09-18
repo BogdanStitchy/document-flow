@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.db.database_setup import get_engine
 from src.db.models.admins import Admins
 from src.db.models.users import Users
+from src.db.models.data_about_documents import DataAboutDocuments
 
 
 class AdminDB:
@@ -46,7 +47,7 @@ class AdminDB:
 
     @staticmethod
     @pydantic.validate_arguments
-    def get_all_users():
+    def get_all_users() -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(select(Users.__table__))
@@ -55,7 +56,7 @@ class AdminDB:
 
     @staticmethod
     @pydantic.validate_arguments
-    def get_one_user(id_user: int):
+    def get_one_user(id_user: int) -> {}:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
@@ -63,16 +64,25 @@ class AdminDB:
                 user = result.mappings().fetchone()
                 return user
 
+    @staticmethod
+    @pydantic.validate_arguments
+    def get_all_documents() -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(select(DataAboutDocuments.__table__))
+                documents = result.mappings().fetchall()
+                return documents
+
     # ________________________________UPDATE_____________________________________________________
     @staticmethod
     @pydantic.validate_arguments
-    def update_user(id_user: int, **kwargs):
+    def update_user(id_user: int, **kwargs) -> None:
         # Найти запись по user_id
         with Session(get_engine()) as session:
             with session.begin():
                 user = session.query(Users).filter_by(id=id_user).first()
                 if user:
-                    # Обновляем только переданные атрибуты
+                    # Обновить только переданные атрибуты
                     for key, value in kwargs.items():
                         if value is not None and value != "":
                             setattr(user, key, value)

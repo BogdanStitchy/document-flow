@@ -30,7 +30,7 @@ class UserDB:
 
     # _________________________________ADD______________________________________________________
     @staticmethod
-    @pydantic.validate_arguments
+    @pydantic.validate_call
     def add_document(id_user: int, file: bytes, name_document: str, inner_number: str, output_number: str,
                      output_date, type_document: str) -> None:
         with Session(get_engine()) as session:

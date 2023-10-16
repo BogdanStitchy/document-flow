@@ -50,3 +50,16 @@ def test_add_department(database_sa, data, expected_exception):
     else:
         with pytest.raises(expected_exception):
             database_sa.add_admin(*data)
+
+
+@pytest.mark.parametrize("data", [1, 2])
+def test_change_active_status_admin(database_sa, data):
+    admin_before_change = database_sa.get_one_user(data)
+    database_sa.change_admin_activity_status(data)
+    admin_after_change = database_sa.get_one_user(data)
+    assert admin_before_change.active != admin_after_change.active
+
+
+def test_get_all_admins(database_sa):
+    admins = database_sa.get_all_admins()
+    assert len(admins) == 3  # сколько раз добавляем в тестах

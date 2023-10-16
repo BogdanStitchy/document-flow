@@ -67,22 +67,19 @@ def test_update_user(database_admin, id_user, kwargs, expected_exception):
             database_admin.update_user(id_user, **kwargs)
 
 
-@pytest.mark.parametrize("id_document, kwargs, expected_exception", [
-    (1, {"inner_number": "", "output_number": "", "output_date": "", "type_document": "", "name": ""}, None),
-    (2, {"inner_number": "", "output_number": "", "output_date": "", "type_document": "", "name": ""}, None),
-    # (3, {"inner_number": "", "output_number": "", "output_date": "", "type_document": "", "name": ""}, None),
-    (1, (123, 234), TypeError),
-    (2, {"linner": "Test"}, ValueError)
+@pytest.mark.parametrize("data, expected_exception", [
+    (1, None),
+    (2, None),
+    ("string", ValidationError),
+    ((1, 2, 3), ValidationError),
+    (5, ValueError)
 ])
-def test_update_document(database_admin, id_document, kwargs, expected_exception):
+def test_change_active_status_user(database_admin, data, expected_exception):
     if expected_exception is None:
-        database_admin.update_document(id_document, **kwargs)
-        # new_document = database_admin.get_one_user(id_user)
-        # for key, update_value in kwargs.items():
-        #     if update_value != "" and update_value is not None:
-        #         assert update_value == new_user[key]
-        #     else:
-        #         assert new_user[key] is not None and new_user[key] != ''
+        user_before_change = database_admin.get_one_user(data)
+        database_admin.change_user_activity_status(data)
+        user_after_change = database_admin.get_one_user(data)
+        assert user_before_change.active != user_after_change.active
     else:
         with pytest.raises(expected_exception):
-            database_admin.update_document(id_document, **kwargs)
+            database_admin.change_user_activity_status(data)

@@ -48,7 +48,7 @@ class SuperAdminDB(AdminDB):
 
     @staticmethod
     @pydantic.validate_call
-    def get_one_user(id_admin: int) -> {}:
+    def get_one_admin(id_admin: int) -> {}:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
@@ -58,6 +58,7 @@ class SuperAdminDB(AdminDB):
 
     # ________________________________UPDATE_____________________________________________________
     @staticmethod
+    @pydantic.validate_call
     def change_admin_activity_status(id_admin: int):
         with Session(get_engine()) as session:
             with session.begin():

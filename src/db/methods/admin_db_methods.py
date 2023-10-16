@@ -105,3 +105,15 @@ class AdminDB:
                     session.commit()
                 else:
                     raise ValueError(f"Документ с id {id_document} не найден.")
+
+    @staticmethod
+    @pydantic.validate_call
+    def change_user_activity_status(id_user: int):
+        with Session(get_engine()) as session:
+            with session.begin():
+                user = session.query(Users).filter_by(id=id_user).first()
+                if user:
+                    user.active = not user.active
+                    session.commit()
+                else:
+                    raise ValueError(f"Пользователь с id {id_user} не найден.")

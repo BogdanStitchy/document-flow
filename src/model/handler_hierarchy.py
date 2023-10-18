@@ -1,4 +1,5 @@
 import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper
+from src.model.super_admin import SuperAdminMethodsDB
 from PyQt5.QtWidgets import QTreeWidgetItem
 from PyQt5 import QtCore
 
@@ -22,22 +23,26 @@ class Hierarchy:
         return self.__departments
 
     def __set_naming_all_departments(self):
-        result = db_helper.get_all_departments()
-        print("__set_naming_all_departments reult =\t", result)
+        # result = db_helper.get_all_departments()
+        result = SuperAdminMethodsDB.get_all_departments()
+        # print("__set_naming_all_departments reult =\t", result)
         for row in result:
-            self.__departments[row[0]] = {"item": QTreeWidgetItem(), "name": row[1], "number_department": row[2]}
-            self.__departments[row[0]]["item"].setFlags(
+            self.__departments[row.id] = {"item": QTreeWidgetItem(), "name": row.name_department,
+                                          "number_department": row.number_department}
+            self.__departments[row.id]["item"].setFlags(
                 QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-            self.__departments[row[0]]["item"].setText(0, str(row[2]))  # установка номера отдела на итем
-            self.__departments[row[0]]["item"].setText(1, str(row[1]))  # установка имени на итем
-            self.__departments[row[0]]["item"].setText(2, str(row[0]))  # установка id на итем
+            self.__departments[row.id]["item"].setText(0, str(row.number_department))  # установка номера отдела на итем
+            self.__departments[row.id]["item"].setText(1, str(row.name_department))  # установка имени на итем
+            self.__departments[row.id]["item"].setText(2, str(row.id))  # установка id на итем
 
     def __set_hierarchy_departments(self):
-        hierarchy = db_helper.get_hierarchy()
+        # hierarchy = db_helper.get_hierarchy()
+        hierarchy = SuperAdminMethodsDB.get_full_hierarchy_departments()
         for dependence in hierarchy:
-            if dependence[1] is None:
+            if dependence.parent_id is None:
                 continue
-            self.__departments[dependence[1]]["item"].addChild(self.__departments[dependence[0]]["item"])
+            self.__departments[dependence.parent_id]["item"].addChild(
+                self.__departments[dependence.department_id]["item"])
 
 
 def add_department_in_db(name_department: str, number_department: int):

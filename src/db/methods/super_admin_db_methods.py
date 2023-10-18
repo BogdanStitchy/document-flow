@@ -7,10 +7,12 @@ import pydantic
 from src.db.database_setup import get_engine
 from src.db.models.admins import Admins
 from src.db.models.departments import Departments
+from src.db.models.departments_hierarhcy import DepartmentsHierarchy
+
 from src.db.methods.admin_db_methods import AdminDB
 
 
-class SuperAdminDB(AdminDB):
+class SuperAdminMethodsDB(AdminDB):
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call
@@ -30,12 +32,13 @@ class SuperAdminDB(AdminDB):
 
     @staticmethod
     @pydantic.validate_call
-    def add_department(name_department: str, number_department: int) -> None:
+    def add_department(name_department: str, number_department: int) -> int:
         with Session(get_engine()) as session:
             with session.begin():
                 new_department = Departments(name_department=name_department, number_department=number_department)
                 session.add(new_department)
                 session.commit()
+            return new_department.id
 
     # _________________________________GET_______________________________________________________
     @staticmethod
@@ -56,6 +59,25 @@ class SuperAdminDB(AdminDB):
                     select(Admins.__table__).where(Admins.__table__.c.id == id_admin))
                 admin = result.mappings().fetchone()
                 return admin
+
+    @staticmethod
+    @pydantic.validate_call
+    def get_all_departments() -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(select(Departments.__table__))
+                departments = result.mappings().fetchall()
+                return departments
+
+    @staticmethod
+    @pydantic.validate_call
+    def get_full_hierarchy_departments() -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(DepartmentsHierarchy.__table__).where(DepartmentsHierarchy.__table__.c.level == 1))
+                hierarchy_departments = result.mappings().fetchall()
+                return hierarchy_departments
 
     # ________________________________UPDATE_____________________________________________________
     @staticmethod

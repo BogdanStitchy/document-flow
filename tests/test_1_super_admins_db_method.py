@@ -8,7 +8,7 @@ from src.db.methods import super_admin_db_methods as sa_methods
 
 @pytest.fixture(scope="module")
 def database_sa():
-    super_admin_methods = sa_methods.SuperAdminDB()
+    super_admin_methods = sa_methods.SuperAdminMethodsDB()
     yield super_admin_methods
 
 

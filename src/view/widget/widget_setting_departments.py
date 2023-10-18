@@ -106,14 +106,17 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.tree(item)
             # print("departments:\n", self.list_departments)
             # print(self.list_hierarchy)
-            controller.save_hierarchy(self.list_hierarchy)
-            controller.update_data_departments(self.list_departments)
+            # controller.save_hierarchy(self.list_hierarchy)
+            # controller.update_data_departments(self.list_departments)
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
                                                                      "Изменеиня успешно сохранены в базе")
+            self.list_departments.clear()
+            self.list_hierarchy.clear()
             print("save success")
 
     def __add_new_departments(self):
         for item in self.departments_for_added:
+            # this peace replace!!!!!!
             id_added_department = controller.add_department(name_department=item.text(1),
                                                             number_department=int(item.text(0)))
             item.setText(2, str(id_added_department))

@@ -5,7 +5,7 @@ from src.config import config
 
 from src.model.administrator import Administrator
 from src.model.for_data_base import db_helper
-from src.db.methods.super_admin_db_methods import SuperAdminDB
+from src.db.methods.super_admin_db_methods import SuperAdminMethodsDB
 
 
 class SuperAdmin(Administrator):
@@ -36,7 +36,7 @@ class SuperAdmin(Administrator):
     @staticmethod
     def get_data_about_admins():
         # return db_helper.get_data_about_admins()
-        return SuperAdminDB.get_all_admins()
+        return SuperAdminMethodsDB.get_all_admins()
 
     @staticmethod
     def change_activation_status_admin(id_admin: int):

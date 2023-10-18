@@ -291,25 +291,25 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def fill_in_table(self, data_about_users):
         if data_about_users is None:
-            self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные отсутствуют.")
+            self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные о пользователях отсутствуют.")
             return False
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
         for row in data_about_users:
             # print(row)
-            name_item = MyTableWidgetItem(row[1])
-            name_item.set_additional_data(int(row[0]))  # Установка id
+            name_item = MyTableWidgetItem(row.last_name)
+            name_item.set_additional_data(int(row.id))  # Установка id
 
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка фамилии
-            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка имени
-            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка отчества
-            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row[4]))  # Установка логина
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row.name))  # Установка имени
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row.patronymic))  # Установка отчества
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row.login))  # Установка логина
             self.tableWidget.setItem(number_row, 4,
-                                     QtWidgets.QTableWidgetItem(str(row[5])))  # Установка даты регистрации
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка номера отдела
-            creator = f"{row[7]} {row[8]} {row[9]}"
-            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(creator))  # Установка создателя
-            status_active = "" if row[10] else "Деактивирован"
+                                     QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты регистрации
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.id_department)))  # Установка номера отдела
+            # creator = f"{row[7]} {row[8]} {row[9]}"
+            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(str(row.creator_id)))  # Установка создателя
+            status_active = "" if row.active else "Деактивирован"
             self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1

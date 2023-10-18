@@ -4,7 +4,7 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 from src.controller import controller_main_window as controller
 from pathlib import Path
 
-from src.view import window_sa_test
+from src.view import window_superadmin
 from src.view import window_user
 from src.view import window_admin
 
@@ -197,7 +197,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         """
         if data_window == 'superAdmin':
             print("current = super admin")
-            self.window_client = window_sa_test.WindowSuperAdmin()
+            self.window_client = window_superadmin.WindowSuperAdmin()
             self.close()
         elif data_window == 'admin':
             print("current = admin")

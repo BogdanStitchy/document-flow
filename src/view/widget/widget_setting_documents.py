@@ -384,17 +384,17 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         for row in data_for_filling:
             # print("row = ", row)
             # name_item = QtWidgets.QTableWidgetItem(row[1])
-            name_item = MyTableWidgetItem(row[1])
+            name_item = MyTableWidgetItem(row.name)
             # name_item.setText(row[1])
-            name_item.set_additional_data(row[0])
+            name_item.set_additional_data(row.id)
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
-            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row[2]))  # Установка входящего номера
-            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row[3]))  # Установка исходящего номера
-            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row[4])))  # Установка исходящей даты
-            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row[5]))  # Установка типа документа
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row[6])))  # Установка даты загрузки
+            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row.inner_number))  # Установка входящего номера
+            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row.output_number))  # Установка исходящего номера
+            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row.output_date)))  # Установка исходящей даты
+            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row.type_document))  # Установка типа документа
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты загрузки
             self.tableWidget.setItem(number_row, 6,
-                                     QtWidgets.QTableWidgetItem(f"{row[7]} {row[8]} {row[9]}"))  # Установка автора
+                                     QtWidgets.QTableWidgetItem(f"{row.id_creator}"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
                                      QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
 
@@ -404,13 +404,13 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                          "border-radius:5px;\n"
                                          "border: 1 solid black;\n"
                                          "")
-            button_downlad.setObjectName(f"{row[0]}")
+            button_downlad.setObjectName(f"{row.id}")
             button_downlad.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             button_downlad.clicked.connect(
-                lambda ch, id_document=row[0], name_file=row[1]: self.press_button_download(id_document, name_file))
+                lambda ch, id_document=row.id, name_file=row.name: self.press_button_download(id_document, name_file))
 
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
-            self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row[0])))  # Установка индекса
+            self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row.id)))  # Установка индекса
             number_row += 1
         print("init table documents finished")
         return True

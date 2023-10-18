@@ -178,7 +178,7 @@ class WindowAdmin(QtWidgets.QMainWindow):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "BZ document flow (Admin mode)"))
+        self.setWindowTitle(_translate("MainWindow", "Documents (Admin mode)"))
         self.label_departament.setText(_translate("MainWindow", f"ADMIN {controller.get_full_name()}"))
         self.button_logout.setText(_translate("MainWindow", "выйти"))
         self.label_mode.setText(_translate("MainWindow", "Режим работы:"))

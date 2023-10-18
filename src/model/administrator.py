@@ -77,7 +77,8 @@ class Administrator(User):
         return True
 
     def get_data_about_documents(self):
-        return db_helper.get_data_documents_for_admin()
+        # return db_helper.get_data_documents_for_admin()
+        return AdminDB.get_all_documents()
 
     @staticmethod
     def search_string_in_documents(search_string: str):
@@ -110,8 +111,9 @@ class Administrator(User):
 
     @staticmethod
     def get_data_about_users():
-        data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
-        return data
+        # data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
+        # return data
+        return AdminDB.get_all_users()
 
     def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
                  flag_leader: bool):

@@ -85,7 +85,7 @@ class WindowUser(QtWidgets.QMainWindow):
 
     def retranslateUi(self, ):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "BZ document flow"))
+        self.setWindowTitle(_translate("MainWindow", "Documents"))
         self.label_name.setText(_translate("MainWindow", controller.get_full_name()))
         self.label_departament.setText(_translate("MainWindow", f"отдел {controller.get_number_department()}"))
         self.pushButton_logout.setText(_translate("MainWindow", "выйти"))

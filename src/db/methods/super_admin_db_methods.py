@@ -14,14 +14,15 @@ class SuperAdminDB(AdminDB):
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call
-    def add_admin(name: str, patronymic: str, last_name: str, login: str, password: bytes, salt: bytes) -> int:
+    def add_admin(name: str, patronymic: str, last_name: str, login: str, password: bytes, salt: bytes,
+                  flag_super_admin: bool = True) -> int:
         """
         :return: id_added_admin: int
         """
         with Session(get_engine()) as session:
             with session.begin():
                 new_admin = Admins(name=name, last_name=last_name, patronymic=patronymic, active=True, login=login,
-                                   password=password, salt=salt)
+                                   password=password, salt=salt, super_admin_flag=flag_super_admin)
 
                 session.add(new_admin)
                 session.commit()

@@ -37,7 +37,7 @@ def check_login(login: str, password: str, role: str) -> str:
 
 def save_hierarchy(list_hierarchy: list):
     # log
-    handler_hierarchy.create_hierarchy(list_hierarchy)
+    handler_hierarchy.save_hierarchy(list_hierarchy)
 
 
 def get_hierarchy():
@@ -121,6 +121,10 @@ def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patron
 
 def add_department(name_department: str, number_department: int):
     return handler_hierarchy.add_department_in_db(name_department, number_department)
+
+
+def add_one_hierarchy(id_department: int, parent_id: int):
+    handler_hierarchy.add_one_hierarchy(id_department, parent_id)
 
 
 def delete_department(id_department: int):

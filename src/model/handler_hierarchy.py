@@ -1,7 +1,8 @@
-import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper
-from src.model.super_admin import SuperAdminMethodsDB
 from PyQt5.QtWidgets import QTreeWidgetItem
 from PyQt5 import QtCore
+
+import src.model.for_data_base.db_helper_for_hierarchy_derartments as db_helper
+from src.model.super_admin import SuperAdminMethodsDB
 
 
 class Hierarchy:
@@ -46,7 +47,8 @@ class Hierarchy:
 
 
 def add_department_in_db(name_department: str, number_department: int):
-    return db_helper.add_department(name_department, number_department)
+    # return db_helper.add_department(name_department, number_department)
+    return SuperAdminMethodsDB.add_department(name_department, number_department)
 
 
 def delete_department_in_db(id_department: int):
@@ -54,17 +56,23 @@ def delete_department_in_db(id_department: int):
 
 
 def update_data_departments(list_departments: list):
-    db_helper.update_data_departments(list_departments)
+    # db_helper.update_data_departments(list_departments)
+    SuperAdminMethodsDB.update_all_departments(list_departments)
+
+
+def save_hierarchy(list_hierarchy: list):
+    # db_helper.create_hierarchy(list_hierarchy)
+    SuperAdminMethodsDB.update_full_hierarchy(list_hierarchy)
+
+
+def change_people_departments(list_replacement_departments: list):
+    db_helper.change_people_departments(list_replacement_departments)
+
+
+def add_one_hierarchy(id_department: int, parent_id: int):
+    SuperAdminMethodsDB.add_one_hierarchy_department(id_department, parent_id)
 
 
 if __name__ == '__main__':
     hr = Hierarchy()
     print(hr.get_data_about_departments())
-
-
-def create_hierarchy(list_hierarchy: list):
-    db_helper.create_hierarchy(list_hierarchy)
-
-
-def change_people_departments(list_replacement_departments: list):
-    db_helper.change_people_departments(list_replacement_departments)

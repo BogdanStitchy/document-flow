@@ -102,23 +102,22 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.__add_new_departments()
             controller.change_people_departments(self.list_replacement_departments)
             self.__delete_departments()
-            
-            self.tree(item)
-            # print("departments:\n", self.list_departments)
-            # print(self.list_hierarchy)
-            # controller.save_hierarchy(self.list_hierarchy)
-            # controller.update_data_departments(self.list_departments)
+
+            self.make_tree(item)
+            controller.save_hierarchy(self.list_hierarchy)
+            controller.update_data_departments(self.list_departments)
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
                                                                      "Изменеиня успешно сохранены в базе")
             self.list_departments.clear()
             self.list_hierarchy.clear()
-            print("save success")
 
     def __add_new_departments(self):
         for item in self.departments_for_added:
             # this peace replace!!!!!!
             id_added_department = controller.add_department(name_department=item.text(1),
                                                             number_department=int(item.text(0)))
+            parent_id = item.parent().text(2)
+            controller.add_one_hierarchy(id_added_department, parent_id)
             item.setText(2, str(id_added_department))
 
     def __delete_departments(self):
@@ -153,24 +152,21 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.id_departments_for_delete.append(element.text(2))
             print(element.text(0), element.text(1))
 
-    def tree(self, item):
-        text = item.text(0)
-        # print(f"{text}", end="\t")
-        self.list_departments.append((item.text(0), item.text(1), int(item.text(2))))
-        record_for_db = [0, 0]
+    def make_tree(self, item):
+        self.list_departments.append({"number_department": item.text(0),
+                                      "name_department": item.text(1),
+                                      "id": item.text(2)})
+        parenthood_for_db = {"department_id": 0, "parent_id": 0, "level":1}
         if item.parent() is not None:
-            record_for_db[1] = item.parent().text(2)
+            parenthood_for_db["parent_id"] = item.parent().text(2)
             # print(f"\tparent: {item.parent().text(0)}", end="\t")
         else:
-            record_for_db[1] = None
-            # print(f"\tparent: null", end="\t")
-        record_for_db[0] = item.text(2)
-        self.list_hierarchy.append(record_for_db)
-        # print("id = ", item.text(2))
-        # print(record_for_db, "\n")
+            parenthood_for_db["parent_id"] = None
+        parenthood_for_db["department_id"] = item.text(2)
+        self.list_hierarchy.append(parenthood_for_db)
         count_children = item.childCount()
         for index_child in range(count_children):
-            self.tree(item.child(index_child))
+            self.make_tree(item.child(index_child))
 
     def init_tree_widget(self):
         hierarchy = controller.get_hierarchy()

@@ -6,6 +6,7 @@ import pydantic
 
 from src.db.database_setup import get_engine
 from src.db.models.admins import Admins
+from src.db.models.users import Users
 from src.db.models.departments import Departments
 from src.db.models.departments_hierarhcy import DepartmentsHierarchy
 
@@ -47,17 +48,6 @@ class SuperAdminMethodsDB(AdminDB):
             with session.begin():
                 session.execute(
                     insert(DepartmentsHierarchy).values(department_id=id_department, parent_id=parent_id, level=1))
-                session.commit()
-
-    @staticmethod
-    @pydantic.validate_call
-    def update_full_hierarchy(list_hierarchy: list):
-        with Session(get_engine()) as session:
-            with session.begin():
-                for row in list_hierarchy:
-                    stmt = update(DepartmentsHierarchy).where(
-                        DepartmentsHierarchy.department_id == row['department_id']).values(parent_id=row['parent_id'])
-                    session.execute(stmt)
                 session.commit()
 
     # _________________________________GET_______________________________________________________
@@ -102,7 +92,7 @@ class SuperAdminMethodsDB(AdminDB):
     # ________________________________UPDATE_____________________________________________________
     @staticmethod
     @pydantic.validate_call
-    def change_admin_activity_status(id_admin: int):
+    def change_admin_activity_status(id_admin: int) -> None:
         with Session(get_engine()) as session:
             with session.begin():
                 admin = session.query(Admins).filter_by(id=id_admin).first()
@@ -114,7 +104,7 @@ class SuperAdminMethodsDB(AdminDB):
 
     @staticmethod
     @pydantic.validate_call
-    def update_all_departments(list_departments: list):
+    def update_all_departments(list_departments: list) -> None:
         with Session(get_engine()) as session:
             with session.begin():
                 for row in list_departments:
@@ -124,10 +114,31 @@ class SuperAdminMethodsDB(AdminDB):
                     session.execute(stmt)
                 session.commit()
 
+    @staticmethod
+    @pydantic.validate_call
+    def update_full_hierarchy(list_hierarchy: list) -> None:
+        with Session(get_engine()) as session:
+            with session.begin():
+                for row in list_hierarchy:
+                    stmt = update(DepartmentsHierarchy).where(
+                        DepartmentsHierarchy.department_id == row['department_id']).values(parent_id=row['parent_id'])
+                    session.execute(stmt)
+                session.commit()
+
+    @staticmethod
+    @pydantic.validate_call
+    def update_user_departments(list_replacement_departments: list) -> None:
+        with Session(get_engine()) as session:
+            with session.begin():
+                for row in list_replacement_departments:
+                    stmt = update(Users).where(Users.id_department == row[1]).values(id_department=row[0])
+                    session.execute(stmt)
+                session.commit()
+
     # ________________________________DELETE_____________________________________________________
     @staticmethod
     @pydantic.validate_call()
-    def delete_departments(id_departments_for_delete: list):
+    def delete_departments(id_departments_for_delete: list) -> None:
         with Session(get_engine()) as session:
             with session.begin():
                 condition = Departments.id.in_(id_departments_for_delete)

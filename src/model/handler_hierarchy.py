@@ -57,6 +57,7 @@ def add_department_in_db(name_department: str, number_department: int):
 def delete_departments(id_departments_for_delete: list):
     SuperAdminMethodsDB.delete_departments(id_departments_for_delete)
 
+
 def update_data_departments(list_departments: list):
     # db_helper.update_data_departments(list_departments)
     SuperAdminMethodsDB.update_all_departments(list_departments)
@@ -68,7 +69,8 @@ def save_hierarchy(list_hierarchy: list):
 
 
 def change_people_departments(list_replacement_departments: list):
-    db_helper.change_people_departments(list_replacement_departments)
+    # db_helper.change_people_departments(list_replacement_departments)
+    SuperAdminMethodsDB.update_user_departments(list_replacement_departments)
 
 
 def add_one_hierarchy(id_department: int, parent_id: int):

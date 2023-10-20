@@ -127,9 +127,6 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __delete_departments(self):
         controller.delete_departments(self.id_departments_for_delete)
-        # for id_department in self.id_departments_for_delete:
-        #     print(type(id_department))
-        # controller.delete_department(id_department=int(id_department))
 
     def button_add_row_press(self):
         item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)

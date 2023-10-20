@@ -127,9 +127,13 @@ def add_one_hierarchy(id_department: int, parent_id: int):
     handler_hierarchy.add_one_hierarchy(id_department, parent_id)
 
 
-def delete_department(id_department: int):
-    # log
-    handler_hierarchy.delete_department_in_db(id_department)
+def delete_departments(id_departments_for_delete: list):
+    handler_hierarchy.delete_departments(id_departments_for_delete)
+
+#
+# def delete_department(id_department: int):
+#     # log
+#     handler_hierarchy.delete_department_in_db(id_department)
 
 
 def update_data_departments(list_departments: list):

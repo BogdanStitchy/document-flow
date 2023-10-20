@@ -51,9 +51,11 @@ def add_department_in_db(name_department: str, number_department: int):
     return SuperAdminMethodsDB.add_department(name_department, number_department)
 
 
-def delete_department_in_db(id_department: int):
-    db_helper.delete_department(id_department)
+# def delete_department_in_db(id_department: int):
+#     db_helper.delete_department(id_department)
 
+def delete_departments(id_departments_for_delete: list):
+    SuperAdminMethodsDB.delete_departments(id_departments_for_delete)
 
 def update_data_departments(list_departments: list):
     # db_helper.update_data_departments(list_departments)

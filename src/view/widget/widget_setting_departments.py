@@ -97,23 +97,28 @@ class TreeHierarchy(QtWidgets.QMainWindow):
     def button_save_press(self):
         for i in range(self.treeWidget.topLevelItemCount()):  # количество элементов верхнего уровня
             item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
-            # print(item.text(0))  # текст элемента в указанном столбце
 
             self.__add_new_departments()
             controller.change_people_departments(self.list_replacement_departments)
             self.__delete_departments()
 
-            self.make_tree(item)
+            self.make_tree_hierarchy(item)
             controller.save_hierarchy(self.list_hierarchy)
             controller.update_data_departments(self.list_departments)
+
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
                                                                      "Изменеиня успешно сохранены в базе")
-            self.list_departments.clear()
-            self.list_hierarchy.clear()
+            self.__clear_all_lists()
+
+    def __clear_all_lists(self):
+        self.list_departments.clear()
+        self.list_hierarchy.clear()
+        self.list_replacement_departments.clear()
+        self.departments_for_added.clear()
+        self.id_departments_for_delete.clear()
 
     def __add_new_departments(self):
         for item in self.departments_for_added:
-            # this peace replace!!!!!!
             id_added_department = controller.add_department(name_department=item.text(1),
                                                             number_department=int(item.text(0)))
             parent_id = item.parent().text(2)
@@ -121,8 +126,10 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             item.setText(2, str(id_added_department))
 
     def __delete_departments(self):
-        for id_department in self.id_departments_for_delete:
-            controller.delete_department(id_department=int(id_department))
+        controller.delete_departments(self.id_departments_for_delete)
+        # for id_department in self.id_departments_for_delete:
+        #     print(type(id_department))
+        # controller.delete_department(id_department=int(id_department))
 
     def button_add_row_press(self):
         item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)
@@ -140,23 +147,28 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление информации об отделе",
                                                                  "Для удаления информации об отделе, выделите "
                                                                  "нужный отдел щелчком мыши")
-        print(selected_elements, type(selected_elements))
         self.dialog_window = DialogWidgetSelectDepartment(self)
         self.dialog_window.exec()  # ожидание закрытия диалогового окна
-        selected_department = self.dialog_window.get_selected_answer()
-        print("selected_department = ", selected_department)
+        id_department_for_replace = self.dialog_window.get_selected_answer()
+        print("id_department_for_replace for delete= ", id_department_for_replace)
         for element in selected_elements:
-            element.removeChild(element)
-            self.list_replacement_departments.append(
-                (selected_department, int(element.text(2))))  # 1 - то, на что меняем; 2 - то, что заменяем
-            self.id_departments_for_delete.append(element.text(2))
-            print(element.text(0), element.text(1))
+            self.__create_deletion_queues(id_department_for_replace, element)
 
-    def make_tree(self, item):
+    def __create_deletion_queues(self, id_department_for_replace, element_for_delete):
+        # лист для перевода людей с удаляемого отдела в другой отдел 1 - то, на что меняем; 2 - то, что заменяем
+        self.list_replacement_departments.append(
+            (id_department_for_replace, int(element_for_delete.text(2))))
+        self.id_departments_for_delete.append(int(element_for_delete.text(2)))
+        for number_child in range(element_for_delete.childCount()):
+            child = element_for_delete.child(number_child)
+            self.__create_deletion_queues(id_department_for_replace, child)  # Рекурсия. Подаем потомка итема
+        element_for_delete.removeChild(element_for_delete)
+
+    def make_tree_hierarchy(self, item):
         self.list_departments.append({"number_department": item.text(0),
                                       "name_department": item.text(1),
                                       "id": item.text(2)})
-        parenthood_for_db = {"department_id": 0, "parent_id": 0, "level":1}
+        parenthood_for_db = {"department_id": 0, "parent_id": 0, "level": 1}
         if item.parent() is not None:
             parenthood_for_db["parent_id"] = item.parent().text(2)
             # print(f"\tparent: {item.parent().text(0)}", end="\t")
@@ -166,7 +178,7 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.list_hierarchy.append(parenthood_for_db)
         count_children = item.childCount()
         for index_child in range(count_children):
-            self.make_tree(item.child(index_child))
+            self.make_tree_hierarchy(item.child(index_child))
 
     def init_tree_widget(self):
         hierarchy = controller.get_hierarchy()

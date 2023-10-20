@@ -45,8 +45,6 @@ class SuperAdminMethodsDB(AdminDB):
     def add_one_hierarchy_department(id_department: int, parent_id: int) -> None:
         with Session(get_engine()) as session:
             with session.begin():
-                # new_hierarchy = DepartmentsHierarchy(department_id=id_department, parent_id=parent_id)
-                # session.add(new_hierarchy)
                 session.execute(
                     insert(DepartmentsHierarchy).values(department_id=id_department, parent_id=parent_id, level=1))
                 session.commit()
@@ -56,11 +54,7 @@ class SuperAdminMethodsDB(AdminDB):
     def update_full_hierarchy(list_hierarchy: list):
         with Session(get_engine()) as session:
             with session.begin():
-                # session.execute(delete(DepartmentsHierarchy))
                 for row in list_hierarchy:
-                    # stmt = insert(Departments).values(department_id=row['department_id'],
-                    #                                   parent_id=row['parent_id'],
-                    #                                   level=1)
                     stmt = update(DepartmentsHierarchy).where(
                         DepartmentsHierarchy.department_id == row['department_id']).values(parent_id=row['parent_id'])
                     session.execute(stmt)
@@ -128,4 +122,15 @@ class SuperAdminMethodsDB(AdminDB):
                         number_department=row['number_department'],
                         name_department=row['name_department'])
                     session.execute(stmt)
+                session.commit()
+
+    # ________________________________DELETE_____________________________________________________
+    @staticmethod
+    @pydantic.validate_call()
+    def delete_departments(id_departments_for_delete: list):
+        with Session(get_engine()) as session:
+            with session.begin():
+                condition = Departments.id.in_(id_departments_for_delete)
+                delete_stmt = delete(Departments).where(condition)
+                session.execute(delete_stmt)
                 session.commit()

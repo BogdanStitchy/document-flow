@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QButtonGroup
-from src.model.for_data_base.db_helper_for_hierarchy_derartments import get_all_departments
+from PyQt5.QtWidgets import QDialog
+from src.db.methods.super_admin_db_methods import SuperAdminMethodsDB
 from src.controller import controller_main_window as controller
 
 
@@ -51,12 +51,12 @@ class DialogWidgetSelectDepartment(QDialog):
                                        "")
 
     def __add_radiobutton(self):
-        departments = get_all_departments()
+        departments = SuperAdminMethodsDB.get_all_departments()
         print(departments)
         self.group = QtWidgets.QButtonGroup(self)
         for department in departments:
-            radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
-            radio_button.setObjectName(f"{department[0]}")
+            radio_button = QtWidgets.QRadioButton(f"{department.number_department} - {department.name_department}")
+            radio_button.setObjectName(f"{department.id}")
             self.verticalLayout.addWidget(radio_button)
             self.group.addButton(radio_button)
 
@@ -65,7 +65,6 @@ class DialogWidgetSelectDepartment(QDialog):
             department = self.group.checkedButton().objectName()  # получаем выбранную радиобаттон
             print(department)
             self.selected_department = department
-            get_all_departments()
             self.close()
         except Exception as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Выбор отдела",

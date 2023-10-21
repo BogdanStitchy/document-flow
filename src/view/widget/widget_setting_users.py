@@ -199,7 +199,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget = QtWidgets.QTableWidget(self.frame_body)
         self.tableWidget.setSortingEnabled(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        # self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(100)
         sizePolicy.setVerticalStretch(100)
@@ -296,7 +295,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
         for row in data_about_users:
-            # print(row)
             name_item = MyTableWidgetItem(row.last_name)
             name_item.set_additional_data(int(row.id))  # Установка id
 
@@ -306,9 +304,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row.login))  # Установка логина
             self.tableWidget.setItem(number_row, 4,
                                      QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты регистрации
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.id_department)))  # Установка номера отдела
-            # creator = f"{row[7]} {row[8]} {row[9]}"
-            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(str(row.creator_id)))  # Установка создателя
+            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.number_department)))  # Установка номера отдела
+            self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(str(row.creator)))  # Установка создателя
             status_active = "" if row.active else "Деактивирован"
             self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
@@ -374,8 +371,5 @@ if __name__ == "__main__":
     # sys.exit(app.exec_()
 
     app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
     ui = WidgetSettingUser()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
     sys.exit(app.exec_())

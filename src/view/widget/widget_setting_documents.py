@@ -347,20 +347,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item = self.tableWidget.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Скачать"))
 
-    # def resizeEvent(self, event):
-    #     print("resize")
-    #     column_widths = [20, 10, 10, 10, 10, 10, 10, 10, 10]
-    #     total_widths = sum(column_widths)
-    #     print("self.tableWidget.width() = ", self.tableWidget.width())
-    #     for i in range(9):
-    #         width = int(column_widths[i] / total_widths * self.tableWidget.width()-2)
-    #         # print(f"i = {i}\twidth = {width}")
-    #         self.tableWidget.setColumnWidth(i, width)
-
     def press_button_add_document(self):
         if controller.role_client != 'user':
             QtWidgets.QMessageBox.warning(self, "Предупреждение",
-                                          "Добавлять документы могут тольуо пользователи, не администраторы!")
+                                          "Добавлять документы могут только пользователи, не администраторы!")
             return
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
@@ -374,18 +364,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.fill_in_table(self.data_about_documents)
 
     def fill_in_table(self, data_for_filling):
-        # print("widget\n", self.data_about_documents)
         if len(data_for_filling) == 0:
-            # data_for_filling = QtWidgets.QDialog()
             return False
         self.tableWidget.setRowCount(len(data_for_filling))
-        # self.tableWidget.setColumnCount()
         number_row = 0
         for row in data_for_filling:
-            # print("row = ", row)
-            # name_item = QtWidgets.QTableWidgetItem(row[1])
             name_item = MyTableWidgetItem(row.name)
-            # name_item.setText(row[1])
             name_item.set_additional_data(row.id)
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
             self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row.inner_number))  # Установка входящего номера
@@ -394,9 +378,9 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row.type_document))  # Установка типа документа
             self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты загрузки
             self.tableWidget.setItem(number_row, 6,
-                                     QtWidgets.QTableWidgetItem(f"{row.id_creator}"))  # Установка автора
+                                     QtWidgets.QTableWidgetItem(f"{row.creator}"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
-                                     QtWidgets.QTableWidgetItem(" "))  # Установка связанных документов
+                                     QtWidgets.QTableWidgetItem(" "))  # Установка примечаний
 
             button_downlad = QtWidgets.QPushButton(f"скачать")
             button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"
@@ -412,7 +396,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
             self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row.id)))  # Установка индекса
             number_row += 1
-        print("init table documents finished")
+        # print("init table documents finished")
         return True
 
     def press_button_download(self, id_document: int, name_file: str):
@@ -484,8 +468,5 @@ if __name__ == "__main__":
     # sys.exit(app.exec_()
 
     app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
     ui = WidgetDocuments()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
     sys.exit(app.exec_())

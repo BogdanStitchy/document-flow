@@ -84,8 +84,7 @@ def edit_document(id_document: int, name_document: str, inner_number: str, outpu
 
 def get_data_about_users():
     # log
-    data = client.get_data_about_users()
-    return data
+    return client.get_data_about_users()
 
 
 def change_activation_status(id_user: int):
@@ -129,6 +128,7 @@ def add_one_hierarchy(id_department: int, parent_id: int):
 
 def delete_departments(id_departments_for_delete: list):
     handler_hierarchy.delete_departments(id_departments_for_delete)
+
 
 #
 # def delete_department(id_department: int):

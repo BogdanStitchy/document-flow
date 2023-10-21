@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.db.database_setup import get_engine
 from src.db.models.admins import Admins
 from src.db.models.users import Users
+from src.db.models.departments import Departments
 from src.db.models.data_about_documents import DataAboutDocuments
 
 
@@ -50,7 +51,21 @@ class AdminDB:
     def get_all_users() -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
-                result = session.execute(select(Users.__table__))
+                result = session.execute(select(
+                    Users.id,
+                    Users.login,
+                    Users.name,
+                    Users.last_name,
+                    Users.patronymic,
+                    Users.active,
+                    Users.password,
+                    Users.salt,
+                    Users.date_last_changes_password,
+                    Users.date_creating,
+                    Departments.number_department,
+                    (Admins.last_name + ' ' + Admins.name).label("creator")
+                ).join_from(Users, Departments).join_from(Users, Admins)
+                )
                 users = result.mappings().fetchall()
                 return users
 
@@ -69,7 +84,17 @@ class AdminDB:
     def get_all_documents() -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
-                result = session.execute(select(DataAboutDocuments.__table__))
+                result = session.execute(select(
+                    DataAboutDocuments.inner_number,
+                    DataAboutDocuments.output_number,
+                    DataAboutDocuments.output_date,
+                    DataAboutDocuments.type_document,
+                    DataAboutDocuments.name,
+                    DataAboutDocuments.date_creating,
+                    DataAboutDocuments.id,
+                    (Users.last_name + ' ' + Users.name).label('creator')
+                ).join_from(DataAboutDocuments, Users)
+                                         )
                 documents = result.mappings().fetchall()
                 return documents
 

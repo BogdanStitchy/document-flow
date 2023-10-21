@@ -1,6 +1,6 @@
 """file with database access methods for super admin role"""
 
-from sqlalchemy import select, update, insert, delete
+from sqlalchemy import select, update, insert, delete, or_
 from sqlalchemy.orm import Session
 import pydantic
 
@@ -69,6 +69,22 @@ class SuperAdminMethodsDB(AdminMethodsDB):
                     select(Admins.__table__).where(Admins.__table__.c.id == id_admin))
                 admin = result.mappings().fetchone()
                 return admin
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_admins(search_string: str) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(Admins.__table__).where(
+                        or_(Admins.last_name.ilike(f"%{search_string}%"),
+                            Admins.name.ilike(f"%{search_string}%"),
+                            Admins.patronymic.ilike(f"%{search_string}%"),
+                            Admins.login.ilike(f"%{search_string}%"))
+                    )
+                )
+                admins = result.mappings().fetchall()
+                return admins
 
     @staticmethod
     @pydantic.validate_call

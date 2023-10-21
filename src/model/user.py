@@ -92,9 +92,18 @@ class User:
                                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True
 
-    def get_last_change_password(self):
+    def check_needs_password_change(self):
         # self.CURRENT_ID = 6
-        return db_helper.get_last_change_password_user(self.CURRENT_ID)
+        change = UserDB.get_last_change_password_admin(self.CURRENT_ID)
+        if change is None:
+            return True
+        delta_date = datetime.datetime.now() - change
+        if delta_date.days > 180:
+            return True
+        else:
+            return False  # пароль не надо менять
+        # return db_helper.get_last_change_password_user(self.CURRENT_ID)
+
 
     def delete_file(self):
         pass

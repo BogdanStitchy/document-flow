@@ -55,15 +55,23 @@ class Administrator(User):
             return 'superAdmin'
         return 'admin'
 
-    # отказаться
-    def get_last_change_password(self):
-        # self.CURRENT_ID = 6
-        return db_helper.get_last_change_password_admin(self.CURRENT_ID)
+    def check_needs_password_change(self):
+        change = AdminMethodsDB.get_last_change_password_admin(self.CURRENT_ID)
+        if change is None:
+            return True
+        delta_date = datetime.datetime.now() - change
+        if delta_date.days > 180:
+            return True
+        else:
+            return False  # пароль не надо менять
 
     def change_password(self, password: str):
         # self.CURRENT_ID = 5
-        if self.check_password(self.CURRENT_LOGIN, password) == 'admin' or 'superAdmin':
-            return False
+        try:
+            if self.check_password(self.CURRENT_LOGIN, password) == 'admin' or 'superAdmin':
+                return False  # старый и новый пароли совпали
+        except ClientPasswordError:
+            pass
         salt = os.urandom(16)
         password = hashlib.pbkdf2_hmac(
             config.HASH_FUNCTION,
@@ -72,9 +80,10 @@ class Administrator(User):
             200000,
             dklen=64
         )
-        db_helper.changes_password_admin(self.CURRENT_ID, password.hex(), salt.hex(),
-                                         datetime.now().strftime("%d-%m-%Y %H:%M"))
-        return True
+        # db_helper.changes_password_admin(self.CURRENT_ID, password.hex(), salt.hex(),
+        #                                  datetime.now().strftime("%d-%m-%Y %H:%M"))
+        AdminMethodsDB.change_password(self.CURRENT_ID, password, salt, datetime.now().strftime("%d-%m-%Y %H:%M"))
+        return True  # пароль изменен
 
     def get_data_about_documents(self):
         # return db_helper.get_data_documents_for_admin()
@@ -89,7 +98,6 @@ class Administrator(User):
     def search_string_in_users(search_string: str):
         # return db_helper.search_string_in_users(search_string)
         return AdminMethodsDB.find_users(search_string)
-
 
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
                                          start_date_output: str = None, end_date_output: str = None,

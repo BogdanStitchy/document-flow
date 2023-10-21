@@ -108,7 +108,7 @@ class DialogWidgetChangePassword(QDialog):
             QtWidgets.QMessageBox.warning(self, "Предупреждение", status_check_password)
             return
         else:
-            if controller.change_password(password):
+            if controller.change_password(password):  # пароль изменен
                 self.flag_success_exit = True
                 self.close()
             else:

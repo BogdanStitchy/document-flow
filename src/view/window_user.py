@@ -96,7 +96,7 @@ class WindowUser(QtWidgets.QMainWindow):
         self.close()
 
     def check_needs_password_change(self):
-        change = controller.get_last_password_change()
+        change = controller.check_needs_password_change()
         # print(change)
         # print(type(change))
         if change is None:

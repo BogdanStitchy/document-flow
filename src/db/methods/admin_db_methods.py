@@ -1,6 +1,6 @@
 """file with database access methods for admin role"""
 import pydantic
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, update
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -45,6 +45,17 @@ class AdminMethodsDB:
                     ).where(Admins.login == login))
             result = result.mappings().fetchone()
             return result
+
+    @staticmethod
+    @pydantic.validate_call
+    def get_last_change_password_admin(id_admin: int):
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(Admins.date_last_changes_password).where(Admins.id == id_admin)
+                )
+            result = result.fetchone()
+            return result[0]
 
     @staticmethod
     @pydantic.validate_call
@@ -164,6 +175,19 @@ class AdminMethodsDB:
                 return documents
 
     # ________________________________UPDATE_____________________________________________________
+    @staticmethod
+    @pydantic.validate_call
+    def change_password(id_admin: int, password: bytes, salt: bytes, date_change):
+        with Session(get_engine()) as session:
+            with session.begin():
+                session.execute(
+                    update(Admins).where(Admins.id == id_admin).values(
+                        salt=salt,
+                        password=password,
+                        date_last_changes_password=date_change
+                    )
+                )
+
     @staticmethod
     @pydantic.validate_call
     def update_user(id_user: int, **kwargs) -> None:

@@ -151,10 +151,10 @@ def change_password(password: str):
     return client.change_password(password)
 
 
-def get_last_password_change():
+def check_needs_password_change():
     # log
     # client = User()
-    return client.get_last_change_password()
+    return client.check_needs_password_change()
 
 
 def get_login():

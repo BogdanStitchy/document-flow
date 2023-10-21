@@ -27,11 +27,7 @@ class SuperAdmin(Administrator):
             200000,
             dklen=64
         )
-
-        id_admin = db_helper.add_record_admin_data(last_name, name, patronymic,
-                                                   datetime.now().strftime("%d-%m-%Y %H:%M"))
-
-        db_helper.add_record_admin_login(password.hex(), salt, id_admin, login, False)
+        SuperAdminMethodsDB.add_admin(name, patronymic, last_name, login, password, salt)
 
     @staticmethod
     def get_data_about_admins():

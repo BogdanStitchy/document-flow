@@ -155,7 +155,6 @@ class DialogWidgetAddAdmin(QDialog):
         login = self.lineEdit_login.text()
         password = self.lineEdit_password.text()
         try:
-
             controller.add_admin_in_database(last_name, name, patronymic, login, password)
             self.main_window.press_button_refresh()
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Добавление администратора",

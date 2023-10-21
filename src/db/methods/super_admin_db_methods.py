@@ -18,7 +18,7 @@ class SuperAdminMethodsDB(AdminMethodsDB):
     @staticmethod
     @pydantic.validate_call
     def add_admin(name: str, patronymic: str, last_name: str, login: str, password: bytes, salt: bytes,
-                  flag_super_admin: bool = True) -> int:
+                  flag_super_admin: bool = False) -> int:
         """
         :return: id_added_admin: int
         """

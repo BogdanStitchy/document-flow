@@ -6,7 +6,7 @@ from src.config import config
 from src.model.user import User
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
-from src.db.methods.admin_db_methods import AdminDB
+from src.db.methods.admin_db_methods import AdminMethodsDB
 from src.model.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
 
 
@@ -27,7 +27,7 @@ class Administrator(User):
 
     def check_password(self, login: str, password: str):
         # request = db_helper.get_login_data_admin(login)
-        data_about_admin: {} = AdminDB.check_password(login)
+        data_about_admin: {} = AdminMethodsDB.check_password(login)
 
         if data_about_admin is None:
             raise ClientNotFoundError("Администратор с указанным логином не найден в базе!\n"
@@ -78,11 +78,12 @@ class Administrator(User):
 
     def get_data_about_documents(self):
         # return db_helper.get_data_documents_for_admin()
-        return AdminDB.get_all_documents()
+        return AdminMethodsDB.get_all_documents()
 
     @staticmethod
     def search_string_in_documents(search_string: str):
-        return db_helper.search_string_in_documents_for_admin(search_string)
+        # return db_helper.search_string_in_documents_for_admin(search_string)
+        return AdminMethodsDB.find_documents(search_string)
 
     @staticmethod
     def search_string_in_users(search_string: str):
@@ -113,7 +114,7 @@ class Administrator(User):
     def get_data_about_users():
         # data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
         # return data
-        return AdminDB.get_all_users()
+        return AdminMethodsDB.get_all_users()
 
     def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
                  flag_leader: bool):

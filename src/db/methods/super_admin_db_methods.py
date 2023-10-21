@@ -10,10 +10,10 @@ from src.db.models.users import Users
 from src.db.models.departments import Departments
 from src.db.models.departments_hierarhcy import DepartmentsHierarchy
 
-from src.db.methods.admin_db_methods import AdminDB
+from src.db.methods.admin_db_methods import AdminMethodsDB
 
 
-class SuperAdminMethodsDB(AdminDB):
+class SuperAdminMethodsDB(AdminMethodsDB):
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call

@@ -29,6 +29,6 @@ def test_add_document(database_user, data, expected_exception):
 
 
 def test_get_document():
-    from src.db.methods.admin_db_methods import AdminDB
-    documents = AdminDB.get_all_documents()
+    from src.db.methods.admin_db_methods import AdminMethodsDB
+    documents = AdminMethodsDB.get_all_documents()
     assert len(documents) == 3

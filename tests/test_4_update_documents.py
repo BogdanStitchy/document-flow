@@ -5,7 +5,7 @@ from src.db.methods import admin_db_methods
 
 @pytest.fixture(scope="module")
 def database_admin():
-    admin_methods = admin_db_methods.AdminDB()
+    admin_methods = admin_db_methods.AdminMethodsDB()
     yield admin_methods
 
 

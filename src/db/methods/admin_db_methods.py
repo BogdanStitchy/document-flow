@@ -1,6 +1,6 @@
 """file with database access methods for admin role"""
 import pydantic
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -10,7 +10,7 @@ from src.db.models.departments import Departments
 from src.db.models.data_about_documents import DataAboutDocuments
 
 
-class AdminDB:
+class AdminMethodsDB:
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call
@@ -65,7 +65,7 @@ class AdminDB:
                     Departments.number_department,
                     (Admins.last_name + ' ' + Admins.name).label("creator")
                 ).join_from(Users, Departments).join_from(Users, Admins)
-                )
+                                         )
                 users = result.mappings().fetchall()
                 return users
 
@@ -97,6 +97,33 @@ class AdminDB:
                                          )
                 documents = result.mappings().fetchall()
                 return documents
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_documents(search_string: str) -> {}:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(
+                        DataAboutDocuments.inner_number,
+                        DataAboutDocuments.output_number,
+                        DataAboutDocuments.output_date,
+                        DataAboutDocuments.type_document,
+                        DataAboutDocuments.name,
+                        DataAboutDocuments.date_creating,
+                        DataAboutDocuments.id,
+                        (Users.last_name + ' ' + Users.name).label('creator')
+                    ).where(
+                        or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
+                            DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
+                            DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
+                            DataAboutDocuments.name.ilike(f"%{search_string}%"),
+                            Users.last_name.ilike(f"%{search_string}%"),
+                            Users.name.ilike(f"%{search_string}%"))
+                    ).join_from(DataAboutDocuments, Users)
+                )
+                user = result.mappings().fetchall()
+                return user
 
     # ________________________________UPDATE_____________________________________________________
     @staticmethod

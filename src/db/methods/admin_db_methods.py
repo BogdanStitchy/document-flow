@@ -71,6 +71,44 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
+    def find_users(search_string: str) -> [{}, {}]:
+        def try_convert_to_int(string: str):
+            try:
+                return int(string)
+            except ValueError:
+                return -99999
+
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(select(
+                    Users.id,
+                    Users.login,
+                    Users.name,
+                    Users.last_name,
+                    Users.patronymic,
+                    Users.active,
+                    Users.password,
+                    Users.salt,
+                    Users.date_last_changes_password,
+                    Users.date_creating,
+                    Departments.number_department,
+                    (Admins.last_name + ' ' + Admins.name).label("creator")
+                ).where(
+                    or_(Users.login.ilike(f"%{search_string}%"),
+                        Users.name.ilike(f"%{search_string}%"),
+                        Users.last_name.ilike(f"%{search_string}%"),
+                        Users.patronymic.ilike(f"%{search_string}%"),
+                        Departments.number_department == try_convert_to_int(search_string),
+                        Admins.last_name.ilike(f"%{search_string}%"),
+                        Admins.name.ilike(f"%{search_string}%"))
+                ).join_from(
+                    Users, Departments).join_from(Users, Admins)
+                                         )
+                users = result.mappings().fetchall()
+                return users
+
+    @staticmethod
+    @pydantic.validate_call
     def get_one_user(id_user: int) -> {}:
         with Session(get_engine()) as session:
             with session.begin():
@@ -100,7 +138,7 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
-    def find_documents(search_string: str) -> {}:
+    def find_documents(search_string: str) -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
@@ -122,8 +160,8 @@ class AdminMethodsDB:
                             Users.name.ilike(f"%{search_string}%"))
                     ).join_from(DataAboutDocuments, Users)
                 )
-                user = result.mappings().fetchall()
-                return user
+                documents = result.mappings().fetchall()
+                return documents
 
     # ________________________________UPDATE_____________________________________________________
     @staticmethod

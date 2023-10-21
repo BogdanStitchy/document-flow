@@ -87,7 +87,8 @@ class Administrator(User):
 
     @staticmethod
     def search_string_in_users(search_string: str):
-        return db_helper.search_string_in_users(search_string)
+        # return db_helper.search_string_in_users(search_string)
+        return AdminMethodsDB.find_users(search_string)
 
     @staticmethod
     def search_string_in_admins(search_string: str):

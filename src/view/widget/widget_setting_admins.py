@@ -312,8 +312,8 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
     def fill_in_table(self, data_about_users):
         if data_about_users is None:
-            self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка",
-                                                                  "Данные об администраторах отсутствуют.")
+            return False
+        if len(data_about_users) == 0:
             return False
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0

@@ -292,6 +292,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         if data_about_users is None:
             self.dialog_window = QtWidgets.QMessageBox().critical(self, "Ошибка", "Данные о пользователях отсутствуют.")
             return False
+        if len(data_about_users) == 0:
+            return False
         self.tableWidget.setRowCount(len(data_about_users))
         number_row = 0
         for row in data_about_users:
@@ -304,7 +306,8 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(row.login))  # Установка логина
             self.tableWidget.setItem(number_row, 4,
                                      QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты регистрации
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.number_department)))  # Установка номера отдела
+            self.tableWidget.setItem(number_row, 5,
+                                     QtWidgets.QTableWidgetItem(str(row.number_department)))  # Установка номера отдела
             self.tableWidget.setItem(number_row, 6, QtWidgets.QTableWidgetItem(str(row.creator)))  # Установка создателя
             status_active = "" if row.active else "Деактивирован"
             self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива

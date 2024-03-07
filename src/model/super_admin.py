@@ -44,6 +44,8 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):
+        raise "Нужно изменить метод обновления"
+        #EDIT!!!
         db_helper.edit_data_admin(last_name, name, patronymic, id_admin)
 
         if password != "":

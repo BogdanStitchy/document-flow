@@ -1,7 +1,6 @@
 import os
-import hashlib
 from datetime import datetime
-from src.config import config
+from src.config import tools
 
 from src.model.user import User
 from src.model.for_data_base import db_helper
@@ -37,13 +36,7 @@ class Administrator(User):
             raise ClientActiveError("Учетная запись администратора с указанными данными деактивирована.\n"
                                     "Для активации учетной записи обратитесь к супер администратору.")
 
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(data_about_admin["salt"]),
-            200000,
-            dklen=64
-        )
+        password = tools.create_hash_password(password, data_about_admin["salt"])
 
         if password != bytes(data_about_admin['password']):
             raise ClientPasswordError("Указан неправильный пароль")
@@ -73,15 +66,7 @@ class Administrator(User):
         except ClientPasswordError:
             pass
         salt = os.urandom(16)
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(salt.hex(), 'utf-8'),
-            200000,
-            dklen=64
-        )
-        # db_helper.changes_password_admin(self.CURRENT_ID, password.hex(), salt.hex(),
-        #                                  datetime.now().strftime("%d-%m-%Y %H:%M"))
+        password = tools.create_hash_password(password, salt)
         AdminMethodsDB.change_password(self.CURRENT_ID, password, salt, datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True  # пароль изменен
 
@@ -145,13 +130,7 @@ class Administrator(User):
         #     200000,
         #     dklen=64
         # )
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(salt.hex(), 'utf-8'),
-            200000,
-            dklen=64
-        )
+        password = tools.create_hash_password(password, salt)
 
         # print(len(str(password)))
         # print(len(str(salt)))
@@ -172,13 +151,8 @@ class Administrator(User):
 
         if password != "":
             salt = os.urandom(16)
-            password = hashlib.pbkdf2_hmac(
-                config.HASH_FUNCTION,
-                password.encode('utf-8'),
-                bytes(salt.hex(), 'utf-8'),
-                200000,
-                dklen=64
-            )
+            password = tools.create_hash_password(password, salt)
+            #EDIT!!!
             db_helper.edit_user_login_data(login, password.hex(), salt.hex(), id_user)
         elif flag_edit_login:
             db_helper.edit_only_login_user(login, id_user)

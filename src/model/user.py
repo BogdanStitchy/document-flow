@@ -1,9 +1,8 @@
-import hashlib
 import os
 from datetime import datetime
 import datetime
 
-from src.config import config
+from src.config import tools
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments as db_helper_departments
 
@@ -60,13 +59,7 @@ class User:
             raise ClientActiveError("Учетная запись пользователя с указанными данными деактивирована.\n"
                                     "Для активации учетной записи обратитесь к администратору.")
 
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(data_user['salt']),
-            200000,
-            dklen=64
-        )
+        password = tools.create_hash_password(password, data_user['salt'])
 
         if password != bytes(data_user['password']):
             raise ClientPasswordError("Указан неправильный пароль")
@@ -81,13 +74,7 @@ class User:
         if self.check_password(self.CURRENT_LOGIN, password) == "user":
             return False  # старый и новый пароли сходятся
         salt = os.urandom(16)
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(salt.hex(), 'utf-8'),
-            200000,
-            dklen=64
-        )
+        password = tools.create_hash_password(password, salt)
         db_helper.changes_password_user(self.CURRENT_ID, password.hex(), salt.hex(),
                                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True
@@ -103,7 +90,6 @@ class User:
         else:
             return False  # пароль не надо менять
         # return db_helper.get_last_change_password_user(self.CURRENT_ID)
-
 
     def delete_file(self):
         pass

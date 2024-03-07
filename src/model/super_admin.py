@@ -1,7 +1,5 @@
 import os
-import hashlib
-from datetime import datetime
-from src.config import config
+from src.config import tools
 
 from src.model.administrator import Administrator
 from src.model.for_data_base import db_helper
@@ -20,13 +18,7 @@ class SuperAdmin(Administrator):
     @staticmethod
     def add_admin(last_name, name, patronymic, login, password):
         salt = os.urandom(16)
-        password = hashlib.pbkdf2_hmac(
-            config.HASH_FUNCTION,
-            password.encode('utf-8'),
-            bytes(salt),
-            200000,
-            dklen=64
-        )
+        password = tools.create_hash_password(password, salt)
         SuperAdminMethodsDB.add_admin(name, patronymic, last_name, login, password, salt)
 
     @staticmethod
@@ -40,23 +32,17 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def change_activation_status_admin(id_admin: int):
-        db_helper.change_activation_status_admin(id_admin)
+        SuperAdminMethodsDB.change_admin_activity_status(id_admin)
 
     @staticmethod
     def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):
         raise "Нужно изменить метод обновления"
-        #EDIT!!!
+        # EDIT!!!
         db_helper.edit_data_admin(last_name, name, patronymic, id_admin)
 
         if password != "":
             salt = os.urandom(16)
-            password = hashlib.pbkdf2_hmac(
-                config.HASH_FUNCTION,
-                password.encode('utf-8'),
-                bytes(salt.hex(), 'utf-8'),
-                200000,
-                dklen=64
-            )
+            password = tools.create_hash_password(password, salt)
             db_helper.edit_admin_login_data(login, password.hex(), salt.hex(), id_admin)
         elif flag_edit_login:
             db_helper.edit_only_login_admin(login, id_admin)

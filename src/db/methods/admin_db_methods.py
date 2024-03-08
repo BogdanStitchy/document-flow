@@ -1,4 +1,5 @@
 """file with database access methods for admin role"""
+import datetime
 import pydantic
 from sqlalchemy import select, or_, update
 from sqlalchemy.orm import Session
@@ -82,7 +83,7 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
-    def find_users(search_string: str) -> [{}, {}]:
+    def find_users_words(search_string: str) -> [{}, {}]:
         def try_convert_to_int(string: str):
             try:
                 return int(string)
@@ -117,6 +118,17 @@ class AdminMethodsDB:
                                          )
                 users = result.mappings().fetchall()
                 return users
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_users_period(start_date: datetime.date, end_date: datetime.date) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(Users.__table__).where(Users.date_creating.between(start_date, end_date))
+                )
+                admins = result.mappings().fetchall()
+                return admins
 
     @staticmethod
     @pydantic.validate_call
@@ -190,7 +202,7 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
-    def update_user(id_user: int, **kwargs) -> None:
+    def edit_user(id_user: int, **kwargs) -> None:
         # Найти запись по user_id
         with Session(get_engine()) as session:
             with session.begin():

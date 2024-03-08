@@ -82,7 +82,7 @@ class Administrator(User):
     @staticmethod
     def search_string_in_users(search_string: str):
         # return db_helper.search_string_in_users(search_string)
-        return AdminMethodsDB.find_users(search_string)
+        return AdminMethodsDB.find_users_words(search_string)
 
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
                                          start_date_output: str = None, end_date_output: str = None,

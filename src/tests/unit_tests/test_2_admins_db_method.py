@@ -1,6 +1,7 @@
 from pydantic import ValidationError
 import pytest
 import os
+import datetime
 from sqlalchemy.exc import IntegrityError
 
 from src.db.methods import admin_db_methods
@@ -46,6 +47,29 @@ def test_get_one_user(database_admin):
     assert len(user1) == 12
 
 
+def test_find_admins_word(database_admin):
+    find_string = "userov"
+    res = database_admin.find_users_words(find_string)
+    assert len(res) == 1
+
+
+def test_good_find_admins_period(database_admin):
+    start_date = datetime.datetime.strptime("01.01.2021", "%d.%m.%Y")
+    end_date = datetime.datetime.strptime("01.01.2022", "%d.%m.%Y")
+    new_date = datetime.datetime.strptime("01.05.2021", "%d.%m.%Y")
+
+    database_admin.edit_user(1, date_creating=new_date)
+    res = database_admin.find_users_period(start_date, end_date)
+    assert len(res) == 1
+
+
+def test_broke_find_admins_period(database_admin):
+    new_date = datetime.datetime.strptime("01.05.2021", "%d.%m.%Y")
+    database_admin.edit_user(1, date_creating=new_date)
+    with pytest.raises(ValidationError):
+        database_admin.find_users_period("01.05.2021", "01.05.2025")
+
+
 @pytest.mark.parametrize("id_user, kwargs, expected_exception", [
     (1, {"name": "Dima", "last_name": "Ivanov"}, None),
     (2, {"name": "Stas"}, None),
@@ -55,7 +79,7 @@ def test_get_one_user(database_admin):
 ])
 def test_update_user(database_admin, id_user, kwargs, expected_exception):
     if expected_exception is None:
-        database_admin.update_user(id_user, **kwargs)
+        database_admin.edit_user(id_user, **kwargs)
         new_user = database_admin.get_one_user(id_user)
         for key, update_value in kwargs.items():
             if update_value != "" and update_value is not None:
@@ -64,7 +88,7 @@ def test_update_user(database_admin, id_user, kwargs, expected_exception):
                 assert new_user[key] is not None and new_user[key] != ''
     else:
         with pytest.raises(expected_exception):
-            database_admin.update_user(id_user, **kwargs)
+            database_admin.edit_user(id_user, **kwargs)
 
 
 @pytest.mark.parametrize("data, expected_exception", [

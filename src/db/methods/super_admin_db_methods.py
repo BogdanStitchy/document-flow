@@ -1,4 +1,5 @@
 """file with database access methods for super admin role"""
+import datetime
 
 from sqlalchemy import select, update, insert, delete, or_
 from sqlalchemy.orm import Session
@@ -72,7 +73,7 @@ class SuperAdminMethodsDB(AdminMethodsDB):
 
     @staticmethod
     @pydantic.validate_call
-    def find_admins(search_string: str) -> [{}, {}]:
+    def find_admins_words(search_string: str) -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
@@ -82,6 +83,17 @@ class SuperAdminMethodsDB(AdminMethodsDB):
                             Admins.patronymic.ilike(f"%{search_string}%"),
                             Admins.login.ilike(f"%{search_string}%"))
                     )
+                )
+                admins = result.mappings().fetchall()
+                return admins
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_admins_period(start_date: datetime.date, end_date: datetime.date) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(Admins.__table__).where(Admins.date_creating.between(start_date, end_date))
                 )
                 admins = result.mappings().fetchall()
                 return admins

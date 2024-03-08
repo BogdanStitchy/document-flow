@@ -28,7 +28,7 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def search_string_in_admins(search_string: str):
-        return SuperAdminMethodsDB.find_admins(search_string)
+        return SuperAdminMethodsDB.find_admins_words(search_string)
 
     @staticmethod
     def change_activation_status_admin(id_admin: int):

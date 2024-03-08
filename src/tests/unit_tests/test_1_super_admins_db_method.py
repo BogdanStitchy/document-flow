@@ -78,29 +78,26 @@ def test_change_active_status_admin(database_sa, data, expected_exception):
 
 
 @pytest.mark.parametrize(
-    "id_admin, old_data_admin, new_name, new_login, new_password, new_salt",
+    "id_admin, kwargs_new_data, expected_exception",
     [
-        (1, __data_successfully_added_admins_for_tests[0], "new_name", "new_login", os.urandom(16), os.urandom(16)),
-        (2, __data_successfully_added_admins_for_tests[1], "new_name1", "new_login1", None, None),
+        (1, {"name": "new_admin_name", "last_name": "new_last_name"}, None),
+        (2, {"name": "new_admin_name_1", "login": "new_login", "password": os.urandom(16)}, None),
+        (3, {"name": "", "salt": os.urandom(16)}, None),
+        (3, {"name": "New_new", "login": "new_login"}, IntegrityError),
     ])
-def test_edit_admin(id_admin, database_sa, old_data_admin, new_name, new_login, new_password, new_salt):
-    if new_password:
-        database_sa.edit_admin_data(id_admin=id_admin, name=new_name, login=new_login, patronymic=old_data_admin[1],
-                                    last_name=old_data_admin[2], password=new_password, salt=new_salt)
-    else:
-        database_sa.edit_admin_data(id_admin=id_admin, name=new_name, login=new_login, patronymic=old_data_admin[1],
-                                    last_name=old_data_admin[2])
+def test_edit_admin(database_sa, id_admin, kwargs_new_data, expected_exception):
+    if expected_exception is not None:
+        with pytest.raises(expected_exception):
+            database_sa.edit_admin(id_admin, **kwargs_new_data)
+        return
 
-    edited_admin = database_sa.get_one_admin(id_admin)
-
-    assert (edited_admin.login == new_login and
-            edited_admin.name == new_name and
-            edited_admin.last_name == old_data_admin[2] and
-            edited_admin.patronymic == old_data_admin[1]
-            )
-    if new_password is None:
-        assert (edited_admin.password == old_data_admin[4] and
-                edited_admin.salt == old_data_admin[5])
+    database_sa.edit_admin(id_admin, **kwargs_new_data)
+    new_user = database_sa.get_one_admin(id_admin)
+    for key, update_value in kwargs_new_data.items():
+        if update_value != "" and update_value is not None:
+            assert update_value == new_user[key]
+        else:
+            assert new_user[key] is not None and new_user[key] != ''
 
 
 def test_get_all_admins(database_sa):

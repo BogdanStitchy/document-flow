@@ -120,21 +120,18 @@ class SuperAdminMethodsDB(AdminMethodsDB):
 
     @staticmethod
     @pydantic.validate_call
-    def edit_admin_data(id_admin: int, name: str, patronymic: str, last_name: str, login: str,
-                        password: bytes = None, salt: bytes = None) -> None:
+    def edit_admin(id_admin: int, **kwargs) -> None:
         with Session(get_engine()) as session:
             with session.begin():
                 admin = session.query(Admins).filter_by(id=id_admin).first()
+
                 if not admin:
                     raise ValueError(f"Администратор с id {id_admin} не найден.")
 
-                admin.login = login
-                admin.name = name
-                admin.last_name = last_name
-                admin.patronymic = patronymic
-                if password is not None:
-                    admin.password = password
-                    admin.salt = salt
+                # Обновить только переданные атрибуты
+                for key, value in kwargs.items():
+                    if value is not None and value != "":
+                        setattr(admin, key, value)
                 session.commit()
 
     @staticmethod

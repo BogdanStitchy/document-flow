@@ -78,13 +78,12 @@ def test_change_active_status_admin(database_sa, data, expected_exception):
             database_sa.change_admin_activity_status(data)
 
 
-@pytest.mark.parametrize(
-    "id_admin, kwargs_new_data, expected_exception", [
-        (1, {"name": "new_admin_name", "last_name": "new_last_name"}, None),
-        (2, {"name": "new_admin_name_1", "login": "new_login", "password": os.urandom(16)}, None),
-        (3, {"name": "", "salt": os.urandom(16)}, None),
-        (3, {"name": "New_new", "login": "new_login"}, IntegrityError),
-    ])
+@pytest.mark.parametrize("id_admin, kwargs_new_data, expected_exception", [
+    (1, {"name": "new_admin_name", "last_name": "new_last_name"}, None),
+    (2, {"name": "new_admin_name_1", "login": "new_login", "password": os.urandom(16)}, None),
+    (3, {"name": "", "salt": os.urandom(16)}, None),
+    (3, {"name": "New_new", "login": "new_login"}, IntegrityError),
+])
 def test_edit_admin(database_sa, id_admin, kwargs_new_data, expected_exception):
     if expected_exception is not None:
         with pytest.raises(expected_exception):
@@ -105,11 +104,24 @@ def test_get_all_admins(database_sa):
     assert len(admins) == len(__data_successfully_added_admins_for_tests)
 
 
-def test_find_admins_period(database_sa):
+def test_good_find_admins_period(database_sa):
     start_date = datetime.datetime.strptime("01.01.2021", "%d.%m.%Y")
     end_date = datetime.datetime.strptime("01.01.2022", "%d.%m.%Y")
     new_date = datetime.datetime.strptime("01.05.2021", "%d.%m.%Y")
 
     database_sa.edit_admin(1, date_creating=new_date)
     res = database_sa.find_admins_period(start_date, end_date)
+    assert len(res) == 1
+
+
+def test_broke_find_admins_period(database_sa):
+    new_date = datetime.datetime.strptime("01.05.2021", "%d.%m.%Y")
+    database_sa.edit_admin(1, date_creating=new_date)
+    with pytest.raises(ValidationError):
+        database_sa.find_admins_period("01.05.2021", "01.05.2025")
+
+
+def test_find_admins_word(database_sa):
+    find_string = "new_admin_name_1"
+    res = database_sa.find_admins_words(find_string)
     assert len(res) == 1

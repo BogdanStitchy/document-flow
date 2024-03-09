@@ -127,8 +127,8 @@ class AdminMethodsDB:
                 result = session.execute(
                     select(Users.__table__).where(Users.date_creating.between(start_date, end_date))
                 )
-                admins = result.mappings().fetchall()
-                return admins
+                users = result.mappings().fetchall()
+                return users
 
     @staticmethod
     @pydantic.validate_call
@@ -218,7 +218,7 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
-    def update_document(id_document: int, **kwargs) -> None:
+    def edit_document(id_document: int, **kwargs) -> None:
         # Найти запись по id_document
         with Session(get_engine()) as session:
             with session.begin():

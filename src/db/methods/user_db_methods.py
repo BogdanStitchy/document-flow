@@ -1,6 +1,8 @@
 """file with database access methods for user role"""
+
 import pydantic
-from sqlalchemy import select
+import datetime
+from sqlalchemy import select, and_
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -27,6 +29,21 @@ class UserDB:
                     ).where(Users.login == login))
             result = result.mappings().fetchone()
             return result
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_document_period(start_output_date: datetime.date, end_output_date: datetime.date,
+                             start_create_date: datetime.date, end_create_date: datetime.date) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(DataAboutDocuments.__table__).where(and_(
+                        DataAboutDocuments.date_creating.between(start_create_date, end_create_date),
+                        DataAboutDocuments.output_date.between(start_output_date, end_output_date)
+                    ))
+                )
+                admins = result.mappings().fetchall()
+                return admins
 
     # _________________________________ADD______________________________________________________
     @staticmethod

@@ -45,6 +45,8 @@ class SuperAdminMethodsDB(AdminMethodsDB):
     @staticmethod
     @pydantic.validate_call
     def add_one_hierarchy_department(id_department: int, parent_id: int) -> None:
+        if id_department == parent_id:
+            raise ValueError("id подчиняемого отдела не может ровняться id руководящего отдела")
         with Session(get_engine()) as session:
             with session.begin():
                 session.execute(

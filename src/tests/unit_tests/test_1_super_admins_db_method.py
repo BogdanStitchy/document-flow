@@ -116,13 +116,8 @@ def test_find_admins_word(database_sa):
     ((1, 1), ValidationError),
 ])
 def test_add_department_broke(database_sa, data, expected_exception):
-    if expected_exception is None:
-        database_sa.add_department(*data)
-        departments = database_sa.get_all_departments()
-        print(departments)
-    else:
-        with pytest.raises(expected_exception):
-            database_sa.add_admin(*data)
+    with pytest.raises(expected_exception):
+        database_sa.add_admin(*data)
 
 
 def test_add_department_good(database_sa):
@@ -130,5 +125,21 @@ def test_add_department_good(database_sa):
     for dt in data:
         database_sa.add_department(*dt)
     departments = database_sa.get_all_departments()
-    print(departments)
     assert len(departments) == 4
+
+
+@pytest.mark.parametrize("data, expected_exception", [
+    (("", ""), ValidationError),
+    ((1, 1), ValueError),
+])
+def test_add_hierarchy_department_broke(database_sa, data, expected_exception):
+    with pytest.raises(expected_exception):
+        database_sa.add_one_hierarchy_department(*data)
+
+
+def test_add_hierarchy_department_good(database_sa):
+    data = [(2, 1), (3, 1), (4, 3)]
+    for dt in data:
+        database_sa.add_one_hierarchy_department(*dt)
+    hierarchy_departments = database_sa.get_full_hierarchy_departments()
+    assert len(hierarchy_departments) == 3

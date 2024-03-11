@@ -143,3 +143,10 @@ def test_add_hierarchy_department_good(database_sa):
         database_sa.add_one_hierarchy_department(*dt)
     hierarchy_departments = database_sa.get_full_hierarchy_departments()
     assert len(hierarchy_departments) == 3
+
+
+def test_delete_department(database_sa):
+    id_departments_for_delete = [2, 4]
+    database_sa.delete_departments(id_departments_for_delete)
+    departments_after_delete = database_sa.get_all_departments()
+    assert len(departments_after_delete) == 2

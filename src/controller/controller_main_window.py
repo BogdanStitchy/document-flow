@@ -12,6 +12,8 @@ role_client: str = ""
 
 
 def check_login(login: str, password: str, role: str) -> str:
+    if role not in ("admin", "user"):
+        raise ValueError("Значение role ожидается 'admin' или 'user'")
     global client, role_client
     try:
         if role == 'admin':

@@ -459,14 +459,6 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     import sys
-
-    # app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
-    # ui = WidgetDocuments()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
-    # sys.exit(app.exec_()
-
     app = QtWidgets.QApplication(sys.argv)
     ui = WidgetDocuments()
     sys.exit(app.exec_())

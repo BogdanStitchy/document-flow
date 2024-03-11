@@ -48,7 +48,13 @@ class User:
             self.CURRENT_ID)
 
     def check_password(self, login: str, password: str):
-        # request = db_helper.get_login_data_user(login)
+        """
+        checks user authentication
+
+        :param login: user login
+        :param password: user password
+        :return: True if login success, else False
+        """
         data_user: {} = UserDB.check_password(login)
 
         if data_user is None:

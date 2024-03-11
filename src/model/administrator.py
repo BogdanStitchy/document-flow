@@ -25,7 +25,13 @@ class Administrator(User):
         self.date_last_changes_password = data_admin['date_last_changes_password']
 
     def check_password(self, login: str, password: str):
-        # request = db_helper.get_login_data_admin(login)
+        """
+        checks admin authentication
+
+        :param login: admin login
+        :param password: admin password
+        :return: True if login success, else False
+        """
         data_about_admin: {} = AdminMethodsDB.check_password(login)
 
         if data_about_admin is None:

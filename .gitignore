@@ -18,3 +18,4 @@ src/model/file.pdf
 src/model/for_data_base/
 *.pyc
 src/config/__pycache__/
+src/model/admin.py

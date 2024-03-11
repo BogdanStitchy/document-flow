@@ -45,22 +45,6 @@ def test_re_add_admin(database_sa):
 
 
 @pytest.mark.parametrize("data, expected_exception", [
-    (("dep1", 1), None),
-    (("dep2", 2), None),
-    (("dep3", 3), None),
-    (("dep4", 4), None),
-    (("", ""), ValidationError),
-    ((1, 1), ValidationError),
-])
-def test_add_department(database_sa, data, expected_exception):
-    if expected_exception is None:
-        database_sa.add_department(*data)
-    else:
-        with pytest.raises(expected_exception):
-            database_sa.add_admin(*data)
-
-
-@pytest.mark.parametrize("data, expected_exception", [
     (1, None),
     (2, None),
     ("string", ValidationError),
@@ -125,3 +109,26 @@ def test_find_admins_word(database_sa):
     find_string = "new_admin_name_1"
     res = database_sa.find_admins_words(find_string)
     assert len(res) == 1
+
+
+@pytest.mark.parametrize("data, expected_exception", [
+    (("", ""), ValidationError),
+    ((1, 1), ValidationError),
+])
+def test_add_department_broke(database_sa, data, expected_exception):
+    if expected_exception is None:
+        database_sa.add_department(*data)
+        departments = database_sa.get_all_departments()
+        print(departments)
+    else:
+        with pytest.raises(expected_exception):
+            database_sa.add_admin(*data)
+
+
+def test_add_department_good(database_sa):
+    data = [("dep1", 100), ("dep2", 200), ("dep3", 300), ("dep4", 400), ]
+    for dt in data:
+        database_sa.add_department(*dt)
+    departments = database_sa.get_all_departments()
+    print(departments)
+    assert len(departments) == 4

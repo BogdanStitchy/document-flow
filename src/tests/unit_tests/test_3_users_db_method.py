@@ -44,6 +44,6 @@ def test_good_find_document_period(database_user):
     assert len(res) == 2
 
 
-def test_broke_find_admins_period(database_user):
+def test_broke_find_documents_period(database_user):
     with pytest.raises(ValidationError):
         database_user.find_document_period("01.05.2021", "01.05.2025", "01.05.2021", "01.05.2025")

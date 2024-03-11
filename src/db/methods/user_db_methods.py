@@ -2,11 +2,11 @@
 
 import pydantic
 import datetime
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, or_
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
-from src.db.models import DataAboutDocuments, FilesDocuments
+from src.db.models import DataAboutDocuments, FilesDocuments, DepartmentsHierarchy
 from src.db.models.users import Users
 
 
@@ -44,6 +44,37 @@ class UserDB:
                 )
                 admins = result.mappings().fetchall()
                 return admins
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_document_word(id_current_department: int, search_string: str):
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(
+                    select(
+                        DataAboutDocuments.inner_number,
+                        DataAboutDocuments.output_number,
+                        DataAboutDocuments.output_date,
+                        DataAboutDocuments.type_document,
+                        DataAboutDocuments.name,
+                        DataAboutDocuments.date_creating,
+                        DataAboutDocuments.id,
+                        (Users.last_name + ' ' + Users.name).label('creator')
+                    ).where(
+                        and_(or_(DepartmentsHierarchy.parent_id == id_current_department,
+                                 DepartmentsHierarchy.department_id == id_current_department, )
+                             (or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
+                                  DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
+                                  DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
+                                  DataAboutDocuments.name.ilike(f"%{search_string}%"),
+                                  Users.last_name.ilike(f"%{search_string}%"),
+                                  Users.name.ilike(f"%{search_string}%"))
+                              )
+                             )
+                    ).join_from(DataAboutDocuments, Users, DepartmentsHierarchy)
+                )
+                documents = result.mappings().fetchall()
+                return documents
 
     # _________________________________ADD______________________________________________________
     @staticmethod

@@ -15,8 +15,8 @@ class AdminMethodsDB:
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call
-    def add_user(last_name: str, name: str, patronymic: str, login: str, password: bytes, salt: bytes,
-                 id_department: int, id_creator: int) -> int:
+    def add_user_db(last_name: str, name: str, patronymic: str, login: str, password: bytes, salt: bytes,
+                    id_department: int, id_creator: int) -> int:
         with Session(get_engine()) as session:
             with session.begin():
                 new_user = Users(name=name, last_name=last_name, patronymic=patronymic, login=login,

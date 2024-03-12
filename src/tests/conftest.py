@@ -56,6 +56,36 @@ def clean_admins_table_database(create_database, get_session):
 
 
 @pytest.fixture(scope="module")
+def clean_users_table_database(create_database, get_session):
+    session = get_session
+    try:
+        user_table = base.Base.metadata.tables['users']
+        session.execute(user_table.delete())
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+@pytest.fixture(scope="module")
+def clean_departments_table_database(create_database, get_session):
+    session = get_session
+    try:
+        departments_table = base.Base.metadata.tables['departments']
+        departments_hierarchy_table = base.Base.metadata.tables['departments_hierarchy']
+        session.execute(departments_table.delete())
+        session.execute(departments_hierarchy_table.delete())
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+@pytest.fixture(scope="module")
 def db_methods_super_admin():
     super_admin_methods = sa_methods.SuperAdminMethodsDB()
     yield super_admin_methods

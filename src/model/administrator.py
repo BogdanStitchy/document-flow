@@ -1,7 +1,8 @@
 import os
 from datetime import datetime
-from src.config import tools
+import pydantic
 
+from src.config import tools
 from src.model.user import User
 from src.model.for_data_base import db_helper
 from src.model.for_data_base import db_helper_for_hierarchy_derartments
@@ -109,44 +110,22 @@ class Administrator(User):
 
     @staticmethod
     def get_data_about_users():
-        # data = db_helper.get_data_about_users(2)  # for getting data about admin enter 1
-        # return data
         return AdminMethodsDB.get_all_users()
 
-    def add_user(self, last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
-                 flag_leader: bool):
+    @pydantic.validate_call
+    def add_user(self, last_name: str, name: str, patronymic: str, login: str, password: str,
+                 id_department: int):
         salt = os.urandom(16)
-        # original_salt = salt  # (salt.hex(), 'utf-8')
-        # print("original salt = ", salt)
-        # password = 'password'
-        # password2 = 'passworasdgasdgsdfgsdfhsdfhd'
-        # start_time = time.time()
-        # # print(config.HASH_FUNCTION)
-        # key1 = hashlib.pbkdf2_hmac(
-        #     config.HASH_FUNCTION,
-        #     password.encode('utf-8'),
-        #     salt,
-        #     200000,
-        #     dklen=64
-        # )
-        # key2 = hashlib.pbkdf2_hmac(
-        #     config.HASH_FUNCTION,
-        #     password2.encode('utf-8'),
-        #     salt,
-        #     200000,
-        #     dklen=64
-        # )
         password = tools.create_hash_password(password, salt)
 
-        # print(len(str(password)))
-        # print(len(str(salt)))
-        # this get id for division_number
-        id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
-        id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
-                                                 datetime.now().strftime("%d-%m-%Y %H:%M"))
-        # id_user = 14
-        db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2, flag_leader)
-        print(f"\nUser {last_name} {name} added in data base\n")
+        AdminMethodsDB.add_user_db(last_name, name, patronymic, login, password, salt, id_department, self.CURRENT_ID)
+
+        # id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
+        # id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
+        #                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
+        # # id_user = 14
+        # db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2, flag_leader)
+        # print(f"\nUser {last_name} {name} added in data base\n")
 
     @staticmethod
     def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,

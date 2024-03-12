@@ -1,5 +1,6 @@
 """file with database access methods for super admin role"""
 import datetime
+from typing import Optional
 
 from sqlalchemy import select, update, insert, delete, or_
 from sqlalchemy.orm import Session
@@ -34,7 +35,7 @@ class SuperAdminMethodsDB(AdminMethodsDB):
 
     @staticmethod
     @pydantic.validate_call
-    def add_department(name_department: str, number_department: int) -> int:
+    def add_department(name_department: str, number_department: int or None) -> int:
         with Session(get_engine()) as session:
             with session.begin():
                 new_department = Departments(name_department=name_department, number_department=number_department)
@@ -44,7 +45,7 @@ class SuperAdminMethodsDB(AdminMethodsDB):
 
     @staticmethod
     @pydantic.validate_call
-    def add_one_hierarchy_department(id_department: int, parent_id: int) -> None:
+    def add_one_hierarchy_department(id_department: int, parent_id: Optional[int]) -> None:
         if id_department == parent_id:
             raise ValueError("id подчиняемого отдела не может ровняться id руководящего отдела")
         with Session(get_engine()) as session:

@@ -112,7 +112,7 @@ def test_add_department_broke(db_methods_super_admin, data, expected_exception):
         db_methods_super_admin.add_admin(*data)
 
 
-def test_add_department_good(db_methods_super_admin):
+def test_add_department_good(clean_departments_table_database, db_methods_super_admin):
     data = [("dep1", 100), ("dep2", 200), ("dep3", 300), ("dep4", 400), ]
     for dt in data:
         db_methods_super_admin.add_department(*dt)

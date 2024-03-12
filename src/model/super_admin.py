@@ -35,6 +35,11 @@ class SuperAdmin(Administrator):
         SuperAdminMethodsDB.change_admin_activity_status(id_admin)
 
     @staticmethod
+    def add_department(name_department: str, number_department: int, parent_id: int or None):
+        id_added_department = SuperAdminMethodsDB.add_department(name_department, number_department)
+        SuperAdminMethodsDB.add_one_hierarchy_department(id_added_department, parent_id)
+
+    @staticmethod
     def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):
         raise "Нужно изменить метод обновления"
         # EDIT!!!

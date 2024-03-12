@@ -44,6 +44,7 @@ class User:
         self.date_last_changes_password = data_user['date_last_changes_password']
 
     def set_department_data(self):
+        #fix this
         self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_for_one_user(
             self.CURRENT_ID)
 
@@ -72,7 +73,7 @@ class User:
 
         # user successful login in system
         self.set_self_data(data_user=data_user, login_user=login)
-        self.set_department_data()
+        # self.set_department_data()
         return 'user'
 
     def change_password(self, password: str):

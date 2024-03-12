@@ -86,6 +86,22 @@ def clean_departments_table_database(create_database, get_session):
 
 
 @pytest.fixture(scope="module")
+def clean_documents_table_database(create_database, get_session):
+    session = get_session
+    try:
+        data_document_table = base.Base.metadata.tables['data_about_documents']
+        file_document_table = base.Base.metadata.tables['files_documents']
+        session.execute(data_document_table.delete())
+        session.execute(file_document_table.delete())
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+@pytest.fixture(scope="module")
 def db_methods_super_admin():
     super_admin_methods = sa_methods.SuperAdminMethodsDB()
     yield super_admin_methods

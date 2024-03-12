@@ -1,6 +1,7 @@
 import pytest
 from src.model.super_admin import SuperAdmin
 from src.model.administrator import Administrator
+from src.model.user import User
 
 
 @pytest.fixture(scope="module")
@@ -42,3 +43,11 @@ def fill_db_users(create_database, fill_db_departments_and_departments_hierarchy
     for user in added_users:
         admin.add_user(*user)
         # last_name=user[0], name=user[1], patronymic=user[2], login=user[3], password=user[4], id_department=user[5]
+
+
+@pytest.fixture(scope="module")
+def get_user():
+    user = User()
+    user.set_self_data({'id': 1, 'name': 'Ivan', 'patronymic': "Ivanovich", 'last_name': "Ivanov",
+                        'date_last_changes_password': "10.10.2023"}, "Login_Ivan")
+    return user

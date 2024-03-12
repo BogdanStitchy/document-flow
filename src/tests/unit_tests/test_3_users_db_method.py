@@ -20,7 +20,7 @@ def database_user():
     ((1, os.urandom(16), "doc3", "55555", 99999, datetime.datetime(2023, 7, 12), "rtx"), ValidationError),
     ((1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), 15.7), ValidationError)
 ])
-def test_add_document(database_user, data, expected_exception):
+def test_add_document(database_user, clean_documents_table_database, data, expected_exception):
     if expected_exception is None:
         database_user.add_document(*data)
     else:

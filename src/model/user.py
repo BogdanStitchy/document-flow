@@ -44,7 +44,7 @@ class User:
         self.date_last_changes_password = data_user['date_last_changes_password']
 
     def set_department_data(self):
-        #fix this
+        # fix this
         self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_for_one_user(
             self.CURRENT_ID)
 
@@ -102,13 +102,13 @@ class User:
         pass
 
     def add_document(self, path_to_document: str, name_document: str, inner_number: str, output_number: str,
-                     output_date,
+                     output_date: str,
                      type_document: str):
-        id_documents = db_helper.add_data_about_document(inner_number, output_number, output_date, name_document,
-                                                         datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
-                                                         self.CURRENT_ID, type_document)
+
         file = open(path_to_document, 'rb')
-        db_helper.add_file(id_documents, file.read())
+        output_date = datetime.datetime.strptime(output_date, "%d.%m.%Y")
+        UserDB.add_document(self.CURRENT_ID, file.read(), name_document, inner_number, output_number, output_date,
+                            type_document)
 
     @staticmethod
     def edit_document(id_document, name_document: str, inner_number: str, output_number: str, output_date,

@@ -6,35 +6,55 @@ from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
 
 from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError
+from typing import Tuple, Optional
 
 client = SuperAdmin  # Client("admin").client
-role_client: str = ""
+# role_client: str = ""
 
 
-def check_login(login: str, password: str, role: str) -> str:
+def authenticate(login: str, password: str, role: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Performs user authentication with error handling
+    :param login:
+    :param password:
+    :param role:
+    :return: role: str or None, error:str or None
+    """
+    try:
+        user = __check_login(login, password, role)
+        return user, None  # Возвращаем объект пользователя и None в качестве ошибки
+    except (ClientActiveError, ClientNotFoundError, ClientPasswordError) as ex:
+        return None, str(ex)
+    except Exception as ex:
+        # log
+        return None, f"Неизвестная ошибка, обратитесь к разработчикам. \nКод ошибки: 001"
+
+
+def __check_login(login: str, password: str, role: str):
+    """
+
+    :param login:
+    :param password:
+    :param role: 'admin' or 'user'
+    :return: 'admin' or 'user' or 'superAdmin' or message about error
+    """
     if role not in ("admin", "user"):
         raise ValueError("Значение role ожидается 'admin' или 'user'")
-    global client, role_client
-    try:
-        if role == 'admin':
-            client = Administrator()
-            result = client.check_password(login, password)  # superAdmin or Admin
-            role_client = result
-            if role_client == 'superAdmin':
-                client = SuperAdmin()
-            return role_client
+    global client #, role_client
 
-        elif role == 'user':
-            role_client = role
-            client = User()
-            result = client.check_password(login, password)
-            return result
-    except (ClientActiveError, ClientNotFoundError, ClientPasswordError) as ex:
-        print("check_login my exception: ", str(ex))
-        return str(ex)
-    except Exception as ex:
-        print(f"check_login unknown exception {ex}")
-        return f"Неизвестная ошибка, обратитесь к разработчикам. \nКод ошибки: 001"
+    if role == 'admin':
+        client = Administrator()
+        result = client.check_password(login, password)  # superAdmin or Admin
+        # role_client = result
+        if result == 'superAdmin':
+            client = SuperAdmin()
+        return result
+
+    elif role == 'user':
+        # role_client = role
+        client = User()
+        result = client.check_password(login, password)
+        return result
 
 
 def save_hierarchy(list_hierarchy: list):

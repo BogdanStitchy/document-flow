@@ -186,30 +186,29 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
             self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода пароля", "Введите пароль!")
             return
 
-        result_checking = controller.check_login(input_login, input_password, role)
-        self.create_window(data_window=result_checking)
+        user_role, error_login = controller.authenticate(input_login, input_password, role)
+        self.create_window(user_role, error_login)
 
-    def create_window(self, data_window: str):
+    def create_window(self, user_role, error_login):
         """
         method create window role authorized client or QMessageBox.critical with information about error login
-        :param data_window: str
+        :param user_role:
+        :param error_login:
         :return:
         """
-        if data_window == 'superAdmin':
-            print("current = super admin")
+        if error_login:
+            self.clear_password_line()
+            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", error_login)
+            return
+        if user_role == 'superAdmin':
             self.window_client = window_superadmin.WindowSuperAdmin()
             self.close()
-        elif data_window == 'admin':
-            print("current = admin")
+        elif user_role == 'admin':
             self.window_client = window_admin.WindowAdmin()
             self.close()
-        elif data_window == 'user':
-            print("current = user")
+        elif user_role == 'user':
             self.window_client = window_user.WindowUser()
             self.close()
-        else:
-            self.clear_password_line()
-            self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", data_window)
 
     def clear_password_line(self):
         self.line_password.setText('')

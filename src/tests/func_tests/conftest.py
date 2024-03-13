@@ -19,7 +19,7 @@ def fill_db_departments_and_departments_hierarchy():
     added_department = [
         ("Финансовый", 101, None),  # id = 1
         ("Кадровый", 102, 1),  # id = 2
-        ("Информационные Технологии", 103, 2),  # id = 3
+        ("Информационные Технологии", 103, 1),  # id = 3
         ("Маркетинг", 104, 2),  # id = 4
         ("Продажи", 105, 3)  # id = 5
     ]
@@ -31,9 +31,9 @@ def fill_db_departments_and_departments_hierarchy():
 def fill_db_users(create_database, fill_db_departments_and_departments_hierarchy):
     added_users = [("Иванов", "Иван", "Иванович", "ivanovii", "pass123", 1),
                    ("Петрова", "Мария", "Алексеевна", "petrovama", "pass234", 2),
-                   ("Сидоров", "Николай", "Петрович", "sidorovnp", "pass345", 2),
-                   ("Кузнецов", "Алексей", "Дмитриевич", "kuznetsovad", "pass456", 3),
-                   ("Смирнова", "Екатерина", "Васильевна", "smirnovaev", "pass567", 3),
+                   ("Сидоров", "Николай", "Петрович", "sidorovnp", "pass345", 3),
+                   ("Кузнецов", "Алексей", "Дмитриевич", "kuznetsovad", "pass456", 4),
+                   ("Смирнова", "Екатерина", "Васильевна", "smirnovaev", "pass567", 5),
                    ("Волков", "Дмитрий", "Анатольевич", "volkovda", "pass678", 4),
                    ("Зайцева", "Ольга", "Геннадьевна", "zaytsevog", "pass789", 5)]
     admin = Administrator()
@@ -49,5 +49,6 @@ def fill_db_users(create_database, fill_db_departments_and_departments_hierarchy
 def get_user():
     user = User()
     user.set_self_data({'id': 1, 'name': 'Ivan', 'patronymic': "Ivanovich", 'last_name': "Ivanov",
-                        'date_last_changes_password': "10.10.2023"}, "Login_Ivan")
+                        'date_last_changes_password': "10.10.2023", 'id_department': 1, 'number_department': 100},
+                       "Login_Ivan")
     return user

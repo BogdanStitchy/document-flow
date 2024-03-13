@@ -77,8 +77,8 @@ class Administrator(User):
         AdminMethodsDB.change_password(self.CURRENT_ID, password, salt, datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True  # пароль изменен
 
-    def get_data_about_documents(self):
-        # return db_helper.get_data_documents_for_admin()
+    @staticmethod
+    def get_data_about_documents():
         return AdminMethodsDB.get_all_documents()
 
     @staticmethod

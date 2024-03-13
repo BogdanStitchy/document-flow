@@ -42,11 +42,8 @@ class User:
         self.CURRENT_PATRONYMIC = data_user['patronymic']
         self.CURRENT_LAST_NAME = data_user['last_name']
         self.date_last_changes_password = data_user['date_last_changes_password']
-
-    def set_department_data(self):
-        # fix this
-        self.CURRENT_ID_DEPARTMENT, self.CURRENT_NUMBER_DEPARTMENT = db_helper.get_data_department_for_one_user(
-            self.CURRENT_ID)
+        self.CURRENT_ID_DEPARTMENT = data_user['id_department']
+        self.CURRENT_NUMBER_DEPARTMENT = data_user['number_department']
 
     def check_password(self, login: str, password: str):
         """
@@ -71,13 +68,10 @@ class User:
         if password != bytes(data_user['password']):
             raise ClientPasswordError("Указан неправильный пароль")
 
-        # user successful login in system
         self.set_self_data(data_user=data_user, login_user=login)
-        # self.set_department_data()
         return 'user'
 
     def change_password(self, password: str):
-        # self.CURRENT_ID = 5
         if self.check_password(self.CURRENT_LOGIN, password) == "user":
             return False  # старый и новый пароли сходятся
         salt = os.urandom(16)
@@ -118,8 +112,10 @@ class User:
     def get_data_about_documents(self):
         # print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
         # print("USER")
-        access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
-        return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
+        #
+        # access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
+        # return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
+        return UserDB.get_data_about_documents(self.CURRENT_ID_DEPARTMENT)
 
     def search_string_in_documents(self, search_string: str):
         access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)

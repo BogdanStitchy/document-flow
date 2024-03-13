@@ -6,7 +6,7 @@ from sqlalchemy import select, and_, or_
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
-from src.db.models import DataAboutDocuments, FilesDocuments, DepartmentsHierarchy
+from src.db.models import DataAboutDocuments, FilesDocuments, DepartmentsHierarchy, Departments
 from src.db.models.users import Users
 
 
@@ -25,10 +25,37 @@ class UserDB:
                         Users.active,
                         Users.password,
                         Users.salt,
-                        Users.date_last_changes_password
-                    ).where(Users.login == login))
+                        Users.date_last_changes_password,
+                        Users.id_department,
+                        Departments.number_department
+                    ).join(Departments).where(Users.login == login))
             result = result.mappings().fetchone()
             return result
+
+    @staticmethod
+    @pydantic.validate_call
+    def get_data_about_documents(id_current_department: int):
+        with Session(get_engine()) as session:
+            execute_id_available_departments = (select(DepartmentsHierarchy.department_id).where(
+                DepartmentsHierarchy.parent_id == id_current_department))
+            id_available_departments = session.execute(execute_id_available_departments).scalars().all()
+            id_available_departments.append(id_current_department)  # list
+            access_condition = Users.id_department.in_(id_available_departments)
+            stmt = (
+                select(
+                    DataAboutDocuments.inner_number,
+                    DataAboutDocuments.output_number,
+                    DataAboutDocuments.output_date,
+                    DataAboutDocuments.type_document,
+                    DataAboutDocuments.name,
+                    DataAboutDocuments.date_creating,
+                    DataAboutDocuments.id,
+                    (Users.last_name + ' ' + Users.name).label('creator')
+                ).join(Users).where(access_condition)
+            )
+            result = session.execute(stmt)
+            documents = result.mappings().fetchall()
+            return documents
 
     @staticmethod
     @pydantic.validate_call

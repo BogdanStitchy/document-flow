@@ -28,7 +28,7 @@ def test_add_document(database_user, clean_documents_table_database, data, expec
             database_user.add_document(*data)
 
 
-def test_get_document():
+def test_get_document_admin():
     from src.db.methods.admin_db_methods import AdminMethodsDB
     documents = AdminMethodsDB.get_all_documents()
     assert len(documents) == 3

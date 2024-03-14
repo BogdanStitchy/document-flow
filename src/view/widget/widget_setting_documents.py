@@ -411,7 +411,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
     def press_button_delete_document(self):
         if controller.role_client == 'user':
             QtWidgets.QMessageBox.information(self, "Ошибка доступа",
-                                              "Удалять документы могут тольуо администраторы!\n"
+                                              "Удалять документы могут только администраторы!\n"
                                               "Для удаления документа обратитесь к администратору.")
             self.pushButton_delete.setEnabled(False)
             return

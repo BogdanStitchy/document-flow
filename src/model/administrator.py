@@ -84,7 +84,7 @@ class Administrator(User):
     @staticmethod
     def search_string_in_documents(search_string: str):
         # return db_helper.search_string_in_documents_for_admin(search_string)
-        return AdminMethodsDB.find_documents(search_string)
+        return AdminMethodsDB.find_documents_words(search_string)
 
     @staticmethod
     def search_string_in_users(search_string: str):
@@ -94,11 +94,22 @@ class Administrator(User):
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
                                          start_date_output: str = None, end_date_output: str = None,
                                          start_date_download: str = None, end_date_download: str = None):
-        return db_helper.apply_period_searching_documents_for_admin(flag_date_output, flag_date_download,
-                                                                    start_date_output=start_date_output,
-                                                                    end_date_output=end_date_output,
-                                                                    start_date_download=start_date_download,
-                                                                    end_date_download=end_date_download)
+
+        if start_date_output:
+            start_date_output = datetime.strptime(start_date_output, "%d.%m.%Y")
+        if end_date_output:
+            end_date_output = datetime.strptime(end_date_output, "%d.%m.%Y")
+        if start_date_download:
+            start_date_download = datetime.strptime(start_date_download, "%d.%m.%Y")
+        if end_date_download:
+            end_date_download = datetime.strptime(end_date_download, "%d.%m.%Y")
+
+        return AdminMethodsDB.find_documents_period(flag_date_output, flag_date_download,
+                                                    start_output_date=start_date_output,
+                                                    end_output_date=end_date_output,
+                                                    start_create_date=start_date_download,
+                                                    end_create_date=end_date_download
+                                                    )
 
     @staticmethod
     def apply_period_registration_admins(start_date_download: str, end_date_download: str):
@@ -137,7 +148,7 @@ class Administrator(User):
         if password != "":
             salt = os.urandom(16)
             password = tools.create_hash_password(password, salt)
-            #EDIT!!!
+            # EDIT!!!
             db_helper.edit_user_login_data(login, password.hex(), salt.hex(), id_user)
         elif flag_edit_login:
             db_helper.edit_only_login_user(login, id_user)

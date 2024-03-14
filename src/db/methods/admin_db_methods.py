@@ -1,7 +1,7 @@
 """file with database access methods for admin role"""
 import datetime
 import pydantic
-from sqlalchemy import select, or_, update
+from sqlalchemy import select, or_, and_, update
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -161,7 +161,7 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
-    def find_documents(search_string: str) -> [{}, {}]:
+    def find_documents_words(search_string: str) -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
@@ -183,6 +183,46 @@ class AdminMethodsDB:
                             Users.name.ilike(f"%{search_string}%"))
                     ).join_from(DataAboutDocuments, Users)
                 )
+                documents = result.mappings().fetchall()
+                return documents
+
+    @staticmethod
+    @pydantic.validate_call
+    def find_documents_period(flag_date_output: bool, flag_date_download: bool,
+                              start_output_date: datetime.date, end_output_date: datetime.date,
+                              start_create_date: datetime.date, end_create_date: datetime.date) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                basic_query_without_conditions = select(
+                    DataAboutDocuments.inner_number,
+                    DataAboutDocuments.output_number,
+                    DataAboutDocuments.output_date,
+                    DataAboutDocuments.type_document,
+                    DataAboutDocuments.name,
+                    DataAboutDocuments.date_creating,
+                    DataAboutDocuments.id,
+                    (Users.last_name + ' ' + Users.name).label('creator')
+                ).join_from(DataAboutDocuments, Users)
+
+                if flag_date_download and flag_date_output:
+                    query_with_conditions = basic_query_without_conditions.where(
+                        and_(DataAboutDocuments.date_creating.between(start_create_date, end_create_date),
+                             DataAboutDocuments.output_date.between(start_output_date, end_output_date)))
+
+                elif flag_date_download:
+                    query_with_conditions = basic_query_without_conditions.where(
+                        DataAboutDocuments.date_creating.between(start_create_date, end_create_date)
+                    )
+
+                elif flag_date_output:
+                    query_with_conditions = basic_query_without_conditions.where(
+                        DataAboutDocuments.output_date.between(start_output_date, end_output_date)
+                    )
+
+                elif not flag_date_output and not flag_date_download:
+                    raise ValueError("Ошибка задания периода, необходимо выбрать по каким полям задавать периоды")
+
+                result = session.execute(query_with_conditions)
                 documents = result.mappings().fetchall()
                 return documents
 

@@ -76,7 +76,6 @@ def test_edit_admin(db_methods_super_admin, id_admin, kwargs_new_data, expected_
 
 def test_get_all_admins(db_methods_super_admin):
     admins = db_methods_super_admin.get_all_admins()
-    print(f"\n\n{admins}\n\n")
     assert len(admins) == len(__data_successfully_added_admins_for_tests) #+ 3 # +3 потому что фикстурой еще три добавляется
 
 

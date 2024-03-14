@@ -103,6 +103,15 @@ class UserDB:
                 documents = result.mappings().fetchall()
                 return documents
 
+    @staticmethod
+    @pydantic.validate_call
+    def get_file(id_document: int):
+        with Session(get_engine()) as session:
+            with session.begin():
+                result = session.execute(select(FilesDocuments.file).where(FilesDocuments.id == id_document))
+                file = result.mappings().fetchone()
+                return file
+
     # _________________________________ADD______________________________________________________
     @staticmethod
     @pydantic.validate_call

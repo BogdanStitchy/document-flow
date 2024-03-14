@@ -404,7 +404,9 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         path_to_save = f"{self.dialog_window.getExistingDirectory()}/{name_file}"
         if path_to_save[1:] == name_file:
             return
-        controller.download_document(id_document, path_to_save)
+        potential_error = controller.download_document(id_document, path_to_save)
+        if potential_error:
+            QtWidgets.QMessageBox.critical(self, "Ошибка", potential_error)
 
     def press_button_delete_document(self):
         if controller.role_client == 'user':

@@ -5,10 +5,12 @@ from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
 
-from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError
+from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
 from typing import Tuple, Optional
 
 client = SuperAdmin  # Client("admin").client
+
+
 # role_client: str = ""
 
 
@@ -40,7 +42,7 @@ def __check_login(login: str, password: str, role: str):
     """
     if role not in ("admin", "user"):
         raise ValueError("Значение role ожидается 'admin' или 'user'")
-    global client #, role_client
+    global client  # , role_client
 
     if role == 'admin':
         client = Administrator()
@@ -86,8 +88,15 @@ def get_data_about_documents():
 
 def download_document(id_document: int, path_to_save: str):
     # log
-    client.download_document(id_document, path_to_save)
-    print("Документ сохранен")
+    try:
+        client.download_document(id_document, path_to_save)
+        print("Документ сохранен")
+    except FileNotFoundError:
+        return "Путь для сохранения файла недопустим"
+    except FileNotWrittenError:
+        return str(FileNotWrittenError)
+    except Exception as ex:
+        return "Неизвестная ошибка, обратитесь в отдел разработки. \nКод ошибки 201"
 
 
 def delete_document(name_document: str, inner_number: str, output_number: str):

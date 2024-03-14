@@ -11,3 +11,8 @@ class ClientPasswordError(Exception):
 class ClientActiveError(Exception):
     """Исключение, вызываемое, когда учетная запись клиента деактивирована"""
     pass
+
+
+class FileNotWrittenError(Exception):
+    """Исключение вызываемое, когда файл не удалось записать на устройство пользователя"""
+    pass

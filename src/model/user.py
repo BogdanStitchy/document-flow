@@ -8,7 +8,7 @@ from src.model.for_data_base import db_helper_for_hierarchy_derartments as db_he
 
 from src.db.methods.user_db_methods import UserDB
 
-from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError
+from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
 
 
 class User:
@@ -133,10 +133,13 @@ class User:
 
     @staticmethod
     def download_document(id_document: int, path_to_save: str):
-        data_file = db_helper.get_file_by_id(id_document)
-        file = open(path_to_save, 'wb')
-        file.write(bytes(data_file))
-        file.close()
+        data_file: {} = UserDB.get_file(id_document)
+
+        if data_file is None:
+            raise FileNotWrittenError("Файл с указанным ID не найден в базе данных.")
+
+        with open(path_to_save, 'wb') as file:
+            file.write(bytes(data_file['file']))
 
     def check_password_strength(self, password: str):
         """

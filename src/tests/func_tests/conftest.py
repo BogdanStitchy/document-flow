@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from src.model.super_admin import SuperAdmin
 from src.model.administrator import Administrator
@@ -52,3 +54,13 @@ def get_user():
                         'date_last_changes_password': "10.10.2023", 'id_department': 1, 'number_department': 100},
                        "Login_Ivan")
     return user
+
+
+@pytest.fixture(scope="function")
+def clean_test_files_directory():
+    directory_path = Path(Path.cwd(), "src", "tests", "func_tests", "file for testing", "saved files")
+
+    # Перебор всех файлов в директории и их удаление
+    for file_path in directory_path.iterdir():
+        if file_path.is_file() or file_path.is_symlink():
+            file_path.unlink()

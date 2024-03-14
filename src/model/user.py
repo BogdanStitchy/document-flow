@@ -23,6 +23,10 @@ class User:
         self.CURRENT_NUMBER_DEPARTMENT: int = None
         self.date_last_changes_password = None
 
+    @staticmethod
+    def get_role():
+        return "user"
+
     def get_lvl_access(self):
         return self.LVL_ACCESS
 
@@ -96,8 +100,7 @@ class User:
         pass
 
     def add_document(self, path_to_document: str, name_document: str, inner_number: str, output_number: str,
-                     output_date: str,
-                     type_document: str):
+                     output_date: str, type_document: str):
 
         file = open(path_to_document, 'rb')
         output_date = datetime.datetime.strptime(output_date, "%d.%m.%Y")

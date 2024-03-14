@@ -193,6 +193,10 @@ def get_login():
     return client.get_login()
 
 
+def get_role():
+    return client.get_role()
+
+
 def get_full_name():
     return client.get_full_name()
 

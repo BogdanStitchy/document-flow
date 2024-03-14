@@ -17,6 +17,10 @@ class Administrator(User):
         self.date_last_changes_password = None
         # self.CURRENT_ID_DEPARTMENT = 1
 
+    @staticmethod
+    def get_role():
+        return "admin"
+
     def set_self_data(self, data_admin: {}, login_admin: str):
         self.CURRENT_LOGIN = login_admin
         self.CURRENT_ID = data_admin['id']

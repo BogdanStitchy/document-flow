@@ -164,7 +164,8 @@ class Administrator(User):
 
     @staticmethod
     def change_activation_status(id_user: int):
-        db_helper.change_activation_status_user(id_user)
+        AdminMethodsDB.change_user_activity_status(id_user)
+        # db_helper.change_activation_status_user(id_user)
 
 
 if __name__ == '__main__':

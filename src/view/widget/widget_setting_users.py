@@ -316,25 +316,25 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
     def press_button_delete(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 8:
-            controller.change_activation_status(items[0].get_additional_data())
-            self.dialog_window = QtWidgets.QMessageBox()
-            if items[7].text() == "":
-                title = "Деактивация пользователя"
-                message = "успешно деактивирован"
-            else:
-                title = "Активация пользователя"
-                message = "успешно активирован"
-            self.dialog_window.information(self, title,
-                                           f'Пользователь "{items[0].text()} {items[1].text()} {items[2].text()}" '
-                                           f'{message}.')
-            self.press_button_refresh()
-
-        else:
+        if len(items) != 8:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Изменение статуса активности пользователя",
                                                                  "Для изменения статуса активности пользователя "
                                                                  "выделите всю строку (строка станет белой), щелкнув "
                                                                  "по номеру строки (крайний левый стоблец).")
+            return
+
+        controller.change_activation_status(items[0].get_additional_data())
+        self.dialog_window = QtWidgets.QMessageBox()
+        if items[7].text() == "":
+            title = "Деактивация пользователя"
+            message = "успешно деактивирован"
+        else:
+            title = "Активация пользователя"
+            message = "успешно активирован"
+        self.dialog_window.information(self, title,
+                                       f'Пользователь "{items[0].text()} {items[1].text()} {items[2].text()}" '
+                                       f'{message}.')
+        self.press_button_refresh()
 
     def press_button_edit_user(self):
         items = self.tableWidget.selectedItems()

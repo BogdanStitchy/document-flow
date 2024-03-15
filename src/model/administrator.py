@@ -141,17 +141,14 @@ class Administrator(User):
     @pydantic.validate_call
     def add_user(self, last_name: str, name: str, patronymic: str, login: str, password: str,
                  id_department: int):
+        for value in locals().values():
+            print(f"key\t=\t{value}")
+            if value == "":
+                raise ValueError("Переданы пустые аргументы для добавления пользователя")
         salt = os.urandom(16)
         password = tools.create_hash_password(password, salt)
 
         AdminMethodsDB.add_user_db(last_name, name, patronymic, login, password, salt, id_department, self.CURRENT_ID)
-
-        # id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
-        # id_user = db_helper.add_record_user_data(last_name, name, patronymic, id_department, self.CURRENT_ID,
-        #                                          datetime.now().strftime("%d-%m-%Y %H:%M"))
-        # # id_user = 14
-        # db_helper.add_record_user_login(password.hex(), salt.hex(), id_user, login, 2, flag_leader)
-        # print(f"\nUser {last_name} {name} added in data base\n")
 
     @staticmethod
     def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,

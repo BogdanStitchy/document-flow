@@ -11,9 +11,6 @@ from typing import Tuple, Optional
 client = SuperAdmin  # Client("admin").client
 
 
-# role_client: str = ""
-
-
 def authenticate(login: str, password: str, role: str) -> Tuple[Optional[str], Optional[str]]:
     """
     Performs user authentication with error handling
@@ -69,10 +66,9 @@ def get_hierarchy():
     return hierarchy.get_data_about_departments()
 
 
-def add_user_in_database(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
-                         flag_leader: bool):
+def add_user_in_database(last_name: str, name: str, patronymic: str, login: str, password: str, id_department: int):
     # log
-    client.add_user(last_name, name, patronymic, division_number, login, password, flag_leader)
+    client.add_user(last_name, name, patronymic, login, password, id_department)
 
 
 def add_document_in_database(path_to_document: str, name_document: str, inner_number: str, output_number: str,

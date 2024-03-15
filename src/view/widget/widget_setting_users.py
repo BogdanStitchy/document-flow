@@ -275,7 +275,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Деактивирован"))
 
     def press_button_add_user(self):
-        print("pushed_button_add_document")
         self.dialog_window = dialog_add_user.DialogWidgetAddUser(self)
 
     def press_button_refresh(self):

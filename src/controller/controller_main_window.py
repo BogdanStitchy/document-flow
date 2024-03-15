@@ -230,9 +230,7 @@ def search_admins(search_string: str):
 
 def apply_period_registration_admins(start_date_download: str, end_date_download: str):
     return client.apply_period_registration_admins(start_date_download, end_date_download)
-    # return []
 
 
 def apply_period_searching_registration_users(start_date_download: str, end_date_download: str):
     return client.apply_period_registration_users(start_date_download, end_date_download)
-    # return []

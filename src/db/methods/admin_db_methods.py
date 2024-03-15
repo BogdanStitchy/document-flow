@@ -125,7 +125,20 @@ class AdminMethodsDB:
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
-                    select(Users.__table__).where(Users.date_creating.between(start_date, end_date))
+                    select(Users.id,
+                           Users.login,
+                           Users.name,
+                           Users.last_name,
+                           Users.patronymic,
+                           Users.active,
+                           Users.password,
+                           Users.salt,
+                           Users.date_last_changes_password,
+                           Users.date_creating,
+                           Departments.number_department,
+                           (Admins.last_name + ' ' + Admins.name).label("creator")
+                           ).join_from(Users, Departments).join_from(Users, Admins).where(
+                        Users.date_creating.between(start_date, end_date))
                 )
                 users = result.mappings().fetchall()
                 return users

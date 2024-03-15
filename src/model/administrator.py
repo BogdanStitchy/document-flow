@@ -5,7 +5,6 @@ import pydantic
 from src.config import tools
 from src.model.user import User
 from src.model.for_data_base import db_helper
-from src.model.for_data_base import db_helper_for_hierarchy_derartments
 from src.db.methods.admin_db_methods import AdminMethodsDB
 from src.model.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
 
@@ -132,7 +131,9 @@ class Administrator(User):
 
     @staticmethod
     def apply_period_registration_users(start_date_download: str, end_date_download: str):
-        return db_helper.apply_period_searching_registration_users(start_date_download, end_date_download)
+        start_date_download = datetime.strptime(start_date_download, "%d.%m.%Y")
+        end_date_download = datetime.strptime(end_date_download, "%d.%m.%Y")
+        return AdminMethodsDB.find_users_period(start_date_download, end_date_download)
 
     @staticmethod
     def get_data_about_users():

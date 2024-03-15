@@ -445,7 +445,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование документа",
                                                                  "Для редактирования документа выделите всю строку "
                                                                  "(строка станет белой), щелкнув по номеру строки "
-                                                                 "(крайний левый стоблец).")
+                                                                 "(крайний левый столбец).")
 
     def press_button_search_documents(self):
         self.pushButton_period_search.setText("период")

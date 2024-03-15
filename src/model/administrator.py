@@ -86,6 +86,13 @@ class Administrator(User):
         return AdminMethodsDB.get_all_documents()
 
     @staticmethod
+    def edit_document(id_document: int, name_document: str, inner_number: str, output_number: str, output_date,
+                      type_document: str):
+        AdminMethodsDB.edit_document(id_document, name=name_document, inner_number=inner_number,
+                                     output_number=output_number, output_date=output_date, type_document=type_document)
+        # db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
+
+    @staticmethod
     def search_string_in_documents(search_string: str):
         # return db_helper.search_string_in_documents_for_admin(search_string)
         return AdminMethodsDB.find_documents_words(search_string)

@@ -107,11 +107,6 @@ class User:
         UserDB.add_document(self.CURRENT_ID, file.read(), name_document, inner_number, output_number, output_date,
                             type_document)
 
-    @staticmethod
-    def edit_document(id_document, name_document: str, inner_number: str, output_number: str, output_date,
-                      type_document: str):
-        db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
-
     def get_data_about_documents(self):
         # print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
         # print("USER")

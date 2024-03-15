@@ -167,14 +167,13 @@ class DialogEditDocument(QDialog):
         output_number = self.lineEdit_output_number.text()
         output_date = self.dateEdit.text()
         type_document = self.lineEdit_type_document.text()
-        print(inner_number)
-        print(output_number)
-        print(output_date)
-        print(type_document)
-        controller.edit_document(self.id_document, self.name_file, inner_number, output_number, output_date, type_document)
+
+        controller.edit_document(self.id_document, self.name_file, inner_number, output_number, output_date,
+                                 type_document)
         self.main_window.press_button_refresh()
         self.dialog_window = QtWidgets.QMessageBox.information(self, "редактирование документа",
-                                                               f'Документ "{self.name_file}" успешно отредактирован.')
+                                                               f'Документ "{self.name_file}" успешно отредактирован.\n'
+                                                               f'Список документов обновлен')
 
         self.close()
 

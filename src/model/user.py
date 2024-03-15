@@ -96,9 +96,6 @@ class User:
             return False  # пароль не надо менять
         # return db_helper.get_last_change_password_user(self.CURRENT_ID)
 
-    def delete_file(self):
-        pass
-
     def add_document(self, path_to_document: str, name_document: str, inner_number: str, output_number: str,
                      output_date: str, type_document: str):
 

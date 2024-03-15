@@ -93,6 +93,10 @@ class Administrator(User):
         # db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
 
     @staticmethod
+    def delete_document(id_document: int):
+        AdminMethodsDB.delete_document(id_document)
+
+    @staticmethod
     def search_string_in_documents(search_string: str):
         # return db_helper.search_string_in_documents_for_admin(search_string)
         return AdminMethodsDB.find_documents_words(search_string)

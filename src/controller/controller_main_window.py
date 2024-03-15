@@ -99,12 +99,10 @@ def download_document(id_document: int, path_to_save: str):
         return "Неизвестная ошибка, обратитесь в отдел разработки. \nКод ошибки 201"
 
 
-def delete_document(name_document: str, inner_number: str, output_number: str):
+def delete_document(id_document: int):
     # log
-    print(name_document)
-    print(inner_number)
-    print(output_number)
-    db_helper_for_documents_and_users.delete_file(name_document, inner_number, output_number)
+    # db_helper_for_documents_and_users.delete_file(name_document, inner_number, output_number)
+    client.delete_document(id_document)
 
 
 def edit_document(id_document: int, name_document: str, inner_number: str, output_number: str,

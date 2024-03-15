@@ -1,7 +1,7 @@
 """file with database access methods for admin role"""
 import datetime
 import pydantic
-from sqlalchemy import select, or_, and_, update
+from sqlalchemy import select, or_, and_, update, delete
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -283,3 +283,12 @@ class AdminMethodsDB:
                     session.commit()
                 else:
                     raise ValueError(f"Пользователь с id {id_user} не найден.")
+
+    # ________________________________DELETE_____________________________________________________
+    @staticmethod
+    @pydantic.validate_call
+    def delete_document(id_document: int):
+        with Session(get_engine()) as session:
+            with session.begin():
+                session.execute(delete(DataAboutDocuments).where(DataAboutDocuments.id == id_document))
+                session.commit()

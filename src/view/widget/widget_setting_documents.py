@@ -417,9 +417,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             return
         items = self.tableWidget.selectedItems()
         if len(items) == 8:
-            controller.delete_document(items[0].text(), items[1].text(), items[2].text())
+            controller.delete_document(items[0].get_additional_data())
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Удаление документа",
-                                                                     f'Документ "{items[0].text()}" успешно удален из базы.')
+                                                                     f'Документ "{items[0].text()}" '
+                                                                     f'успешно удален из базы.')
             self.press_button_refresh()
         else:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление документа",

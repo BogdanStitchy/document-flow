@@ -185,8 +185,8 @@ class DialogWidgetEditUser(QDialog):
         departments = get_all_departments()
         for department in departments:
             radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
+            radio_button.setObjectName(str(department[0]))
             if self.number_department == department[2]:
-                print("TRUE")
                 radio_button.click()
             self.verticalLayout_2.addWidget(radio_button)
             self.group.addButton(radio_button)
@@ -197,27 +197,27 @@ class DialogWidgetEditUser(QDialog):
         new_patronymic = self.lineEdit_patronymic.text()
         new_login = self.lineEdit_login.text()
         new_password = self.lineEdit_password.text()
-        if new_login != self.login:
-            flag_edit_login = True
-        else:
-            flag_edit_login = False
-        print("password = ", new_password)
-        try:
-            department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
-            department = department[:3]  # получаем только номер отдела, без его названия
-            print(department)
-            controller.edit_user_data(new_last_name, new_name, new_patronymic, department, new_login, new_password,
-                                      self.id_user, flag_edit_login)
-            self.main_window.press_button_refresh()
-            self.dialog_window = QtWidgets.QMessageBox().information(self, "Редактирование пользователя",
-                                                                     f'Данные пользователя '
-                                                                     f'"{new_last_name} {new_name} {new_patronymic}" '
-                                                                     f'успешно отредактированы.')
-            self.close()
-        except Exception as ex:
-            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование пользователя",
-                                                                 "Для редактирования пользователя заполните все поля! ")
-            print("[ERROR] Не выбран ни один радиобаттон\t", ex)
+        # if new_login != self.login:
+        #     flag_edit_login = True
+        # else:
+        #     flag_edit_login = False
+        # print("password = ", new_password)
+        # try:
+            # department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
+            # department = department[:3]  # получаем только номер отдела, без его названия
+        id_department = int(self.group.checkedButton().objectName())
+        controller.edit_user_data(new_last_name, new_name, new_patronymic, new_login, new_password,
+                                  id_user=self.id_user, id_department=id_department)
+        self.main_window.press_button_refresh()
+        self.dialog_window = QtWidgets.QMessageBox().information(self, "Редактирование пользователя",
+                                                                 f'Данные пользователя '
+                                                                 f'"{new_last_name} {new_name} {new_patronymic}" '
+                                                                 f'успешно отредактированы.')
+        self.close()
+        # except ValueError:
+        #     raise ex
+        #     self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование пользователя",
+        #                                                          "Пустым может оставаться только поле пароля")
 
     def push_cancel(self):
         self.close()

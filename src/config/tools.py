@@ -11,3 +11,9 @@ def create_hash_password(password: str, salt: bytes):
         dklen=64
     )
     return password
+
+
+def check_params_empty(params: dict.values, message_error: str = "Переданы пусты аргументы"):
+    for value in params:
+        if value == "":
+            raise ValueError(message_error)

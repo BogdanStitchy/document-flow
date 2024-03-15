@@ -280,7 +280,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
     def press_button_refresh(self):
         self.pushButton_period_search.setText("период")
         self.data_about_users = controller.get_data_about_users()
-        # print(self.data_about_users)
         self.fill_in_table(self.data_about_users)
 
     def press_button_home(self):

@@ -141,33 +141,29 @@ class Administrator(User):
     @pydantic.validate_call
     def add_user(self, last_name: str, name: str, patronymic: str, login: str, password: str,
                  id_department: int):
-        for value in locals().values():
-            print(f"key\t=\t{value}")
-            if value == "":
-                raise ValueError("Переданы пустые аргументы для добавления пользователя")
+        tools.check_params_empty(locals().values(),
+                                 message_error="Переданы пустые аргументы для добавления пользователя")
         salt = os.urandom(16)
         password = tools.create_hash_password(password, salt)
 
         AdminMethodsDB.add_user_db(last_name, name, patronymic, login, password, salt, id_department, self.CURRENT_ID)
 
     @staticmethod
-    def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str,
-                       id_user,
-                       flag_edit_login: bool):
-        id_department = db_helper_for_hierarchy_derartments.get_id_department_by_department_number(int(division_number))
-        db_helper.edit_data_user(last_name, name, patronymic, id_department, id_user)
+    def edit_user_data(last_name: str, name: str, patronymic: str, login: str, password: str, id_user: int,
+                       id_department: int):
+        data_for_update = {"last_name": last_name, "name": name, "patronymic": patronymic, "login": login,
+                           "id_department": id_department}
+        tools.check_params_empty(data_for_update.values())
 
-        if password != "":
+        if password != '':
             salt = os.urandom(16)
             password = tools.create_hash_password(password, salt)
-            # EDIT!!!
-            db_helper.edit_user_login_data(login, password.hex(), salt.hex(), id_user)
-        elif flag_edit_login:
-            db_helper.edit_only_login_user(login, id_user)
+            data_for_update["salt"] = salt
+            data_for_update["password"] = password
+        AdminMethodsDB.edit_user(id_user, **data_for_update)
 
     @staticmethod
     def change_activation_status(id_user: int):
-        # db_helper.delete_user(id_user)
         db_helper.change_activation_status_user(id_user)
 
 

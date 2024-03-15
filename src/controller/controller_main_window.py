@@ -116,10 +116,10 @@ def change_activation_status(id_user: int):
     client.change_activation_status(id_user)
 
 
-def edit_user_data(last_name: str, name: str, patronymic: str, division_number: str, login: str, password: str, id_user,
-                   flag_edit_login: bool):
+def edit_user_data(last_name: str, name: str, patronymic: str, login: str, password: str, id_user: int,
+                   id_department: int):
     # log
-    client.edit_user_data(last_name, name, patronymic, division_number, login, password, id_user, flag_edit_login)
+    client.edit_user_data(last_name, name, patronymic, login, password, id_department=id_department, id_user=id_user)
 
 
 def add_admin_in_database(last_name: str, name: str, patronymic: str, login: str, password: str):

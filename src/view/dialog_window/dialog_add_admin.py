@@ -161,10 +161,9 @@ class DialogWidgetAddAdmin(QDialog):
                                                                      f'Администратор "{last_name} {name} {patronymic}" '
                                                                      f'успешно добавлен в базу.')
             self.close()
-        except Exception as ex:
+        except ValueError as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Добавление администратора",
                                                                  "Для добавления администратора заполните все поля! ")
-            print("[ERROR] Не заполнены все поля\t", ex)
 
     def push_cancel(self):
         self.close()

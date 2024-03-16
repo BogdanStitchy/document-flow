@@ -21,6 +21,7 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def add_admin(last_name: str, name: str, patronymic: str, login: str, password: str):
+        tools.check_params_empty(locals().values())
         salt = os.urandom(16)
         password = tools.create_hash_password(password, salt)
         SuperAdminMethodsDB.add_admin(name, patronymic, last_name, login, password, salt)

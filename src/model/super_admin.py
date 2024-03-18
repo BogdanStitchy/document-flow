@@ -45,14 +45,13 @@ class SuperAdmin(Administrator):
         SuperAdminMethodsDB.add_one_hierarchy_department(id_added_department, parent_id)
 
     @staticmethod
-    def edit_admin_data(id_admin, last_name, name, patronymic, login, password, flag_edit_login):
-        raise "Нужно изменить метод обновления"
-        # EDIT!!!
-        db_helper.edit_data_admin(last_name, name, patronymic, id_admin)
+    def edit_admin_data(id_admin: int, last_name: str, name: str, patronymic: str, login: str, password: str):
+        data_for_update = {"last_name": last_name, "name": name, "patronymic": patronymic, "login": login}
+        tools.check_params_empty(data_for_update.values())
 
-        if password != "":
+        if password != '':
             salt = os.urandom(16)
             password = tools.create_hash_password(password, salt)
-            db_helper.edit_admin_login_data(login, password.hex(), salt.hex(), id_admin)
-        elif flag_edit_login:
-            db_helper.edit_only_login_admin(login, id_admin)
+            data_for_update["salt"] = salt
+            data_for_update["password"] = password
+        SuperAdminMethodsDB.edit_admin(id_admin, **data_for_update)

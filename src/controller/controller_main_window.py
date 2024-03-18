@@ -139,8 +139,8 @@ def change_activation_status_admin(id_admin: int):
 
 
 def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patronymic: str, new_login: str,
-                    new_password: str, flag_edit_login: bool):
-    client.edit_admin_data(id_admin, new_last_name, new_name, new_patronymic, new_login, new_password, flag_edit_login)
+                    new_password: str):
+    client.edit_admin_data(id_admin, new_last_name, new_name, new_patronymic, new_login, new_password)
 
 
 def add_department(name_department: str, number_department: int):

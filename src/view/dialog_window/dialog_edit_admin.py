@@ -166,24 +166,17 @@ class DialogWidgetEditAdmin(QDialog):
         new_patronymic = self.lineEdit_patronymic.text()
         new_login = self.lineEdit_login.text()
         new_password = self.lineEdit_password.text()
-        if new_login != self.login:
-            flag_edit_login = True
-        else:
-            flag_edit_login = False
         try:
-
-            controller.edit_admin_data(self.id_admin, new_last_name, new_name, new_patronymic, new_login, new_password,
-                                       flag_edit_login)
+            controller.edit_admin_data(self.id_admin, new_last_name, new_name, new_patronymic, new_login, new_password,)
             self.main_window.press_button_refresh()
             self.dialog_window = QtWidgets.QMessageBox().information(self, "Редактирование администратора",
                                                                      f'Данные администратора "{new_last_name} {new_name} '
                                                                      f'{new_patronymic}" успешно отредактированы.')
             self.close()
-        except Exception as ex:
+        except ValueError as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование администратора",
                                                                  "Для редактирования администратора "
                                                                  "заполните все поля!")
-            print("[ERROR] Не заполнены все поля\t", ex)
 
     def push_cancel(self):
         self.close()

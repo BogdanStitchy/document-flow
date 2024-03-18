@@ -366,22 +366,22 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
     def press_button_edit_admin(self):
         items = self.tableWidget.selectedItems()
-        if len(items) == 7:
-            id_admin = items[0].get_additional_data()
-            self.dialog_window = dialog_edit_admin.DialogWidgetEditAdmin(main_window=self, last_name=items[0].text(),
-                                                                         name=items[1].text(),
-                                                                         patronymic=items[2].text(),
-                                                                         login=items[3].text(), id_admin=id_admin)
-        else:
+        if len(items) != 7:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование администратора",
                                                                  "Для редактирования администратора выделите всю строку"
                                                                  " (строка станет белой), щелкнув по номеру строки "
                                                                  "(крайний левый стоблец).")
+            return
+        id_admin = items[0].get_additional_data()
+        self.dialog_window = dialog_edit_admin.DialogWidgetEditAdmin(main_window=self, last_name=items[0].text(),
+                                                                     name=items[1].text(),
+                                                                     patronymic=items[2].text(),
+                                                                     login=items[3].text(), id_admin=id_admin)
 
     def press_button_search_admins(self):
         self.pushButton_period_search.setText("период")
         self.result_searching = controller.search_admins(self.line_edit_search.text())
-        print("type(self.result_searching) = ", type(self.result_searching))
+
         if type(self.result_searching) != list:
             QtWidgets.QMessageBox().critical(self, "Ошибка поиска", f"В результате запроса возникла ошибка\n"
                                                                     f"([ERROR]{self.result_searching})")

@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 from src.config import tools
 
 from src.model.administrator import Administrator
@@ -34,6 +36,13 @@ class SuperAdmin(Administrator):
     @staticmethod
     def search_string_in_admins(search_string: str):
         return SuperAdminMethodsDB.find_admins_words(search_string)
+
+    @staticmethod
+    def apply_period_registration_admins(start_date_creating: str, end_date_creating: str):
+        start_date_creating = datetime.strptime(start_date_creating, "%d.%m.%Y")
+        end_date_creating = datetime.strptime(end_date_creating, "%d.%m.%Y")
+        return SuperAdminMethodsDB.find_admins_period(start_date_creating, end_date_creating)
+        # return db_helper.apply_period_searching_registration_admins(start_date_download, end_date_download)
 
     @staticmethod
     def change_activation_status_admin(id_admin: int):

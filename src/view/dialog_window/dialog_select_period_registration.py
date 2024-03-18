@@ -108,11 +108,11 @@ class DialogSelectPeriodRegistration(QDialog):
                                                                        self.dateEdit_end_date_download.text())
         self.close()
 
-        if len(res) > 0:
-            self.set_new_name_main_window_button()
-            self.main_window.fill_in_table(res)
-        else:
+        if len(res) < 1:
             QtWidgets.QMessageBox.warning(self, "Ошибка периода", "Данные в заданном периоде не найдены")
+
+        self.set_new_name_main_window_button()
+        self.main_window.fill_in_table(res)
 
     def set_new_name_main_window_button(self):
         new_name_button_period = f"период:{self.dateEdit_start_date_download.text()}-" \

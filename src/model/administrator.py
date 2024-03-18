@@ -126,10 +126,6 @@ class Administrator(User):
                                                     )
 
     @staticmethod
-    def apply_period_registration_admins(start_date_download: str, end_date_download: str):
-        return db_helper.apply_period_searching_registration_admins(start_date_download, end_date_download)
-
-    @staticmethod
     def apply_period_registration_users(start_date_download: str, end_date_download: str):
         start_date_download = datetime.strptime(start_date_download, "%d.%m.%Y")
         end_date_download = datetime.strptime(end_date_download, "%d.%m.%Y")

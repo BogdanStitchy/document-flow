@@ -169,14 +169,14 @@ class TreeHierarchy(QtWidgets.QMainWindow):
     def __add_new_departments(self):  # добавляем только новые департаменты. Заменить на массив не получится
         for item in self.departments_for_added:
             try:
-                parent_id = item.parent().text(2)
+                parent_id = int(item.parent().text(2))
             except AttributeError as ex:
                 QtWidgets.QMessageBox.critical(self, "Ошибка добавления отдела",
                                                "Невозможно добавить еще один главный отдел. Главный отдел должен быть только один!")
                 continue
             id_added_department = controller.add_department(name_department=item.text(1),
-                                                            number_department=int(item.text(0)))
-            controller.add_one_hierarchy(id_added_department, parent_id)
+                                                            number_department=int(item.text(0)),
+                                                            parent_id=parent_id)
             item.setText(2, str(id_added_department))
 
     def __create_deletion_queues(self, id_department_for_replace, element_for_delete):
@@ -196,7 +196,6 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         parenthood_for_db = {"department_id": 0, "parent_id": 0, "level": 1}
         if item.parent() is not None:
             parenthood_for_db["parent_id"] = item.parent().text(2)
-            # print(f"\tparent: {item.parent().text(0)}", end="\t")
         else:
             parenthood_for_db["parent_id"] = None
         parenthood_for_db["department_id"] = item.text(2)

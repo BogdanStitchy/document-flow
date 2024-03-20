@@ -2,9 +2,9 @@ import os
 from datetime import datetime
 
 from src.config import tools
+from src.model import handler_hierarchy
 
 from src.model.administrator import Administrator
-from src.model.for_data_base import db_helper
 from src.db.methods.super_admin_db_methods import SuperAdminMethodsDB
 
 
@@ -21,6 +21,7 @@ class SuperAdmin(Administrator):
     def get_role():
         return "superAdmin"
 
+    # -------------------------------------admin manipulation-------------------------------------------------------
     @staticmethod
     def add_admin(last_name: str, name: str, patronymic: str, login: str, password: str):
         tools.check_params_empty(locals().values())
@@ -49,11 +50,6 @@ class SuperAdmin(Administrator):
         SuperAdminMethodsDB.change_admin_activity_status(id_admin)
 
     @staticmethod
-    def add_department(name_department: str, number_department: int, parent_id: int or None):
-        id_added_department = SuperAdminMethodsDB.add_department(name_department, number_department)
-        SuperAdminMethodsDB.add_one_hierarchy_department(id_added_department, parent_id)
-
-    @staticmethod
     def edit_admin_data(id_admin: int, last_name: str, name: str, patronymic: str, login: str, password: str):
         data_for_update = {"last_name": last_name, "name": name, "patronymic": patronymic, "login": login}
         tools.check_params_empty(data_for_update.values())
@@ -64,3 +60,33 @@ class SuperAdmin(Administrator):
             data_for_update["salt"] = salt
             data_for_update["password"] = password
         SuperAdminMethodsDB.edit_admin(id_admin, **data_for_update)
+
+    # -------------------------------------department manipulation------------------------------------------------------
+    @staticmethod
+    def add_department(name_department: str, number_department: int, parent_id: int or None) -> int:
+        id_added_department = SuperAdminMethodsDB.add_department(name_department, number_department)
+        SuperAdminMethodsDB.add_one_hierarchy_department(id_added_department, parent_id)
+        return id_added_department
+
+    @staticmethod
+    def save_hierarchy(list_hierarchy: list):
+        SuperAdminMethodsDB.update_full_hierarchy(list_hierarchy)
+
+    @staticmethod
+    def delete_departments(id_departments_for_delete: list):
+        SuperAdminMethodsDB.delete_departments(id_departments_for_delete)
+
+    @staticmethod
+    def update_data_departments(list_departments: list):
+        SuperAdminMethodsDB.update_all_departments(list_departments)
+
+    @staticmethod
+    def change_people_departments(list_replacement_departments: list):
+        SuperAdminMethodsDB.update_user_departments(list_replacement_departments)
+
+    @staticmethod
+    def get_hierarchy():
+        departments = SuperAdminMethodsDB.get_all_departments()
+        hierarchy = SuperAdminMethodsDB.get_full_hierarchy_departments()
+        hierarchy = handler_hierarchy.Hierarchy(departments, hierarchy)
+        return hierarchy.get_data_about_departments()

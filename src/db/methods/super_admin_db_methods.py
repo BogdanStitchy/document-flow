@@ -50,8 +50,8 @@ class SuperAdminMethodsDB(AdminMethodsDB):
             raise ValueError("id подчиняемого отдела не может ровняться id руководящего отдела")
         with Session(get_engine()) as session:
             with session.begin():
-                session.execute(
-                    insert(DepartmentsHierarchy).values(department_id=id_department, parent_id=parent_id, level=1))
+                new_hierarchy = DepartmentsHierarchy(department_id=id_department, parent_id=parent_id, level=1)
+                session.add(new_hierarchy)
                 session.commit()
 
     # _________________________________GET_______________________________________________________
@@ -106,7 +106,8 @@ class SuperAdminMethodsDB(AdminMethodsDB):
     def get_all_departments() -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():
-                result = session.execute(select(Departments.__table__))
+                result = session.execute(select(Departments.id,
+                                                Departments.number_department, Departments.name_department))
                 departments = result.mappings().fetchall()
                 return departments
 
@@ -116,7 +117,7 @@ class SuperAdminMethodsDB(AdminMethodsDB):
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
-                    select(DepartmentsHierarchy.__table__).where(DepartmentsHierarchy.__table__.c.level == 1))
+                    select(DepartmentsHierarchy.__table__).where(DepartmentsHierarchy.level == 1))
                 hierarchy_departments = result.mappings().fetchall()
                 return hierarchy_departments
 

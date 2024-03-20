@@ -1,6 +1,3 @@
-import src.model.for_data_base.db_helper as db_helper_for_documents_and_users
-
-from src.model import handler_hierarchy
 from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
@@ -58,12 +55,11 @@ def __check_login(login: str, password: str, role: str):
 
 def save_hierarchy(list_hierarchy: list):
     # log
-    handler_hierarchy.save_hierarchy(list_hierarchy)
+    client.save_hierarchy(list_hierarchy)
 
 
 def get_hierarchy():
-    hierarchy = handler_hierarchy.Hierarchy()
-    return hierarchy.get_data_about_departments()
+    return client.get_hierarchy()
 
 
 def add_user_in_database(last_name: str, name: str, patronymic: str, login: str, password: str, id_department: int):
@@ -143,32 +139,22 @@ def edit_admin_data(id_admin: int, new_last_name: str, new_name: str, new_patron
     client.edit_admin_data(id_admin, new_last_name, new_name, new_patronymic, new_login, new_password)
 
 
-def add_department(name_department: str, number_department: int):
-    return handler_hierarchy.add_department_in_db(name_department, number_department)
-
-
-def add_one_hierarchy(id_department: int, parent_id: int):
-    handler_hierarchy.add_one_hierarchy(id_department, parent_id)
+def add_department(name_department: str, number_department: int, parent_id: int):
+    return client.add_department(name_department, number_department, parent_id)
 
 
 def delete_departments(id_departments_for_delete: list):
-    handler_hierarchy.delete_departments(id_departments_for_delete)
-
-
-#
-# def delete_department(id_department: int):
-#     # log
-#     handler_hierarchy.delete_department_in_db(id_department)
+    client.delete_departments(id_departments_for_delete)
 
 
 def update_data_departments(list_departments: list):
     # log
-    handler_hierarchy.update_data_departments(list_departments)
+    client.update_data_departments(list_departments)
 
 
 def change_people_departments(list_replacement_departments: list):
     # log
-    handler_hierarchy.change_people_departments(list_replacement_departments)
+    client.change_people_departments(list_replacement_departments)
 
 
 def change_password(password: str):

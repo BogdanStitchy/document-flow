@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QHeaderView
+from PyQt5.QtWidgets import QHeaderView, QMessageBox
 
 from src.view.widget import my_tree_widget
 from src.view.dialog_window.dialog_select_department import DialogWidgetSelectDepartment
@@ -11,15 +11,15 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.resize(800, 600)
+
         self.id_departments_for_delete = []
         self.departments_for_added = []
-        self.depth_lvl = None
         self.list_hierarchy = []
         self.list_departments = []
         self.list_replacement_departments = []
         self.dialog_window = None
-        self.setObjectName("MainWindow")
-        self.resize(800, 600)
+
         self.setupUi()
         self.show()
 
@@ -95,20 +95,69 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.button_delte_row.setText(_translate("MainWindow", "удалить элемент"))
 
     def button_save_press(self):
-        for i in range(self.treeWidget.topLevelItemCount()):  # количество элементов верхнего уровня
-            item = self.treeWidget.topLevelItem(i)  # элемент верхнего уровня, находящийся по индексу
-
+        def _save_all_data_in_db(main_item):
             self.__add_new_departments()
             controller.change_people_departments(self.list_replacement_departments)
-            self.__delete_departments()
+            controller.delete_departments(self.id_departments_for_delete)
 
-            self.make_tree_hierarchy(item)
+            self.make_tree_hierarchy(main_item)
             controller.save_hierarchy(self.list_hierarchy)
             controller.update_data_departments(self.list_departments)
 
-            self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
-                                                                     "Изменеиня успешно сохранены в базе")
-            self.__clear_all_lists()
+        count_top_lvl = self.treeWidget.topLevelItemCount()
+        if count_top_lvl > 1:
+            QMessageBox.critical(self, "Ошибка сохранения", "Невозможно сохранить матрицу доступа с несколькими "
+                                                            "возглавляющими отделами.\nДолжен быть только один "
+                                                            "главный отдел. Составьте матрицу доступа, исходя из этого "
+                                                            "правила.")
+            return
+
+        main_item = self.treeWidget.topLevelItem(0)
+        _save_all_data_in_db(main_item)
+        self.__clear_all_lists()
+        self.dialog_window = QtWidgets.QMessageBox().information(self, "Сохранение изменений",
+                                                                 "Изменеиня успешно сохранены в базе")
+        self.init_tree_widget()
+
+    def button_add_row_press(self):
+        item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget.topLevelItem(0))  # добавляется в главный отдел
+        item_for_added.setFlags(
+            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
+        item_for_added.setText(0, "0")
+        item_for_added.setText(1, "новое название")
+        item_for_added.setText(2, "111")
+        self.departments_for_added.append(item_for_added)
+
+    def button_delete_row_press(self):
+        def __check_abort_delete(count_selected_items: int):
+            if count_selected_items < 1:
+                self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление информации об отделе",
+                                                                     "Для удаления информации об отделе, выделите "
+                                                                     "нужный отдел щелчком мыши")
+                return True
+            if count_selected_items > 1:
+                self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление информации об отделе",
+                                                                     "Для удаления выберите один отдел.")
+                return True
+            reply = QMessageBox.question(self, 'Подтверждение', 'Вы уверены, что хотите удалить выбранный отдел? '
+                                                                'Помимо выбранного отдела, удаляются все подчиняющиеся'
+                                                                ' отделы. \n\nДля сохранения изменений после удаления '
+                                                                'не забудьте нажать кнопку "сохранить"',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.No:
+                return True
+
+        selected_elements = self.treeWidget.selectedItems()
+        if __check_abort_delete(len(selected_elements)):
+            return
+
+        self.dialog_window = DialogWidgetSelectDepartment(self)
+        self.dialog_window.exec()  # ожидание закрытия диалогового окна
+        id_department_for_replace = self.dialog_window.get_selected_answer()
+
+        for element in selected_elements:
+            self.__create_deletion_queues(id_department_for_replace, element)
+        self.init_tree_widget()
 
     def __clear_all_lists(self):
         self.list_departments.clear()
@@ -117,39 +166,18 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.departments_for_added.clear()
         self.id_departments_for_delete.clear()
 
-    def __add_new_departments(self):
+    def __add_new_departments(self):  # добавляем только новые департаменты. Заменить на массив не получится
         for item in self.departments_for_added:
+            try:
+                parent_id = item.parent().text(2)
+            except AttributeError as ex:
+                QtWidgets.QMessageBox.critical(self, "Ошибка добавления отдела",
+                                               "Невозможно добавить еще один главный отдел. Главный отдел должен быть только один!")
+                continue
             id_added_department = controller.add_department(name_department=item.text(1),
                                                             number_department=int(item.text(0)))
-            parent_id = item.parent().text(2)
             controller.add_one_hierarchy(id_added_department, parent_id)
             item.setText(2, str(id_added_department))
-
-    def __delete_departments(self):
-        controller.delete_departments(self.id_departments_for_delete)
-
-    def button_add_row_press(self):
-        item_for_added = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        item_for_added.setFlags(
-            QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsDragEnabled)
-        item_for_added.setText(0, "0")
-        item_for_added.setText(1, "новое название")
-        item_for_added.setText(2, "111")
-        self.treeWidget.addTopLevelItem(item_for_added)
-        self.departments_for_added.append(item_for_added)
-
-    def button_delete_row_press(self):
-        selected_elements = self.treeWidget.selectedItems()
-        if len(selected_elements) < 1:
-            self.dialog_window = QtWidgets.QMessageBox().warning(self, "Удаление информации об отделе",
-                                                                 "Для удаления информации об отделе, выделите "
-                                                                 "нужный отдел щелчком мыши")
-        self.dialog_window = DialogWidgetSelectDepartment(self)
-        self.dialog_window.exec()  # ожидание закрытия диалогового окна
-        id_department_for_replace = self.dialog_window.get_selected_answer()
-        print("id_department_for_replace for delete= ", id_department_for_replace)
-        for element in selected_elements:
-            self.__create_deletion_queues(id_department_for_replace, element)
 
     def __create_deletion_queues(self, id_department_for_replace, element_for_delete):
         # лист для перевода людей с удаляемого отдела в другой отдел 1 - то, на что меняем; 2 - то, что заменяем
@@ -179,8 +207,10 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def init_tree_widget(self):
         hierarchy = controller.get_hierarchy()
+        self.treeWidget.clear()
         self.treeWidget.addTopLevelItem(
             hierarchy[1]["item"])  # элемент под 1-ым индексом всегда будет главным (так сохраняется в базе данных)
+        self.treeWidget.expandAll()
 
 
 if __name__ == "__main__":

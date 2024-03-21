@@ -49,10 +49,11 @@ class User:
         self.CURRENT_ID_DEPARTMENT = data_user['id_department']
         self.CURRENT_NUMBER_DEPARTMENT = data_user['number_department']
 
-    def check_password(self, login: str, password: str):
+    def check_password(self, login: str, password: str, setting_received_data=True):
         """
         checks user authentication
 
+        :param setting_received_data: default True. install the received data to the user?
         :param login: user login
         :param password: user password
         :return: True if login success, else False
@@ -72,12 +73,16 @@ class User:
         if password != bytes(data_user['password']):
             raise ClientPasswordError("Указан неправильный пароль")
 
-        self.set_self_data(data_user=data_user, login_user=login)
+        if setting_received_data:
+            self.set_self_data(data_user=data_user, login_user=login)
         return 'user'
 
     def change_password(self, password: str):
-        if self.check_password(self.CURRENT_LOGIN, password) == "user":
-            return False  # старый и новый пароли сходятся
+        try:
+            if self.check_password(self.CURRENT_LOGIN, password, setting_received_data=False) == "user":
+                return False  # старый и новый пароли сходятся
+        except Exception:
+            pass
         salt = os.urandom(16)
         password = tools.create_hash_password(password, salt)
         db_helper.changes_password_user(self.CURRENT_ID, password.hex(), salt.hex(),

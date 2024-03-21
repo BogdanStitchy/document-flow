@@ -1,8 +1,10 @@
 """file with database access methods for user role"""
+import os
+from typing import Optional
 
 import pydantic
 import datetime
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_, or_, update
 from sqlalchemy.orm import Session
 
 from src.db.database_setup import get_engine
@@ -134,4 +136,17 @@ class UserDB:
                     file=file
                 )
                 session.add(file_data)
+                session.commit()
+
+    # ________________________________UPDATE_____________________________________________________
+    @staticmethod
+    @pydantic.validate_call
+    def changes_password(id_user: int, password: bytes, salt: bytes, date_change) -> None:
+        with Session(get_engine()) as session:
+            with session.begin():
+                session.execute(
+                    update(Users).where(Users.id == id_user).values(
+                        salt=salt,
+                        password=password,
+                        date_last_changes_password=date_change))
                 session.commit()

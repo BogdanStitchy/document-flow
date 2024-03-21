@@ -85,8 +85,7 @@ class User:
             pass
         salt = os.urandom(16)
         password = tools.create_hash_password(password, salt)
-        db_helper.changes_password_user(self.CURRENT_ID, password.hex(), salt.hex(),
-                                        datetime.datetime.now().strftime("%d-%m-%Y %H:%M"))
+        UserDB.changes_password(self.CURRENT_ID, password, salt, datetime.datetime.now().strftime("%d-%m-%Y %H:%M"))
         return True
 
     def check_needs_password_change(self):
@@ -111,11 +110,6 @@ class User:
                             type_document)
 
     def get_data_about_documents(self):
-        # print("self.CURRENT_ID_DEPARTMENT = ", self.CURRENT_ID_DEPARTMENT)
-        # print("USER")
-        #
-        # access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
-        # return db_helper.get_data_documents_for_user(access_id_departments)  # self.CURRENT_ID_DEPARTMENT)
         return UserDB.get_data_about_documents(self.CURRENT_ID_DEPARTMENT)
 
     def search_string_in_documents(self, search_string: str):
@@ -178,9 +172,3 @@ class User:
 
         # Если все проверки пройдены, то пароль сильный
         return True
-
-
-if __name__ == '__main__':
-    user = User()
-    # user.change_password("Ivan")
-    print(user.check_password_strength("Ghbdtasdfsad1@"))

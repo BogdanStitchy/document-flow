@@ -95,21 +95,11 @@ class WindowUser(QtWidgets.QMainWindow):
         self.login.show()
         self.close()
 
-    def check_needs_password_change(self):
-        change = controller.check_needs_password_change()
-        # print(change)
-        # print(type(change))
-        if change is None:
+    def check_needs_password_change(self):  # вся логика должна быть в модели
+        need_change = controller.check_needs_password_change()
+        if need_change:
             self.dialog = DialogWidgetChangePassword(self)
-            result = self.dialog.exec()
-            print("result exit: ", result)
-        else:
-            delta_date = datetime.datetime.now() - change
-            # print("days:", delta_date.days)
-            if delta_date.days > 180:
-                self.dialog = DialogWidgetChangePassword(self)
-                result = self.dialog.exec()
-                # print("result exit: ", result)
+            self.dialog.exec()
 
 
 if __name__ == "__main__":

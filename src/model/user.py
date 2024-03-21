@@ -21,7 +21,7 @@ class User:
         self.CURRENT_LOGIN: str = None
         self.CURRENT_ID_DEPARTMENT: int = None
         self.CURRENT_NUMBER_DEPARTMENT: int = None
-        self.date_last_changes_password = None
+        self.DATE_LAST_CHANGES_PASSWORD = None
 
     @staticmethod
     def get_role():
@@ -45,7 +45,7 @@ class User:
         self.CURRENT_NAME = data_user['name']
         self.CURRENT_PATRONYMIC = data_user['patronymic']
         self.CURRENT_LAST_NAME = data_user['last_name']
-        self.date_last_changes_password = data_user['date_last_changes_password']
+        self.DATE_LAST_CHANGES_PASSWORD = data_user['date_last_changes_password']
         self.CURRENT_ID_DEPARTMENT = data_user['id_department']
         self.CURRENT_NUMBER_DEPARTMENT = data_user['number_department']
 
@@ -85,16 +85,17 @@ class User:
         return True
 
     def check_needs_password_change(self):
-        # self.CURRENT_ID = 6
-        change = UserDB.get_last_change_password_admin(self.CURRENT_ID)
-        if change is None:
+        """
+
+        :return: True if needs change password, else False
+        """
+        if self.DATE_LAST_CHANGES_PASSWORD is None:
             return True
-        delta_date = datetime.datetime.now() - change
+        delta_date = datetime.datetime.now() - self.DATE_LAST_CHANGES_PASSWORD
         if delta_date.days > 180:
             return True
         else:
             return False  # пароль не надо менять
-        # return db_helper.get_last_change_password_user(self.CURRENT_ID)
 
     def add_document(self, path_to_document: str, name_document: str, inner_number: str, output_number: str,
                      output_date: str, type_document: str):

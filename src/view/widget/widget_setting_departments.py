@@ -189,20 +189,39 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             self.__create_deletion_queues(id_department_for_replace, child)  # Рекурсия. Подаем потомка итема
         element_for_delete.removeChild(element_for_delete)
 
-    def make_tree_hierarchy(self, item):
-        self.list_departments.append({"number_department": item.text(0),
-                                      "name_department": item.text(1),
-                                      "id": item.text(2)})
-        parenthood_for_db = {"department_id": 0, "parent_id": 0, "level": 1}
-        if item.parent() is not None:
-            parenthood_for_db["parent_id"] = item.parent().text(2)
-        else:
-            parenthood_for_db["parent_id"] = None
-        parenthood_for_db["department_id"] = item.text(2)
-        self.list_hierarchy.append(parenthood_for_db)
+    def make_tree_hierarchy(self, item, level_parentage=0):
+        def add_all_parents_to_department(current_item, current_level):
+            while current_item.parent() is not None:
+                current_level += 1
+                current_item = current_item.parent()
+                self.list_hierarchy.append({
+                    "department_id": department_id,
+                    "parent_id": current_item.text(2),
+                    "level": current_level
+                })
+
+        department_id = item.text(2)
+        self.list_departments.append({
+            "number_department": item.text(0),
+            "name_department": item.text(1),
+            "id": department_id
+        })
+
+        parent_id = item.parent().text(2) if item.parent() is not None else None
+
+        if item.parent() is None:  # для самого главного отдела
+            self.list_hierarchy.append({
+                "department_id": department_id,
+                "parent_id": parent_id,
+                "level": level_parentage
+            })
+
+        add_all_parents_to_department(item, level_parentage)  # добавляем всех предков до самого верхнего уровня
+
+        # рекурсивный вызов для дочерних элементов
         count_children = item.childCount()
         for index_child in range(count_children):
-            self.make_tree_hierarchy(item.child(index_child))
+            self.make_tree_hierarchy(item.child(index_child), level_parentage=level_parentage)
 
     def init_tree_widget(self):
         hierarchy = controller.get_hierarchy()

@@ -79,6 +79,12 @@ class UserDB:
     def find_document_word(id_current_department: int, search_string: str):
         with Session(get_engine()) as session:
             with session.begin():
+                execute_id_available_departments = (select(DepartmentsHierarchy.department_id).where(
+                    DepartmentsHierarchy.parent_id == id_current_department))
+                id_available_departments = session.execute(execute_id_available_departments).scalars().all()
+                id_available_departments.append(id_current_department)  # list
+                access_condition = Users.id_department.in_(id_available_departments)
+
                 result = session.execute(
                     select(
                         DataAboutDocuments.inner_number,
@@ -90,17 +96,15 @@ class UserDB:
                         DataAboutDocuments.id,
                         (Users.last_name + ' ' + Users.name).label('creator')
                     ).where(
-                        and_(or_(DepartmentsHierarchy.parent_id == id_current_department,
-                                 DepartmentsHierarchy.department_id == id_current_department, )
-                             (or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
-                                  DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
-                                  DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
-                                  DataAboutDocuments.name.ilike(f"%{search_string}%"),
-                                  Users.last_name.ilike(f"%{search_string}%"),
-                                  Users.name.ilike(f"%{search_string}%"))
-                              )
+                        and_(access_condition, (or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
+                                                    DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
+                                                    DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
+                                                    DataAboutDocuments.name.ilike(f"%{search_string}%"),
+                                                    Users.last_name.ilike(f"%{search_string}%"),
+                                                    Users.name.ilike(f"%{search_string}%"))
+                                                )
                              )
-                    ).join_from(DataAboutDocuments, Users, DepartmentsHierarchy)
+                    ).join(Users, DataAboutDocuments.id_creator == Users.id)
                 )
                 documents = result.mappings().fetchall()
                 return documents

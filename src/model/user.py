@@ -118,12 +118,20 @@ class User:
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
                                          start_date_output: str = None, end_date_output: str = None,
                                          start_date_download: str = None, end_date_download: str = None):
-        access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
-        return db_helper.apply_period_searching_for_user(access_id_departments, flag_date_output, flag_date_download,
-                                                         start_date_output=start_date_output,
-                                                         end_date_output=end_date_output,
-                                                         start_date_download=start_date_download,
-                                                         end_date_download=end_date_download)
+        # access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
+        # return db_helper.apply_period_searching_for_user(access_id_departments, flag_date_output, flag_date_download,
+        #                                                  start_date_output=start_date_output,
+        #                                                  end_date_output=end_date_output,
+        #                                                  start_date_download=start_date_download,
+        #                                                  end_date_download=end_date_download)
+        start_date_output = datetime.datetime.strptime(start_date_output, "%d.%m.%Y")
+        end_date_output = datetime.datetime.strptime(end_date_output, "%d.%m.%Y")
+        start_date_download = datetime.datetime.strptime(start_date_download, "%d.%m.%Y")
+        end_date_download = datetime.datetime.strptime(end_date_download, "%d.%m.%Y")
+        return UserDB.find_document_period(self.CURRENT_ID_DEPARTMENT,
+                                           flag_date_output=flag_date_output, flag_date_download=flag_date_download,
+                                           start_output_date=start_date_output, end_output_date=end_date_output,
+                                           start_create_date=start_date_download, end_create_date=end_date_download)
 
     @staticmethod
     def download_document(id_document: int, path_to_save: str):

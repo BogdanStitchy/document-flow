@@ -61,18 +61,52 @@ class UserDB:
 
     @staticmethod
     @pydantic.validate_call
-    def find_document_period(start_output_date: datetime.date, end_output_date: datetime.date,
+    def find_document_period(id_current_department: int, flag_date_output: bool, flag_date_download: bool,
+                             start_output_date: datetime.date, end_output_date: datetime.date,
                              start_create_date: datetime.date, end_create_date: datetime.date) -> [{}, {}]:
+        def get_query_with_conditions():
+            if flag_date_download and flag_date_output:
+                query_with_conditions = basic_query_without_conditions.where(
+                    and_(access_condition, DataAboutDocuments.date_creating.between(start_create_date, end_create_date),
+                         DataAboutDocuments.output_date.between(start_output_date, end_output_date)))
+
+            elif flag_date_download:
+                query_with_conditions = basic_query_without_conditions.where(
+                    access_condition, DataAboutDocuments.date_creating.between(start_create_date, end_create_date)
+                )
+
+            elif flag_date_output:
+                query_with_conditions = basic_query_without_conditions.where(
+                    access_condition, DataAboutDocuments.output_date.between(start_output_date, end_output_date)
+                )
+
+            elif not flag_date_output and not flag_date_download:
+                raise ValueError("Ошибка задания периода, необходимо выбрать по каким полям задавать периоды")
+
+            return query_with_conditions
+
         with Session(get_engine()) as session:
             with session.begin():
-                result = session.execute(
-                    select(DataAboutDocuments.__table__).where(and_(
-                        DataAboutDocuments.date_creating.between(start_create_date, end_create_date),
-                        DataAboutDocuments.output_date.between(start_output_date, end_output_date)
-                    ))
-                )
-                admins = result.mappings().fetchall()
-                return admins
+                execute_id_available_departments = (select(DepartmentsHierarchy.department_id).where(
+                    DepartmentsHierarchy.parent_id == id_current_department))
+                id_available_departments = session.execute(execute_id_available_departments).scalars().all()
+                id_available_departments.append(id_current_department)  # list
+                access_condition = Users.id_department.in_(id_available_departments)
+
+                basic_query_without_conditions = select(
+                    DataAboutDocuments.inner_number,
+                    DataAboutDocuments.output_number,
+                    DataAboutDocuments.output_date,
+                    DataAboutDocuments.type_document,
+                    DataAboutDocuments.name,
+                    DataAboutDocuments.date_creating,
+                    DataAboutDocuments.id,
+                    (Users.last_name + ' ' + Users.name).label('creator')
+                ).join(Users)
+
+                result = session.execute(get_query_with_conditions())
+                documents = result.mappings().fetchall()
+                return documents
 
     @staticmethod
     @pydantic.validate_call
@@ -132,7 +166,7 @@ class UserDB:
                     type_document=type_document,
                     name=name_document,
                     id_creator=id_user,
-                    date_creating=datetime.datetime.now()
+                    date_creating=datetime.datetime.now().strftime('%d.%m.%Y')
                 )
                 session.add(document_data)
                 session.flush()  # Получаем автоматически сгенерированный ID

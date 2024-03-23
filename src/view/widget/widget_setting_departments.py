@@ -191,6 +191,12 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def make_tree_hierarchy(self, item, level_parentage=0):
         def add_all_parents_to_department(current_item, current_level):
+            """
+            Adds all ancestors for the transferred department to the hierarchy list
+            :param current_item:
+            :param current_level: nesting level of the transferred item
+            :return: None
+            """
             while current_item.parent() is not None:
                 current_level += 1
                 current_item = current_item.parent()

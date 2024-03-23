@@ -70,7 +70,7 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def save_hierarchy(list_hierarchy: list):
-        SuperAdminMethodsDB.update_full_hierarchy(list_hierarchy)
+        SuperAdminMethodsDB.create_full_hierarchy(list_hierarchy)
 
     @staticmethod
     def delete_departments(id_departments_for_delete: list):

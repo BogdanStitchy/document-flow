@@ -54,6 +54,15 @@ class SuperAdminMethodsDB(AdminMethodsDB):
                 session.add(new_hierarchy)
                 session.commit()
 
+    @staticmethod
+    @pydantic.validate_call
+    def create_full_hierarchy(list_hierarchy: list) -> None:
+        with Session(get_engine()) as session:
+            with session.begin():
+                session.execute(delete(DepartmentsHierarchy))
+                session.bulk_insert_mappings(DepartmentsHierarchy, list_hierarchy)
+                session.commit()
+
     # _________________________________GET_______________________________________________________
     @staticmethod
     @pydantic.validate_call
@@ -117,7 +126,8 @@ class SuperAdminMethodsDB(AdminMethodsDB):
         with Session(get_engine()) as session:
             with session.begin():
                 result = session.execute(
-                    select(DepartmentsHierarchy.__table__).where(DepartmentsHierarchy.level == 1))
+                    select(DepartmentsHierarchy.__table__).where(DepartmentsHierarchy.level == 1).order_by(
+                        DepartmentsHierarchy.department_id))
                 hierarchy_departments = result.mappings().fetchall()
                 return hierarchy_departments
 
@@ -159,17 +169,6 @@ class SuperAdminMethodsDB(AdminMethodsDB):
                     stmt = update(Departments).where(Departments.id == row['id']).values(
                         number_department=row['number_department'],
                         name_department=row['name_department'])
-                    session.execute(stmt)
-                session.commit()
-
-    @staticmethod
-    @pydantic.validate_call
-    def update_full_hierarchy(list_hierarchy: list) -> None:
-        with Session(get_engine()) as session:
-            with session.begin():
-                for row in list_hierarchy:
-                    stmt = update(DepartmentsHierarchy).where(
-                        DepartmentsHierarchy.department_id == row['department_id']).values(parent_id=row['parent_id'])
                     session.execute(stmt)
                 session.commit()
 

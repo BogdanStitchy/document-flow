@@ -39,7 +39,7 @@ def test_good_find_document_period(database_user):
     end_output_date = datetime.datetime.strptime("01.01.2021", "%d.%m.%Y")
     date_creating = datetime.date.today() + datetime.timedelta(days=1)
 
-    res = database_user.find_document_period(start_output_date, end_output_date,
+    res = database_user.find_document_period(1, True, True, start_output_date, end_output_date,
                                              start_output_date, date_creating)
     assert len(res) == 2
 

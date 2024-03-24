@@ -357,7 +357,9 @@ class WidgetDocuments(QtWidgets.QMainWindow):
     def press_button_refresh(self):
         self.pushButton_period_search.setText("период")
         self.data_about_documents = controller.get_data_about_documents()
-        self.fill_in_table(self.data_about_documents)
+        document_filing = self.fill_in_table(self.data_about_documents)
+        if not document_filing:
+            self.tableWidget.clearContents()
 
     def press_button_home(self):
         self.pushButton_period_search.setText("период")

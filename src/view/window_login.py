@@ -214,6 +214,20 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.line_password.setText('')
         self.repaint()
 
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Down or QtCore.Qt.Key_Up:
+            if self.line_login.hasFocus():
+                self.line_password.setFocus()
+            elif self.line_password.hasFocus():
+                self.line_login.setFocus()
+        if event.key() == QtCore.Qt.Key_Return:
+            if self.line_password.text() != '':
+                self.button_login_press()
+            else:
+                self.line_password.setFocus()
+        else:
+            super(HandlerWindowLogin, self).keyPressEvent(event)
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

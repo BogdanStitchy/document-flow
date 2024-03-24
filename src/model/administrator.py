@@ -25,10 +25,11 @@ class Administrator(User):
         self.CURRENT_LAST_NAME = data_admin['last_name']
         self.date_last_changes_password = data_admin['date_last_changes_password']
 
-    def check_password(self, login: str, password: str):
+    def check_password(self, login: str, password: str, setting_received_data=True):
         """
         checks admin authentication
 
+        :param setting_received_data: default True. install the received data to admin?
         :param login: admin login
         :param password: admin password
         :return: True if login success, else False
@@ -49,7 +50,8 @@ class Administrator(User):
             raise ClientPasswordError("Указан неправильный пароль")
 
         # admin successful login in system
-        self.set_self_data(data_admin=data_about_admin, login_admin=login)
+        if setting_received_data:
+            self.set_self_data(data_admin=data_about_admin, login_admin=login)
 
         if data_about_admin['super_admin_flag']:
             return Role.SUPERADMIN
@@ -67,7 +69,8 @@ class Administrator(User):
 
     def change_password(self, password: str):
         try:
-            if self.check_password(self.CURRENT_LOGIN, password) == Role.ADMIN or Role.SUPERADMIN:
+            if self.check_password(self.CURRENT_LOGIN, password,
+                                   setting_received_data=False) == Role.ADMIN or Role.SUPERADMIN:
                 return False  # старый и новый пароли совпали
         except ClientPasswordError:
             pass
@@ -85,7 +88,6 @@ class Administrator(User):
                       type_document: str):
         AdminMethodsDB.edit_document(id_document, name=name_document, inner_number=inner_number,
                                      output_number=output_number, output_date=output_date, type_document=type_document)
-        # db_helper.edit_document(id_document, name_document, inner_number, output_number, output_date, type_document)
 
     @staticmethod
     def delete_document(id_document: int):

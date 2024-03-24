@@ -216,7 +216,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.repaint()
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Down or QtCore.Qt.Key_Up:
+        if event.key() in (QtCore.Qt.Key_Down, QtCore.Qt.Key_Up):
             if self.line_login.hasFocus():
                 self.line_password.setFocus()
             elif self.line_password.hasFocus():

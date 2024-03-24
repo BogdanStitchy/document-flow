@@ -157,6 +157,10 @@ def change_people_departments(list_replacement_departments: list):
     client.change_people_departments(list_replacement_departments)
 
 
+def get_all_departments_without_one(id_exempt_department: int):
+    return client.get_all_departments_without_one(id_exempt_department)
+
+
 def change_password(password: str):
     # log
     return client.change_password(password)

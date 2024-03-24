@@ -122,6 +122,17 @@ class SuperAdminMethodsDB(AdminMethodsDB):
 
     @staticmethod
     @pydantic.validate_call
+    def get_all_departments_without_one(id_exempt_department: int) -> [{}, {}]:
+        with Session(get_engine()) as session:
+            with session.begin():
+                stmt = select(Departments.id, Departments.number_department, Departments.name_department
+                              ).where(Departments.id != id_exempt_department)
+                result = session.execute(stmt)
+                departments = result.mappings().fetchall()
+                return departments
+
+    @staticmethod
+    @pydantic.validate_call
     def get_full_hierarchy_departments() -> [{}, {}]:
         with Session(get_engine()) as session:
             with session.begin():

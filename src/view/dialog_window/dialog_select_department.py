@@ -1,16 +1,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from src.db.methods.super_admin_db_methods import SuperAdminMethodsDB
 from src.controller import controller_main_window as controller
 
 
 class DialogWidgetSelectDepartment(QDialog):
-    def __init__(self, main_window):
+    def __init__(self, main_window, id_department_delete):
         QDialog.__init__(self)
         self.dialog_window = None
         self.setModal(True)
         self.main_window = main_window
         self.selected_department = None
+        self.id_department_delete = id_department_delete
+
         self.setWindowTitle("Выбор отдела для перемещения пользователей")
         self.show()
         self.__setupUi()
@@ -51,8 +52,7 @@ class DialogWidgetSelectDepartment(QDialog):
                                        "")
 
     def __add_radiobutton(self):
-        departments = SuperAdminMethodsDB.get_all_departments()
-        print(departments)
+        departments = controller.get_all_departments_without_one(self.id_department_delete)
         self.group = QtWidgets.QButtonGroup(self)
         for department in departments:
             radio_button = QtWidgets.QRadioButton(f"{department.number_department} - {department.name_department}")

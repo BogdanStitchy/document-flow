@@ -90,3 +90,7 @@ class SuperAdmin(Administrator):
         hierarchy = SuperAdminMethodsDB.get_full_hierarchy_departments()
         hierarchy = handler_hierarchy.Hierarchy(departments, hierarchy)
         return hierarchy.get_data_about_departments()
+
+    @staticmethod
+    def get_all_departments_without_one(id_exempt_department: int):
+        return SuperAdminMethodsDB.get_all_departments_without_one(id_exempt_department)

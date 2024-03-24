@@ -151,7 +151,8 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         if __check_abort_delete(len(selected_elements)):
             return
 
-        self.dialog_window = DialogWidgetSelectDepartment(self)
+        id_department_delete = int(selected_elements[0].text(2))
+        self.dialog_window = DialogWidgetSelectDepartment(self, id_department_delete)
         self.dialog_window.exec()  # ожидание закрытия диалогового окна
         id_department_for_replace = self.dialog_window.get_selected_answer()
 

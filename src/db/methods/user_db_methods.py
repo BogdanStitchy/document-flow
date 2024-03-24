@@ -166,7 +166,7 @@ class UserDB:
                     type_document=type_document,
                     name=name_document,
                     id_creator=id_user,
-                    date_creating=datetime.datetime.now().strftime('%d.%m.%Y')
+                    date_creating=datetime.datetime.now().date()
                 )
                 session.add(document_data)
                 session.flush()  # Получаем автоматически сгенерированный ID

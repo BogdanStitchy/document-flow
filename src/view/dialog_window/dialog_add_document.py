@@ -109,8 +109,8 @@ class DialogAddDocument(QDialog):
         self.label_date.setObjectName("label_date")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_date)
 
-        self.frame_for_drop = QtWidgets.QFrame(self.main_frame)
-        self.frame_for_drop.setAcceptDrops(False)
+        self.frame_for_drop = DropFrame(parent=self.main_frame, main_widget=self)  # QtWidgets.QFrame(self.main_frame)
+        # self.frame_for_drop.setAcceptDrops(False)
         self.frame_for_drop.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                           "border-radius: 5px;\n"
                                           "")
@@ -215,23 +215,18 @@ class DialogAddDocument(QDialog):
         self.pushButton_cancel.setText(_translate("Dialog_add_user", "Отмена"))
 
     def add_file(self):
-        print("button_click")
-        self.path_to_file = QtWidgets.QFileDialog.getOpenFileName()[0]
+        self._set_name_file(QtWidgets.QFileDialog.getOpenFileName()[0])
+
+    def _set_name_file(self, name_path):
+        self.path_to_file = name_path
         self.name_file = self.path_to_file[self.path_to_file.rfind("/") + 1:]
-        print(self.path_to_file.rfind("/"))
         self.label_name_selected_file.setText(self.name_file)
-        # print(self.path_to_file)
 
     def push_save_file(self):
         inner_number = self.lineEdit_inner_number.text()
         output_number = self.lineEdit_output_number.text()
         output_date = self.dateEdit.text()
         type_document = self.lineEdit_type_document.text()
-        print(inner_number)
-        print(output_number)
-        print(output_date)
-        print(type_document)
-        print(self.path_to_file)
         controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number, output_date,
                                             type_document)
         self.main_window.press_button_refresh()
@@ -242,6 +237,26 @@ class DialogAddDocument(QDialog):
 
     def push_cancel(self):
         self.close()
+
+
+class DropFrame(QtWidgets.QFrame):
+    def __init__(self, parent=None, main_widget=None):
+        print(f"{parent=}")
+        print(f"{main_widget=}")
+        super().__init__(parent)
+        self.setAcceptDrops(True)
+        self.main_widget = main_widget
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+            url = event.mimeData().urls()[0]
+            file_path = url.toLocalFile()
+            self.main_widget._set_name_file(file_path)
 
 
 if __name__ == "__main__":

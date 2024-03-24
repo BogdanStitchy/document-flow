@@ -62,7 +62,7 @@ class Administrator(User):
         change = AdminMethodsDB.get_last_change_password_admin(self.CURRENT_ID)
         if change is None:
             return True
-        delta_date = datetime.datetime.now() - change
+        delta_date = datetime.now() - change
         if delta_date.days > 180:
             return True
         else:

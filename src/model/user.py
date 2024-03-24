@@ -3,13 +3,16 @@ from datetime import datetime
 import datetime
 
 from src.model.utils import tools
+from src.config.types_role import Role
+from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, \
+    FileNotWrittenError
 
 from src.db.methods.user_db_methods import UserDB
 
-from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
-
 
 class User:
+    role = Role.USER
+
     def __init__(self):
         self.LVL_ACCESS = 2
         self.CURRENT_ID: int = None
@@ -21,9 +24,8 @@ class User:
         self.CURRENT_NUMBER_DEPARTMENT: int = None
         self.DATE_LAST_CHANGES_PASSWORD = None
 
-    @staticmethod
-    def get_role():
-        return "user"
+    def get_role(self):
+        return self.role
 
     def get_lvl_access(self):
         return self.LVL_ACCESS
@@ -73,7 +75,7 @@ class User:
 
         if setting_received_data:
             self.set_self_data(data_user=data_user, login_user=login)
-        return 'user'
+        return Role.USER
 
     def change_password(self, password: str):
         try:
@@ -116,12 +118,6 @@ class User:
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
                                          start_date_output: str = None, end_date_output: str = None,
                                          start_date_download: str = None, end_date_download: str = None):
-        # access_id_departments = db_helper_departments.get_id_children_department(self.CURRENT_ID_DEPARTMENT)
-        # return db_helper.apply_period_searching_for_user(access_id_departments, flag_date_output, flag_date_download,
-        #                                                  start_date_output=start_date_output,
-        #                                                  end_date_output=end_date_output,
-        #                                                  start_date_download=start_date_download,
-        #                                                  end_date_download=end_date_download)
         start_date_output = datetime.datetime.strptime(start_date_output, "%d.%m.%Y")
         end_date_output = datetime.datetime.strptime(end_date_output, "%d.%m.%Y")
         start_date_download = datetime.datetime.strptime(start_date_download, "%d.%m.%Y")

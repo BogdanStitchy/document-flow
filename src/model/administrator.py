@@ -3,21 +3,19 @@ from datetime import datetime
 import pydantic
 
 from src.model.utils import tools
+from src.config.types_role import Role
 from src.model.user import User
 from src.db.methods.admin_db_methods import AdminMethodsDB
 from src.model.utils.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
 
 
 class Administrator(User):
+    role = Role.ADMIN
+
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 1
         self.date_last_changes_password = None
-        # self.CURRENT_ID_DEPARTMENT = 1
-
-    @staticmethod
-    def get_role():
-        return "admin"
 
     def set_self_data(self, data_admin: {}, login_admin: str):
         self.CURRENT_LOGIN = login_admin
@@ -54,8 +52,8 @@ class Administrator(User):
         self.set_self_data(data_admin=data_about_admin, login_admin=login)
 
         if data_about_admin['super_admin_flag']:
-            return 'superAdmin'
-        return 'admin'
+            return Role.SUPERADMIN
+        return Role.ADMIN
 
     def check_needs_password_change(self):
         change = AdminMethodsDB.get_last_change_password_admin(self.CURRENT_ID)
@@ -68,9 +66,8 @@ class Administrator(User):
             return False  # пароль не надо менять
 
     def change_password(self, password: str):
-        # self.CURRENT_ID = 5
         try:
-            if self.check_password(self.CURRENT_LOGIN, password) == 'admin' or 'superAdmin':
+            if self.check_password(self.CURRENT_LOGIN, password) == Role.ADMIN or Role.SUPERADMIN:
                 return False  # старый и новый пароли совпали
         except ClientPasswordError:
             pass

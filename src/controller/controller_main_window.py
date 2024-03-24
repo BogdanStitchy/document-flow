@@ -1,14 +1,16 @@
+from typing import Tuple, Optional
+
 from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
-
 from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
-from typing import Tuple, Optional
+from src.config.types_role import Role
+
 
 client = SuperAdmin  # Client("admin").client
 
 
-def authenticate(login: str, password: str, role: str) -> Tuple[Optional[str], Optional[str]]:
+def authenticate(login: str, password: str, role: Role) -> Tuple[Optional[str], Optional[str]]:
     """
     Performs user authentication with error handling
     :param login:
@@ -26,28 +28,26 @@ def authenticate(login: str, password: str, role: str) -> Tuple[Optional[str], O
         return None, f"Неизвестная ошибка, обратитесь к разработчикам. \nКод ошибки: 001"
 
 
-def __check_login(login: str, password: str, role: str):
+def __check_login(login: str, password: str, role: Role):
     """
 
     :param login:
     :param password:
-    :param role: 'admin' or 'user'
+    :param role: Role.ADMIN or Role.USER
     :return: 'admin' or 'user' or 'superAdmin' or message about error
     """
-    if role not in ("admin", "user"):
-        raise ValueError("Значение role ожидается 'admin' или 'user'")
-    global client  # , role_client
+    if role not in (Role.ADMIN, Role.USER):
+        raise ValueError("Значение role ожидается Role.ADMIN или Role.USER")
+    global client
 
-    if role == 'admin':
+    if role == Role.ADMIN:
         client = Administrator()
         result = client.check_password(login, password)  # superAdmin or Admin
-        # role_client = result
-        if result == 'superAdmin':
+        if result == role.SUPERADMIN:
             client = SuperAdmin()
         return result
 
-    elif role == 'user':
-        # role_client = role
+    elif role == Role.USER:
         client = User()
         result = client.check_password(login, password)
         return result

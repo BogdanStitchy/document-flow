@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from src.model.utils import tools
+from src.config.types_role import Role
 from src.model import handler_hierarchy
 
 from src.model.administrator import Administrator
@@ -9,6 +10,8 @@ from src.db.methods.super_admin_db_methods import SuperAdminMethodsDB
 
 
 class SuperAdmin(Administrator):
+    role = Role.SUPERADMIN
+
     def __init__(self):
         super().__init__()
         self.LVL_ACCESS = 0
@@ -16,10 +19,6 @@ class SuperAdmin(Administrator):
         self.CURRENT_LAST_NAME = "Супер"
         self.CURRENT_NAME = "Админ"
         self.CURRENT_PATRONYMIC = "СА"
-
-    @staticmethod
-    def get_role():
-        return "superAdmin"
 
     # -------------------------------------admin manipulation-------------------------------------------------------
     @staticmethod

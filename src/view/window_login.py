@@ -1,8 +1,9 @@
 import sys
-
 from PyQt5 import QtGui, QtWidgets, QtCore
-from src.controller import controller_main_window as controller
 from pathlib import Path
+
+from src.config.types_role import Role
+from src.controller import controller_main_window as controller
 
 from src.view import window_superadmin
 from src.view import window_user
@@ -176,9 +177,9 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
     def button_login_press(self):
         role = None
         if self.radio_user.isChecked():
-            role = 'user'
+            role = Role.USER
         if self.radio_admin.isChecked():
-            role = 'admin'
+            role = Role.ADMIN
         input_login = self.line_login.text()
         input_password = self.line_password.text()
 
@@ -200,13 +201,13 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
             self.clear_password_line()
             self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", error_login)
             return
-        if user_role == 'superAdmin':
+        if user_role == Role.SUPERADMIN:
             self.window_client = window_superadmin.WindowSuperAdmin()
             self.close()
-        elif user_role == 'admin':
+        elif user_role == Role.ADMIN:
             self.window_client = window_admin.WindowAdmin()
             self.close()
-        elif user_role == 'user':
+        elif user_role == Role.USER:
             self.window_client = window_user.WindowUser()
             self.close()
 

@@ -1,11 +1,10 @@
-import datetime
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.config.types_role import Role
+from src.controller import controller_main_window as controller
 from src.view.dialog_window import dialog_add_document
 from src.view.dialog_window import dialog_edit_document
 from src.view.dialog_window import dialog_select_period_documents
-from src.controller import controller_main_window as controller
 from src.view.widget.my_table_widget_item import MyTableWidgetItem
 
 
@@ -348,7 +347,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Скачать"))
 
     def press_button_add_document(self):
-        if controller.get_role() != 'user':
+        if controller.get_role() != Role.USER:
             QtWidgets.QMessageBox.warning(self, "Предупреждение",
                                           "Добавлять документы могут только пользователи, не администраторы!")
             return
@@ -374,11 +373,16 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             name_item = MyTableWidgetItem(row.name)
             name_item.set_additional_data(row.id)
             self.tableWidget.setItem(number_row, 0, name_item)  # Установка имени
-            self.tableWidget.setItem(number_row, 1, QtWidgets.QTableWidgetItem(row.inner_number))  # Установка входящего номера
-            self.tableWidget.setItem(number_row, 2, QtWidgets.QTableWidgetItem(row.output_number))  # Установка исходящего номера
-            self.tableWidget.setItem(number_row, 3, QtWidgets.QTableWidgetItem(str(row.output_date)))  # Установка исходящей даты
-            self.tableWidget.setItem(number_row, 4, QtWidgets.QTableWidgetItem(row.type_document))  # Установка типа документа
-            self.tableWidget.setItem(number_row, 5, QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты загрузки
+            self.tableWidget.setItem(number_row, 1,
+                                     QtWidgets.QTableWidgetItem(row.inner_number))  # Установка входящего номера
+            self.tableWidget.setItem(number_row, 2,
+                                     QtWidgets.QTableWidgetItem(row.output_number))  # Установка исходящего номера
+            self.tableWidget.setItem(number_row, 3,
+                                     QtWidgets.QTableWidgetItem(str(row.output_date)))  # Установка исходящей даты
+            self.tableWidget.setItem(number_row, 4,
+                                     QtWidgets.QTableWidgetItem(row.type_document))  # Установка типа документа
+            self.tableWidget.setItem(number_row, 5,
+                                     QtWidgets.QTableWidgetItem(str(row.date_creating)))  # Установка даты загрузки
             self.tableWidget.setItem(number_row, 6,
                                      QtWidgets.QTableWidgetItem(f"{row.creator}"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
@@ -411,7 +415,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(self, "Ошибка", potential_error)
 
     def press_button_delete_document(self):
-        if controller.get_role() == 'user':
+        if controller.get_role() == Role.USER:
             QtWidgets.QMessageBox.information(self, "Ошибка доступа",
                                               "Удалять документы могут только администраторы!\n"
                                               "Для удаления документа обратитесь к администратору.")
@@ -431,7 +435,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                  "(крайний левый стоблец).")
 
     def press_button_edit_document(self):
-        if controller.get_role() == 'user':
+        if controller.get_role() == Role.USER:
             QtWidgets.QMessageBox.information(self, "Ошибка доступа",
                                               "Редактировать документы могут тольуо администраторы!\n"
                                               "Для редактирования документа обратитесь к администратору.")
@@ -464,6 +468,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     ui = WidgetDocuments()
     sys.exit(app.exec_())

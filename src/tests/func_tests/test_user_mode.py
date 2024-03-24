@@ -1,7 +1,7 @@
 from pathlib import Path
 import pytest
 
-from src.model.custom_exceptions import FileNotWrittenError
+from src.model.utils.custom_exceptions import FileNotWrittenError
 from src.model.user import User
 
 

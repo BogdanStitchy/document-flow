@@ -2,11 +2,10 @@ import os
 from datetime import datetime
 import pydantic
 
-from src.config import tools
+from src.model.utils import tools
 from src.model.user import User
-from src.model.for_data_base import db_helper
 from src.db.methods.admin_db_methods import AdminMethodsDB
-from src.model.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
+from src.model.utils.custom_exceptions import ClientActiveError, ClientPasswordError, ClientNotFoundError
 
 
 class Administrator(User):

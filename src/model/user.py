@@ -2,13 +2,11 @@ import os
 from datetime import datetime
 import datetime
 
-from src.config import tools
-from src.model.for_data_base import db_helper
-from src.model.for_data_base import db_helper_for_hierarchy_derartments as db_helper_departments
+from src.model.utils import tools
 
 from src.db.methods.user_db_methods import UserDB
 
-from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
+from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
 
 
 class User:

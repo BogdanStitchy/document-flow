@@ -1,6 +1,6 @@
 import pytest
 import src.controller.controller_main_window as controller
-from src.model.custom_exceptions.client_custom_exceptions import ClientNotFoundError, ClientPasswordError
+from src.model.utils.custom_exceptions.client_custom_exceptions import ClientNotFoundError, ClientPasswordError
 
 
 @pytest.mark.parametrize("login, password, role, expected_exception",

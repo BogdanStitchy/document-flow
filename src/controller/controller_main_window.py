@@ -2,7 +2,7 @@ from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
 
-from src.model.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
+from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
 from typing import Tuple, Optional
 
 client = SuperAdmin  # Client("admin").client

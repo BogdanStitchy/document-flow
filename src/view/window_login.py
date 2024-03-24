@@ -197,18 +197,21 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         :param error_login:
         :return:
         """
+
         if error_login:
             self.clear_password_line()
             self.information_window = QtWidgets.QMessageBox.critical(self, "Ошибка ввода", error_login)
             return
-        if user_role == Role.SUPERADMIN:
-            self.window_client = window_superadmin.WindowSuperAdmin()
-            self.close()
-        elif user_role == Role.ADMIN:
-            self.window_client = window_admin.WindowAdmin()
-            self.close()
-        elif user_role == Role.USER:
-            self.window_client = window_user.WindowUser()
+
+        role_window_map = {
+            Role.SUPERADMIN: window_superadmin.WindowSuperAdmin,
+            Role.ADMIN: window_admin.WindowAdmin,
+            Role.USER: window_user.WindowUser,
+        }
+
+        window_class = role_window_map.get(user_role)
+        if window_class:
+            self.window_client = window_class()
             self.close()
 
     def clear_password_line(self):
@@ -221,6 +224,7 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
                 self.line_password.setFocus()
             elif self.line_password.hasFocus():
                 self.line_login.setFocus()
+
         if event.key() == QtCore.Qt.Key_Return:
             if self.line_password.text() != '':
                 self.button_login_press()

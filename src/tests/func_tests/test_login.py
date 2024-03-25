@@ -1,19 +1,20 @@
 import pytest
 import src.controller.controller_main_window as controller
 from src.model.utils.custom_exceptions.client_custom_exceptions import ClientNotFoundError, ClientPasswordError
+from src.config.types_role import Role
 
 
 @pytest.mark.parametrize("login, password, role, expected_exception",
                          [
                              # admins
-                             ("ivanadmin", "password1", "admin", None),  # успешный вход
-                             ("ivanadmin", "password1", "user", ClientNotFoundError),  # не найден в базе админ
-                             ("ivan", "password1", "admin", ClientNotFoundError),  # не найден в базе админ
-                             ("petradmin", "password", "admin", ClientPasswordError),  # неверный пароль
+                             ("ivanadmin", "password1", Role.ADMIN, None),  # успешный вход
+                             ("ivanadmin", "password1", Role.USER, ClientNotFoundError),  # не найден в базе админ
+                             ("ivan", "password1", Role.ADMIN, ClientNotFoundError),  # не найден в базе админ
+                             ("petradmin", "password", Role.ADMIN, ClientPasswordError),  # неверный пароль
                              # users
-                             ("ivanovii", "pass123", "user", None),  # успешный вход
-                             ("ivanovii", "pass123", "admin", ClientNotFoundError),  # не найден в базе пользователей
-                             ("ivanovii", "pass", "user", ClientPasswordError),  # неверный пароль
+                             ("ivanovii", "pass123", Role.USER, None),  # успешный вход
+                             ("ivanovii", "pass123", Role.ADMIN, ClientNotFoundError),  # не найден в базе пользователей
+                             ("ivanovii", "pass", Role.USER, ClientPasswordError),  # неверный пароль
                          ])
 def test_login(fill_db_admins, fill_db_users, login, password, role, expected_exception):
     if expected_exception is not None:

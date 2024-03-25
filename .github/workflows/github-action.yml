@@ -40,5 +40,6 @@ jobs:
           pytest -v src/tests/unit_tests
       - name: Func tests
         run: |
+          echo "Working directory is $(pwd)"
           pytest -v src/tests/func_tests
 

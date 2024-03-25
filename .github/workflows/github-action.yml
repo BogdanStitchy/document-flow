@@ -16,7 +16,7 @@ env:
   PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
   NAME_DB: ${{ secrets.NAME_DB }}
   HOST: ${{ secrets.HOST }}
-  PORT: 5430
+  PORT: ${{ secrets.PORT }}
   HASH_FUNCTION: ${{ secrets.HASH_FUNCTION }}
 
 jobs:
@@ -37,10 +37,8 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Unit tests
         run: |
-          cd ./src/tests/
-          pytest -v unit_tests
+          pytest -v src/tests/unit_tests
       - name: Func tests
         run: |
-          cd ./src/tests/
-          pytest -v func_tests
+          pytest -v src/tests/func_tests
 

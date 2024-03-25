@@ -9,6 +9,16 @@ on:
 permissions:
   contents: read
 
+env:
+  DRIVER_DB: ${{ secrets.DRIVER_DB }}
+  DIALECT_DB: ${{ secrets.DIALECT_DB }}
+  LOGIN_DB: ${{ secrets.LOGIN_DB }}
+  PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
+  NAME_DB: ${{ secrets.NAME_DB }}
+  HOST: ${{ secrets.HOST }}
+  PORT: ${{ secrets.PORT }}
+  HASH_FUNCTION: ${{ secrets.HASH_FUNCTION }}
+
 jobs:
   build-and-test:
 

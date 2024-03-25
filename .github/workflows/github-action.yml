@@ -37,8 +37,10 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Unit tests
         run: |
-          pytest -v src/tests/unit_tests
+          cd ./src/tests/
+          pytest -v unit_tests
       - name: Func tests
         run: |
-          pytest -v src/tests/func_tests
+          cd ./src/tests/
+          pytest -v func_tests
 

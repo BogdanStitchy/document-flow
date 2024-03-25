@@ -16,7 +16,7 @@ env:
   PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
   NAME_DB: ${{ secrets.NAME_DB }}
   HOST: ${{ secrets.HOST }}
-  PORT: ${{ secrets.PORT }}
+  PORT: 5430
   HASH_FUNCTION: ${{ secrets.HASH_FUNCTION }}
 
 jobs:

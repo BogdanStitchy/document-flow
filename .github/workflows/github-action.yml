@@ -42,5 +42,5 @@ jobs:
         run: |
           cd ..
           echo "Working directory is $(pwd)"
-          pytest -v src/tests/func_tests
+          pytest -v document-flow/src/tests/func_tests
 

@@ -57,10 +57,12 @@ def get_user():
 
 
 @pytest.fixture(scope="function")
-def clean_test_files_directory():
-    directory_path = Path(Path.cwd(), "src", "tests", "func_tests", "file for testing", "saved files")
+def get_temp_file(tmp_path):
+    file_name = "source_test.txt"
+    temp_file_path = tmp_path / file_name
 
-    # Перебор всех файлов в директории и их удаление
-    for file_path in directory_path.iterdir():
-        if file_path.is_file() or file_path.is_symlink():
-            file_path.unlink()
+    # проверка, существует ли файл, и создание его, если он не существует
+    if not temp_file_path.exists():
+        temp_file_path.write_text("_____test file_____")
+
+    return temp_file_path

@@ -177,6 +177,7 @@ class AdminMethodsDB:
                     or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
                         DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
                         DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
+                        DataAboutDocuments.note.ilike(f"%{search_string}%"),
                         DataAboutDocuments.name.ilike(f"%{search_string}%"),
                         Users.last_name.ilike(f"%{search_string}%"),
                         Users.name.ilike(f"%{search_string}%"))

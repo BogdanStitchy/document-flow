@@ -18,6 +18,7 @@ _necessary_fields_for_documents = (DataAboutDocuments.inner_number,
                                    DataAboutDocuments.note,
                                    (Users.last_name + ' ' + Users.name).label('creator'))
 
+
 class UserDB:
     # _________________________________GET_______________________________________________________
     @staticmethod
@@ -115,6 +116,7 @@ class UserDB:
                     and_(access_condition, (or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
                                                 DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
                                                 DataAboutDocuments.type_document.ilike(f"%{search_string}%"),
+                                                DataAboutDocuments.note.ilike(f"%{search_string}%"),
                                                 DataAboutDocuments.name.ilike(f"%{search_string}%"),
                                                 Users.last_name.ilike(f"%{search_string}%"),
                                                 Users.name.ilike(f"%{search_string}%"))

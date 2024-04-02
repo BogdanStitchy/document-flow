@@ -102,12 +102,12 @@ class User:
             return False  # пароль не надо менять
 
     def add_document(self, path_to_document: str, name_document: str, inner_number: str, output_number: str,
-                     output_date: str, type_document: str):
+                     output_date: str, type_document: str, note: str):
 
         file = open(path_to_document, 'rb')
         output_date = datetime.datetime.strptime(output_date, "%d.%m.%Y")
         UserDB.add_document(self.CURRENT_ID, file.read(), name_document, inner_number, output_number, output_date,
-                            type_document)
+                            type_document, note)
 
     def get_data_about_documents(self):
         return UserDB.get_data_about_documents(self.CURRENT_ID_DEPARTMENT)

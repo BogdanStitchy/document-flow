@@ -149,7 +149,7 @@ class UserDB:
     @staticmethod
     @pydantic.validate_call
     def add_document(id_user: int, file: bytes, name_document: str, inner_number: str, output_number: str,
-                     output_date, type_document: str) -> None:
+                     output_date, type_document: str, note: str) -> None:
         with session_factory() as session:
             document_data = DataAboutDocuments(
                 inner_number=inner_number,
@@ -158,7 +158,8 @@ class UserDB:
                 type_document=type_document,
                 name=name_document,
                 id_creator=id_user,
-                date_creating=datetime.datetime.now().date()
+                date_creating=datetime.datetime.now().date(),
+                note=note
             )
             session.add(document_data)
             session.flush()  # Получаем автоматически сгенерированный ID

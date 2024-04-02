@@ -227,8 +227,9 @@ class DialogAddDocument(QDialog):
         output_number = self.lineEdit_output_number.text()
         output_date = self.dateEdit.text()
         type_document = self.lineEdit_type_document.text()
+        note = self.lineEdit_note.text()
         controller.add_document_in_database(self.path_to_file, self.name_file, inner_number, output_number, output_date,
-                                            type_document)
+                                            type_document, note)
         self.main_window.press_button_refresh()
         self.dialog_window = QtWidgets.QMessageBox.information(self, "добавление документа",
                                                                f'Документ "{self.name_file}" успешно загружен в базу.')

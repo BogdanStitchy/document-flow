@@ -68,9 +68,9 @@ def add_user_in_database(last_name: str, name: str, patronymic: str, login: str,
 
 
 def add_document_in_database(path_to_document: str, name_document: str, inner_number: str, output_number: str,
-                             output_date, type_document: str):
+                             output_date, type_document: str, note: str):
     # log
-    client.add_document(path_to_document, name_document, inner_number, output_number, output_date, type_document)
+    client.add_document(path_to_document, name_document, inner_number, output_number, output_date, type_document, note)
 
 
 def get_data_about_documents():

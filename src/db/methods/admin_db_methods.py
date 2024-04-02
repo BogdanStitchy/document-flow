@@ -9,6 +9,16 @@ from src.db.models.users import Users
 from src.db.models.departments import Departments
 from src.db.models.data_about_documents import DataAboutDocuments
 
+_necessary_fields_for_documents = (DataAboutDocuments.inner_number,
+                                   DataAboutDocuments.output_number,
+                                   DataAboutDocuments.output_date,
+                                   DataAboutDocuments.type_document,
+                                   DataAboutDocuments.name,
+                                   DataAboutDocuments.date_creating,
+                                   DataAboutDocuments.id,
+                                   DataAboutDocuments.note,
+                                   (Users.last_name + ' ' + Users.name).label('creator'))
+
 
 class AdminMethodsDB:
     # _________________________________ADD______________________________________________________
@@ -150,14 +160,7 @@ class AdminMethodsDB:
     def get_all_documents() -> [{}, {}]:
         with session_factory() as session:
             result = session.execute(select(
-                DataAboutDocuments.inner_number,
-                DataAboutDocuments.output_number,
-                DataAboutDocuments.output_date,
-                DataAboutDocuments.type_document,
-                DataAboutDocuments.name,
-                DataAboutDocuments.date_creating,
-                DataAboutDocuments.id,
-                (Users.last_name + ' ' + Users.name).label('creator')
+                *_necessary_fields_for_documents
             ).join_from(DataAboutDocuments, Users)
                                      )
             documents = result.mappings().fetchall()
@@ -169,14 +172,7 @@ class AdminMethodsDB:
         with session_factory() as session:
             result = session.execute(
                 select(
-                    DataAboutDocuments.inner_number,
-                    DataAboutDocuments.output_number,
-                    DataAboutDocuments.output_date,
-                    DataAboutDocuments.type_document,
-                    DataAboutDocuments.name,
-                    DataAboutDocuments.date_creating,
-                    DataAboutDocuments.id,
-                    (Users.last_name + ' ' + Users.name).label('creator')
+                    *_necessary_fields_for_documents
                 ).where(
                     or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
                         DataAboutDocuments.output_number.ilike(f"%{search_string}%"),
@@ -196,14 +192,7 @@ class AdminMethodsDB:
                               start_create_date: datetime.date, end_create_date: datetime.date) -> [{}, {}]:
         with session_factory() as session:
             basic_query_without_conditions = select(
-                DataAboutDocuments.inner_number,
-                DataAboutDocuments.output_number,
-                DataAboutDocuments.output_date,
-                DataAboutDocuments.type_document,
-                DataAboutDocuments.name,
-                DataAboutDocuments.date_creating,
-                DataAboutDocuments.id,
-                (Users.last_name + ' ' + Users.name).label('creator')
+                *_necessary_fields_for_documents
             ).join_from(DataAboutDocuments, Users)
 
             if flag_date_download and flag_date_output:

@@ -386,7 +386,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 6,
                                      QtWidgets.QTableWidgetItem(f"{row.creator}"))  # Установка автора
             self.tableWidget.setItem(number_row, 7,
-                                     QtWidgets.QTableWidgetItem(" "))  # Установка примечаний
+                                     QtWidgets.QTableWidgetItem(f"{'' if row.note is None else row.note}"))  # Установка примечаний
 
             button_downlad = QtWidgets.QPushButton(f"скачать")
             button_downlad.setStyleSheet("background-color: rgb(255, 210, 76);\n"

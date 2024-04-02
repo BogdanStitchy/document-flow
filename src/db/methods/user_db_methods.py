@@ -8,6 +8,15 @@ from src.db.database_setup import session_factory
 from src.db.models import DataAboutDocuments, FilesDocuments, DepartmentsHierarchy, Departments
 from src.db.models.users import Users
 
+_necessary_fields_for_documents = (DataAboutDocuments.inner_number,
+                                   DataAboutDocuments.output_number,
+                                   DataAboutDocuments.output_date,
+                                   DataAboutDocuments.type_document,
+                                   DataAboutDocuments.name,
+                                   DataAboutDocuments.date_creating,
+                                   DataAboutDocuments.id,
+                                   DataAboutDocuments.note,
+                                   (Users.last_name + ' ' + Users.name).label('creator'))
 
 class UserDB:
     # _________________________________GET_______________________________________________________
@@ -41,14 +50,7 @@ class UserDB:
             access_condition = Users.id_department.in_(id_available_departments)
             stmt = (
                 select(
-                    DataAboutDocuments.inner_number,
-                    DataAboutDocuments.output_number,
-                    DataAboutDocuments.output_date,
-                    DataAboutDocuments.type_document,
-                    DataAboutDocuments.name,
-                    DataAboutDocuments.date_creating,
-                    DataAboutDocuments.id,
-                    (Users.last_name + ' ' + Users.name).label('creator')
+                    *_necessary_fields_for_documents
                 ).join(Users).where(access_condition)
             )
             result = session.execute(stmt)
@@ -89,14 +91,7 @@ class UserDB:
             access_condition = Users.id_department.in_(id_available_departments)
 
             basic_query_without_conditions = select(
-                DataAboutDocuments.inner_number,
-                DataAboutDocuments.output_number,
-                DataAboutDocuments.output_date,
-                DataAboutDocuments.type_document,
-                DataAboutDocuments.name,
-                DataAboutDocuments.date_creating,
-                DataAboutDocuments.id,
-                (Users.last_name + ' ' + Users.name).label('creator')
+                *_necessary_fields_for_documents
             ).join(Users)
 
             result = session.execute(get_query_with_conditions())
@@ -115,14 +110,7 @@ class UserDB:
 
             result = session.execute(
                 select(
-                    DataAboutDocuments.inner_number,
-                    DataAboutDocuments.output_number,
-                    DataAboutDocuments.output_date,
-                    DataAboutDocuments.type_document,
-                    DataAboutDocuments.name,
-                    DataAboutDocuments.date_creating,
-                    DataAboutDocuments.id,
-                    (Users.last_name + ' ' + Users.name).label('creator')
+                    *_necessary_fields_for_documents
                 ).where(
                     and_(access_condition, (or_(DataAboutDocuments.inner_number.ilike(f"%{search_string}%"),
                                                 DataAboutDocuments.output_number.ilike(f"%{search_string}%"),

@@ -1,4 +1,6 @@
 import pytest
+import os
+import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -7,6 +9,8 @@ from src.db.database_setup import set_new_engine
 from src.model.super_admin import SuperAdmin
 from src.model.administrator import Administrator
 from src.db.methods import super_admin_db_methods as sa_methods
+from src.db.methods import user_db_methods as user_db_methods
+from src.db.methods import admin_db_methods as admin_db_methods
 
 data_base_memory = "sqlite:///:memory:"
 
@@ -27,10 +31,23 @@ def get_session(create_database):
     return session
 
 
+# -----------------------------------------DB methods-----------------------------------------------------------------
 @pytest.fixture(scope="module")
 def db_methods_super_admin():
     super_admin_methods = sa_methods.SuperAdminMethodsDB()
     yield super_admin_methods
+
+
+@pytest.fixture(scope="module")
+def database_admin():
+    admin_methods = admin_db_methods.AdminMethodsDB()
+    yield admin_methods
+
+
+@pytest.fixture(scope="module")
+def database_user():
+    user_methods = user_db_methods.UserDB()
+    yield user_methods
 
 
 # ------------------------------------for clean table DB---------------------------------------------------------------
@@ -162,3 +179,18 @@ def fill_db_users(create_database, fill_db_departments_and_departments_hierarchy
                         "login")  # потому что при добавлении пользователя, используется атрибут id админа
     for user in added_users:
         admin.add_user(*user)
+
+
+@pytest.fixture(scope="module")
+def fill_db_documents(database_user, db_methods_super_admin, fill_db_users,
+                      fill_db_departments_and_departments_hierarchy):
+    existing_documents = db_methods_super_admin.get_all_documents()
+    if len(existing_documents) != 0:
+        print(f"Table documents not empty. existing_documents:\n{existing_documents}\n")
+        return
+
+    documents = [(1, os.urandom(16), "doc1", "11111", "333333", datetime.datetime(2019, 7, 12), "docx", "note1"),
+                 (1, os.urandom(16), "doc2", "22222", "77777", datetime.datetime(2020, 7, 12), "pdf", "note2"),
+                 (1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), "rtx", "note3")]
+    for document in documents:
+        database_user.add_document(*document)

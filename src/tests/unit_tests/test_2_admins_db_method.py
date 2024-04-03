@@ -4,14 +4,6 @@ import os
 import datetime
 from sqlalchemy.exc import IntegrityError
 
-from src.db.methods import admin_db_methods
-
-
-@pytest.fixture(scope="module")
-def database_admin():
-    admin_methods = admin_db_methods.AdminMethodsDB()
-    yield admin_methods
-
 
 @pytest.mark.parametrize("data, expected_exception", [
     (("userov", "user", "userovich", "user_login", os.urandom(16), os.urandom(16), 1, 1), None),
@@ -21,7 +13,7 @@ def database_admin():
     ((None, "sd", "hhgfgh", "dfgh", os.urandom(16), os.urandom(16), 1), ValidationError),
     (("None", "sdaf", None, "asdf", os.urandom(16), os.urandom(16), 1), ValidationError)
 ])
-def test_add_user(clean_users_table_database, database_admin, data, expected_exception):
+def test_add_user(setup_test_2_admins_db_method, database_admin, data, expected_exception):
     if expected_exception is None:
         id_added_user = database_admin.add_user_db(*data)
         assert type(id_added_user) == int

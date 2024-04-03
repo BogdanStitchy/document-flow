@@ -4,14 +4,6 @@ from pydantic import ValidationError
 import pytest
 import os
 
-from src.db.methods import user_db_methods
-
-
-@pytest.fixture(scope="module")
-def database_user():
-    user_methods = user_db_methods.UserDB()
-    yield user_methods
-
 
 @pytest.mark.parametrize("data, expected_exception", [
     ((1, os.urandom(16), "doc1", "11111", "333333", datetime.datetime(2019, 7, 12), "docx", "note1"), None),
@@ -20,7 +12,8 @@ def database_user():
     ((1, os.urandom(16), "doc3", "55555", 99999, datetime.datetime(2023, 7, 12), "rtx", "note4"), ValidationError),
     ((1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), 15.7), ValidationError)
 ])
-def test_add_document(database_user, clean_documents_table_database, data, expected_exception):
+def test_add_document(setup_test_3_users_db_method, database_user, clean_documents_table_database, data,
+                      expected_exception):
     if expected_exception is None:
         database_user.add_document(*data)
     else:

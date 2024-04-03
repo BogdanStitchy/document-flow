@@ -20,7 +20,8 @@ __data_successfully_added_admins_for_tests = (
     ((None, "sd", "adminov", "admin_login", os.urandom(16), os.urandom(16)), ValidationError),
     (("None", "sd", None, "admin_login", os.urandom(16), os.urandom(16)), ValidationError)
 ])
-def test_good_add_admin(db_methods_super_admin, data, expected_exception, create_database, clean_admins_table_database):
+def test_good_add_admin(setup_test_1_super_admins_db_method, db_methods_super_admin, data, expected_exception,
+                        create_database, clean_admins_table_database):
     if expected_exception is None:
         id_added_admin = db_methods_super_admin.add_admin(*data)
         assert type(id_added_admin) == int
@@ -77,7 +78,8 @@ def test_edit_admin(db_methods_super_admin, id_admin, kwargs_new_data, expected_
 
 def test_get_all_admins(db_methods_super_admin):
     admins = db_methods_super_admin.get_all_admins()
-    assert len(admins) == len(__data_successfully_added_admins_for_tests) #+ 3 # +3 потому что фикстурой еще три добавляется
+    assert len(admins) == len(
+        __data_successfully_added_admins_for_tests)  # + 3 # +3 потому что фикстурой еще три добавляется
 
 
 def test_good_find_admins_period(db_methods_super_admin):

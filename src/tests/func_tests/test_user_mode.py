@@ -19,7 +19,7 @@ def test_user_add_get_document(get_temp_file):
                             'date_last_changes_password': "10.10.2023", 'id_department': id_department,
                             'number_department': id_department * 100}, "Login_Ivan")
         user.add_document(get_temp_file, "test.txt", f"{id_department * 100 + id_department}",
-                          f"{id_department * 100 - id_department}", "10.10.2023", "txt")
+                          f"{id_department * 100 - id_department}", "10.10.2023", "txt", "note")
         all_user_documents[id_department] = user.get_data_about_documents()
 
     # проверяем количество документов, доступное каждому из людей из разных отеделов

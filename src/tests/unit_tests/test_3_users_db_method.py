@@ -14,10 +14,10 @@ def database_user():
 
 
 @pytest.mark.parametrize("data, expected_exception", [
-    ((1, os.urandom(16), "doc1", "11111", "333333", datetime.datetime(2019, 7, 12), "docx"), None),
-    ((1, os.urandom(16), "doc2", "22222", "77777", datetime.datetime(2020, 7, 12), "pdf"), None),
-    ((1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), "rtx"), None),
-    ((1, os.urandom(16), "doc3", "55555", 99999, datetime.datetime(2023, 7, 12), "rtx"), ValidationError),
+    ((1, os.urandom(16), "doc1", "11111", "333333", datetime.datetime(2019, 7, 12), "docx", "note1"), None),
+    ((1, os.urandom(16), "doc2", "22222", "77777", datetime.datetime(2020, 7, 12), "pdf", "note2"), None),
+    ((1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), "rtx", "note3"), None),
+    ((1, os.urandom(16), "doc3", "55555", 99999, datetime.datetime(2023, 7, 12), "rtx", "note4"), ValidationError),
     ((1, os.urandom(16), "doc3", "55555", "99999", datetime.datetime(2023, 7, 12), 15.7), ValidationError)
 ])
 def test_add_document(database_user, clean_documents_table_database, data, expected_exception):

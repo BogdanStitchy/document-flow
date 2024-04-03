@@ -26,7 +26,8 @@ def test_good_add_admin(db_methods_super_admin, data, expected_exception, create
         assert type(id_added_admin) == int
     else:
         with pytest.raises(expected_exception):
-            db_methods_super_admin.add_admin(*data)
+            id_added_admin = db_methods_super_admin.add_admin(*data)
+            assert isinstance(id_added_admin, int)
 
 
 def test_re_add_admin(db_methods_super_admin):

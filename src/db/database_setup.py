@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from .models import base
 from src.config import config
 
@@ -20,9 +20,13 @@ def get_engine() -> create_engine:
     return engine
 
 
-session_factory = sessionmaker(get_engine())
+def session_factory():
+    return sessionmaker(get_engine())()
+
 
 if __name__ == "__main__":
+    from sqlalchemy.orm import Session
+
     with Session(engine) as session_factory:
         with session_factory.begin():
             base.Base.metadata.create_all(engine)

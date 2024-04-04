@@ -21,3 +21,13 @@ def get_temp_file(tmp_path):
         temp_file_path.write_text("_____test file_____")
 
     return temp_file_path
+
+
+@pytest.fixture(scope="module")
+def setup_test_login(clean_all_database, fill_db_admins, fill_db_users):
+    pass
+
+
+@pytest.fixture(scope="module")
+def setup_test_user_mode(clean_all_database, fill_db_users):
+    pass

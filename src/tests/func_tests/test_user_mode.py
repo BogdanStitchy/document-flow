@@ -5,7 +5,7 @@ from src.model.utils.custom_exceptions import FileNotWrittenError
 from src.model.user import User
 
 
-def test_user_add_get_document(get_temp_file):
+def test_user_add_get_document(setup_test_user_mode, get_temp_file):
     # всего 5 отделов. иерархия следующая:
     # 2 -> 1    2 подчиняется 1
     # 3 -> 1

@@ -16,7 +16,7 @@ from src.config.types_role import Role
                              ("ivanovii", "pass123", Role.ADMIN, ClientNotFoundError),  # не найден в базе пользователей
                              ("ivanovii", "pass", Role.USER, ClientPasswordError),  # неверный пароль
                          ])
-def test_login(fill_db_admins, fill_db_users, login, password, role, expected_exception):
+def test_login(setup_test_login, login, password, role, expected_exception):
     if expected_exception is not None:
         with pytest.raises(expected_exception):
             controller.__check_login(login, password, role)

@@ -147,10 +147,24 @@ class TreeHierarchy(QtWidgets.QMainWindow):
             if reply == QMessageBox.No:
                 return True
 
+        def __delete_item_from_view(selected_item):
+            if selected_item:  # Проверка, есть ли выбранный элемент
+                parent = selected_item.parent()
+                if parent:  # Если у элемента есть родитель, то это дочерний элемент
+                    parent.removeChild(selected_item)
+                    return True
+                else:  # Если родителя нет, то это элемент верхнего уровня
+                    QtWidgets.QMessageBox.critical(self, "Ошибка удаления", "Нельзя удалить главный отдел!\nЕсли вы "
+                                                                            "хотите изменить главный отдел, то измените"
+                                                                            " данные отдела, после чего сохраните "
+                                                                            "изменения")
+                    return False
+
         selected_elements = self.treeWidget.selectedItems()
         if __check_abort_delete(len(selected_elements)):
             return
-
+        if not __delete_item_from_view(selected_elements[0]):
+            return
         id_department_delete = int(selected_elements[0].text(2))
         self.dialog_window = DialogWidgetSelectDepartment(self, id_department_delete)
         self.dialog_window.exec()  # ожидание закрытия диалогового окна
@@ -158,7 +172,6 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
         for element in selected_elements:
             self.__create_deletion_queues(id_department_for_replace, element)
-        self.init_tree_widget()
 
     def __clear_all_lists(self):
         self.list_departments.clear()

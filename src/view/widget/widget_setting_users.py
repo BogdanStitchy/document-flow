@@ -13,12 +13,12 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
         super().__init__()
         self.dialog_window = None
         self.data_about_users = None
-        self.setObjectName("MainWindow")
-        self.resize(895, 605)
         self.setupUi()
         self.show()
 
     def setupUi(self):
+        self.resize(895, 605)
+
         self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -311,7 +311,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
             self.tableWidget.setItem(number_row, 7, QtWidgets.QTableWidgetItem(status_active))  # Уст. статуса деакитива
 
             number_row += 1
-        print("init table users finished")
         return True
 
     def press_button_delete(self):
@@ -363,13 +362,6 @@ class WidgetSettingUser(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     import sys
-
-    # app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
-    # ui = WidgetDocuments()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
-    # sys.exit(app.exec_()
 
     app = QtWidgets.QApplication(sys.argv)
     ui = WidgetSettingUser()

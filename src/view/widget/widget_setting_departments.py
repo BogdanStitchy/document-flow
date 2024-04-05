@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QHeaderView, QMessageBox
 
-from src.view.widget import my_tree_widget
+from src.view.widget import custom_tree_widget
 from src.view.dialog_window.dialog_select_department import DialogWidgetSelectDepartment
 
 import src.controller.controller_main_window as controller
@@ -11,7 +11,6 @@ class TreeHierarchy(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.resize(800, 600)
 
         self.id_departments_for_delete = []
         self.departments_for_added = []
@@ -24,6 +23,8 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.show()
 
     def setupUi(self):
+        self.resize(800, 600)
+
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -43,7 +44,7 @@ class TreeHierarchy(QtWidgets.QMainWindow):
         self.gridLayout = QtWidgets.QGridLayout(self.frame)
         self.gridLayout.setObjectName("gridLayout")
 
-        self.treeWidget = my_tree_widget.MyTreeWidget()  # QtWidgets.QTreeWidget(self.frame)
+        self.treeWidget = custom_tree_widget.CustomTreeWidget()  # QtWidgets.QTreeWidget(self.frame)
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
         self.init_tree_widget()

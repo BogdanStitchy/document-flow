@@ -11,6 +11,10 @@ from src.view import window_login
 class WindowSuperAdmin(QtWidgets.QMainWindow):
     def __init__(self):
         super(WindowSuperAdmin, self).__init__()
+        self.setupUi()
+        self.show()
+
+    def setupUi(self):
         self.setObjectName("MainWindow")
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
@@ -18,10 +22,7 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        self.setupUi()
-        self.show()
 
-    def setupUi(self):
         self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -176,188 +177,6 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem2)
         self.verticalLayout.addWidget(self.frame_selection_mode)
-
-        # фрейм функций
-
-        #
-        # self.frame_function = QtWidgets.QFrame(self.frame_head)
-        # self.frame_function.setStyleSheet("")
-        # self.frame_function.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        # self.frame_function.setFrameShadow(QtWidgets.QFrame.Raised)
-        # self.frame_function.setObjectName("frame_function")
-        # self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame_function)
-        # self.horizontalLayout.setContentsMargins(5, 5, 5, 5)
-        # self.horizontalLayout.setObjectName("horizontalLayout")
-        #
-        # self.pushButton_home = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_home.sizePolicy().hasHeightForWidth())
-        # self.pushButton_home.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_home.setFont(font)
-        # self.pushButton_home.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_home.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                    "padding: 5;\n"
-        #                                    "border-radius:5px;\n"
-        #                                    "border: 1 solid black;\n"
-        #                                    "")
-        # self.pushButton_home.setObjectName("pushButton_home")
-        # self.horizontalLayout.addWidget(self.pushButton_home)
-        # self.pushButton_refresh = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_refresh.sizePolicy().hasHeightForWidth())
-        # self.pushButton_refresh.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_refresh.setFont(font)
-        # self.pushButton_refresh.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_refresh.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                       "padding: 5;\n"
-        #                                       "border-radius:5px;\n"
-        #                                       "border: 1 solid black;\n"
-        #                                       "")
-        # self.pushButton_refresh.setObjectName("pushButton_refresh")
-        # self.horizontalLayout.addWidget(self.pushButton_refresh)
-        # self.lineEdit_search = QtWidgets.QLineEdit(self.frame_function)
-        # self.lineEdit_search.setFont(font)
-        # self.lineEdit_search.setPlaceholderText("введите запрос")
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.lineEdit_search.sizePolicy().hasHeightForWidth())
-        # self.lineEdit_search.setSizePolicy(sizePolicy)
-        # self.lineEdit_search.setMinimumSize(QtCore.QSize(150, 25))
-        # font = QtGui.QFont()
-        # font.setPointSize(10)
-        # self.lineEdit_search.setFont(font)
-        # self.lineEdit_search.setStyleSheet("background-color: rgb(255, 255, 255);")
-        # self.lineEdit_search.setObjectName("lineEdit_search")
-        # self.horizontalLayout.addWidget(self.lineEdit_search)
-        #
-        # self.pushButton_find = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_find.sizePolicy().hasHeightForWidth())
-        # self.pushButton_find.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_find.setFont(font)
-        # self.pushButton_find.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_find.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                    "padding: 5;\n"
-        #                                    "border-radius:5px;\n"
-        #                                    "border: 1 solid black;\n"
-        #                                    "")
-        # self.pushButton_find.setObjectName("pushButton_find")
-        # self.horizontalLayout.addWidget(self.pushButton_find)
-        #
-        # spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        # self.horizontalLayout.addItem(spacerItem3)
-        #
-        # self.pushButton_period_search = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_period_search.sizePolicy().hasHeightForWidth())
-        # self.pushButton_period_search.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_period_search.setFont(font)
-        # self.pushButton_period_search.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_period_search.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                             "padding: 5;\n"
-        #                                             "border-radius:5px;\n"
-        #                                             "border: 1 solid black;\n"
-        #                                             "")
-        # self.pushButton_period_search.setObjectName("pushButton_period_search")
-        # self.horizontalLayout.addWidget(self.pushButton_period_search, 0, QtCore.Qt.AlignVCenter)
-        # spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        # self.horizontalLayout.addItem(spacerItem4)
-        #
-        # self.pushButton_add = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_add.sizePolicy().hasHeightForWidth())
-        # self.pushButton_add.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_add.setFont(font)
-        # self.pushButton_add.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_add.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                   "padding: 5;\n"
-        #                                   "border-radius:5px;\n"
-        #                                   "border: 1 solid black;\n"
-        #                                   "")
-        # self.pushButton_add.setObjectName("pushButton_add")
-        # self.horizontalLayout.addWidget(self.pushButton_add)
-        #
-        # self.pushButton_edit = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.pushButton_edit.sizePolicy().hasHeightForWidth())
-        # self.pushButton_edit.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.pushButton_edit.setFont(font)
-        # self.pushButton_edit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_edit.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                    "padding: 5;\n"
-        #                                    "border-radius:5px;\n"
-        #                                    "border: 1 solid black;\n"
-        #                                    "")
-        # self.pushButton_edit.setObjectName("pushButton_edit")
-        # self.horizontalLayout.addWidget(self.pushButton_edit)
-        #
-        # self.pushButton_delete = QtWidgets.QPushButton(self.frame_function)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(2)
-        # sizePolicy.setVerticalStretch(10)
-        # sizePolicy.setHeightForWidth(self.pushButton_delete.sizePolicy().hasHeightForWidth())
-        # self.pushButton_delete.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Monospac821 BT")
-        # font.setPointSize(10)
-        # font.setBold(True)
-        # font.setItalic(False)
-        # font.setUnderline(False)
-        # font.setWeight(75)
-        # font.setStyleStrategy(QtGui.QFont.PreferDefault)
-        # self.pushButton_delete.setFont(font)
-        # self.pushButton_delete.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.pushButton_delete.setStyleSheet("background-color: rgb(255, 210, 76);\n"
-        #                                      "padding: 5;\n"
-        #                                      "border-radius:5px;\n"
-        #                                      "border: 1 solid black;\n"
-        #                                      "")
-        # self.pushButton_delete.setObjectName("pushButton_delete")
-        # self.horizontalLayout.addWidget(self.pushButton_delete)
-        # self.verticalLayout.addWidget(self.frame_function)
 
         self.verticalLayout_3.addWidget(self.frame_head)
         self.frame_body = QtWidgets.QFrame(self.centralwidget)

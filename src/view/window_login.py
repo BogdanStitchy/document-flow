@@ -24,10 +24,8 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
         self.setMinimumSize(QtCore.QSize(500, 470))
         self.setMaximumSize(QtCore.QSize(16777215, 16777215))
         path_to_images = Path(Path().cwd(), "pictures")
-        print(path_to_images)
 
         icon = QtGui.QIcon()
-        print(str(Path(path_to_images, "logo.png")))
         icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.setStyleSheet(
@@ -170,8 +168,6 @@ class HandlerWindowLogin(QtWidgets.QMainWindow):
     def retranslate_ui(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "ДБ_Архив"))
-        # self.label.setWhatsThis(
-        #     _translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.button_login.setText(_translate("MainWindow", "Войти"))
 
     def button_login_press(self):
@@ -240,4 +236,3 @@ if __name__ == '__main__':
     application.show()
 
     sys.exit(app.exec())
-    # test_main()

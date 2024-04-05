@@ -15,11 +15,9 @@ class DialogWidgetAddUser(QDialog):
 
     def setupUi(self):
         self.show()
-        # self.setWindowTitle("Добавление пользователя")
         self.setObjectName("Dialog_add_user")
         self.resize(610, 600)
         self.setMinimumSize(QtCore.QSize(320, 340))
-        # self.setMaximumSize(QtCore.QSize(400, 380))
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -122,14 +120,6 @@ class DialogWidgetAddUser(QDialog):
         self.lineEdit_password.setStyleSheet(style_for_line_edit)
         self.formLayout.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.lineEdit_password)
 
-        self.checkBox_flag_leader = QtWidgets.QCheckBox(self)
-        self.checkBox_flag_leader.setMinimumSize(QtCore.QSize(0, 23))
-        self.checkBox_flag_leader.setText("Начальник отдела (отметить, если уч. запись для руководителя)")
-        self.checkBox_flag_leader.setFont(font)
-        self.checkBox_flag_leader.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.checkBox_flag_leader.setObjectName("checkBox_flag_leader")
-        self.formLayout.setWidget(8, QtWidgets.QFormLayout.SpanningRole, self.checkBox_flag_leader)
-
         self.label_name = QtWidgets.QLabel(self.main_frame)
         self.label_name.setFont(font)
         self.label_name.setObjectName("label_name")
@@ -177,7 +167,6 @@ class DialogWidgetAddUser(QDialog):
 
     def add_radiobutton(self):
         departments = get_all_departments()
-        print(departments)
         for department in departments:
             radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
             radio_button.setObjectName(str(department[0]))
@@ -190,7 +179,7 @@ class DialogWidgetAddUser(QDialog):
         patronymic = self.lineEdit_patronymic.text()
         login = self.lineEdit_login.text()
         password = self.lineEdit_password.text()
-        flag_leader = self.checkBox_flag_leader.isChecked()
+
         try:
             id_department = int(self.group.checkedButton().objectName())
             controller.add_user_in_database(last_name, name, patronymic, login, password, id_department)
@@ -202,7 +191,6 @@ class DialogWidgetAddUser(QDialog):
         except (ValueError, AttributeError) as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Добавление пользователя",
                                                                  "Для добавления пользователя заполните все поля! ")
-            print("[ERROR] Не выбран ни один радиобаттон\t", ex)
 
     def push_cancel(self):
         self.close()
@@ -216,7 +204,6 @@ if __name__ == "__main__":
     Dialog_add_user.show()
 
     Dialog_add_user.setWindowTitle("TRGGFFG")
-    # print(Dialog_add_user.windowTitle())
 
     ui = DialogWidgetAddUser(Dialog_add_user)
 

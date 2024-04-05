@@ -23,11 +23,9 @@ class DialogWidgetEditUser(QDialog):
 
     def setupUi(self):
         self.show()
-        # self.setWindowTitle("Добавление пользователя")
         self.setObjectName("Dialog_add_user")
         self.resize(580, 500)
         self.setMinimumSize(QtCore.QSize(320, 340))
-        # self.setMaximumSize(QtCore.QSize(400, 380))
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -197,14 +195,7 @@ class DialogWidgetEditUser(QDialog):
         new_patronymic = self.lineEdit_patronymic.text()
         new_login = self.lineEdit_login.text()
         new_password = self.lineEdit_password.text()
-        # if new_login != self.login:
-        #     flag_edit_login = True
-        # else:
-        #     flag_edit_login = False
-        # print("password = ", new_password)
-        # try:
-            # department = self.group.checkedButton().text()  # получаем выбранную радиобаттон
-            # department = department[:3]  # получаем только номер отдела, без его названия
+
         id_department = int(self.group.checkedButton().objectName())
         controller.edit_user_data(new_last_name, new_name, new_patronymic, new_login, new_password,
                                   id_user=self.id_user, id_department=id_department)
@@ -214,10 +205,6 @@ class DialogWidgetEditUser(QDialog):
                                                                  f'"{new_last_name} {new_name} {new_patronymic}" '
                                                                  f'успешно отредактированы.')
         self.close()
-        # except ValueError:
-        #     raise ex
-        #     self.dialog_window = QtWidgets.QMessageBox().warning(self, "Редактирование пользователя",
-        #                                                          "Пустым может оставаться только поле пароля")
 
     def push_cancel(self):
         self.close()
@@ -229,9 +216,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     Dialog_add_user = QtWidgets.QWidget()
     Dialog_add_user.show()
-
-    Dialog_add_user.setWindowTitle("TRGGFFG")
-    # print(Dialog_add_user.windowTitle())
 
     ui = DialogWidgetEditUser(Dialog_add_user, "last_name", "name", "patronymic", 401, "Ivan@mail.ru", 1)
 

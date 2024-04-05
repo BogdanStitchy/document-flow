@@ -1,12 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import datetime
 from pathlib import Path
 
 from src.view import window_login
-from src.view.widget import widget_setting_admins
 from src.view.widget import widget_setting_documents
 from src.view.widget import widget_setting_users
-from src.view.widget import widget_setting_departments
 from src.view.dialog_window.dialog_password_change import DialogWidgetChangePassword
 from src.controller import controller_main_window as controller
 
@@ -15,17 +12,18 @@ class WindowAdmin(QtWidgets.QMainWindow):
     def __init__(self):
         super(WindowAdmin, self).__init__()
         self.setObjectName("MainWindow")
+        self.setupUi()
+        self.show()
+        self.check_needs_password_change()
+
+    def setupUi(self):
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
         path_to_images = Path(Path().cwd().parent.parent, "pictures")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        self.setupUi()
-        self.show()
-        self.check_needs_password_change()
 
-    def setupUi(self):
         self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -202,17 +200,6 @@ class WindowAdmin(QtWidgets.QMainWindow):
         if flag_needs_change:
             self.dialog = DialogWidgetChangePassword(self)
             result = self.dialog.exec()
-        # if change is None:
-        #     self.dialog = DialogWidgetChangePassword(self)
-        #     result = self.dialog.exec()
-        #     print("result exit: ", result)
-        # else:
-        #     delta_date = datetime.datetime.now() - change
-        #     # print("days:", delta_date.days)
-        #     if delta_date.days > 180:
-        #         self.dialog = DialogWidgetChangePassword(self)
-        #         result = self.dialog.exec()
-        #         print("result exit: ", result)
 
 
 if __name__ == "__main__":

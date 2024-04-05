@@ -1,10 +1,9 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QDrag
-from PyQt5.QtGui import QDropEvent
 from PyQt5.QtWidgets import *
 
 
-class MyTreeWidget(QTreeWidget):
+class CustomTreeWidget(QTreeWidget):
     customMimeType = "application/x-customTreeWidgetdata"
 
     def __init__(self):
@@ -17,7 +16,7 @@ class MyTreeWidget(QTreeWidget):
 
     def mimeTypes(self):
         mimetypes = QTreeWidget.mimeTypes(self)
-        mimetypes.append(MyTreeWidget.customMimeType)
+        mimetypes.append(CustomTreeWidget.customMimeType)
         return mimetypes
 
     def startDrag(self, supported_actions):
@@ -27,28 +26,14 @@ class MyTreeWidget(QTreeWidget):
         encoded = QByteArray()
         stream = QDataStream(encoded, QIODevice.WriteOnly)
         self.encode_data(self.selectedItems(), stream)
-        mime_data.setData(MyTreeWidget.customMimeType, encoded)
+        mime_data.setData(CustomTreeWidget.customMimeType, encoded)
 
         drag.setMimeData(mime_data)
         drag.exec_(supported_actions)
 
     def dropEvent(self, event):
-        # if event.source() == self:
         event.setDropAction(Qt.MoveAction)
         QTreeWidget.dropEvent(self, event)
-        # QDropEvent.tex
-        # print(event.text())
-
-    # elif isinstance(event.source(), QTreeWidget):
-    #     if event.mimeData().hasFormat(MyTreeWidget.customMimeType):
-    #         encoded = event.mimeData().data(MyTreeWidget.customMimeType)
-    #         parent = self.itemAt(event.pos())
-    #         items = self.decodeData(encoded, event.source())
-    #         for it in items:
-    #             item = QTreeWidgetItem(parent)
-    #             self.fillItem(it, item)
-    #             self.fillItems(it, item)
-    #         event.acceptProposedAction()
 
     def fill_item(self, in_item, out_item):
         for col in range(in_item.columnCount()):
@@ -95,30 +80,3 @@ class MyTreeWidget(QTreeWidget):
                 it = it.child(ix)
             items.append(it)
         return items
-
-# def create_treeWidget(name, ncolumn):
-#     treeWidget = TreeWidget()
-#     header = QTreeWidgetItem([str(i) for i in range(ncolumn)])
-#     treeWidget.setHeaderItem(header)
-#     root = QTreeWidgetItem(treeWidget, [name])
-#     for letter in ["A", "B", "C"]:
-#         item = QTreeWidgetItem(root, ["{}-{}".format(name, letter)])
-#         QTreeWidgetItem(item, ["{}-{}-{}".format(name, letter, i) for i in range(ncolumn)])
-#     treeWidget.expandAll()
-#     treeWidget.setSelectionMode(QAbstractItemView.MultiSelection)
-#     treeWidget.setDragEnabled(True)
-#     treeWidget.viewport().setAcceptDrops(True)
-#     treeWidget.setDropIndicatorShown(True)
-#     return treeWidget
-
-
-# if __name__ == '__main__':
-#     import sys
-#
-#     app = QApplication(sys.argv)
-#     app.setStyle("fusion")
-#     w1 = create_treeWidget("tree1", 3)
-#     w2 = create_treeWidget("tree2", 3)
-#     w1.show()
-#     w2.show()
-#     sys.exit(app.exec_())

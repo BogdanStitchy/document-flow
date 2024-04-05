@@ -15,13 +15,12 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.result_searching = None
         self.data_about_documents = None
         self.dialog_window = None
-        self.setObjectName("MainWindow")
-        self.resize(895, 605)
         self.setupUi()
-        self.resize(900, 605)
+
         self.show()
 
     def setupUi(self):
+        self.resize(900, 605)
         self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -237,35 +236,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setSizePolicy(sizePolicy)
         self.tableWidget.setMinimumSize(QtCore.QSize(877, 498))
         self.tableWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        # palette = QtGui.QPalette()
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        # brush = QtGui.QBrush(QtGui.QColor(255, 230, 154))
-        # brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        # self.tableWidget.setPalette(palette)
+
         self.tableWidget.setFont(font)
         self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
@@ -277,16 +248,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(10)
         self.tableWidget.setColumnHidden(9, True)
-        # # column_widths = [20, 8, 8, 12, 10, 12, 15]
-        # column_widths = [20, 10, 10, 10, 10, 10, 10, 10, 10]
-        # total_widths = sum(column_widths)
-        # print("self.tableWidget.width() = ", self.width())
-        # for i in range(9):
-        #     width = int(column_widths[i] / total_widths * self.width())
-        #     print(f"i = {i}\twidth = {width}")
-        #     self.tableWidget.setColumnWidth(i, width)
-        #     # self.tableWidget.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-        # self.tableWidget.setRowCount(0)
+
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -402,7 +364,6 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             self.tableWidget.setCellWidget(number_row, 8, button_downlad)  # Установка кнопки скачать
             self.tableWidget.setItem(number_row, 9, QtWidgets.QTableWidgetItem(str(row.id)))  # Установка индекса
             number_row += 1
-        # print("init table documents finished")
         return True
 
     def press_button_download(self, id_document: int, name_file: str):

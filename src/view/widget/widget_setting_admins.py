@@ -13,12 +13,13 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         super().__init__()
         self.data_about_users = None
         self.dialog_window = None
-        self.setObjectName("MainWindow")
-        self.resize(895, 605)
         self.setupUi()
         self.show()
 
     def setupUi(self):
+        self.setObjectName("MainWindow")
+        self.resize(895, 605)
+
         self.centralwidget = QtWidgets.QWidget(self)
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -225,7 +226,7 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
         self.tableWidget = QtWidgets.QTableWidget(self.frame_body)
         self.tableWidget.setSortingEnabled(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        # self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(100)
         sizePolicy.setVerticalStretch(100)
@@ -303,7 +304,6 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
     def press_button_refresh(self):
         self.pushButton_period_search.setText("период")
         self.data_about_users = controller.get_data_about_admins()
-        # print(self.data_about_users)
         self.fill_in_table(self.data_about_users)
 
     def press_button_home(self):
@@ -335,7 +335,6 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 
             number_row += 1
         return True
-        print("init table finished")
 
     def press_button_delete(self):
         items = self.tableWidget.selectedItems()
@@ -398,16 +397,6 @@ class WidgetSettingUsers(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     import sys
 
-    # app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
-    # ui = WidgetDocuments()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
-    # sys.exit(app.exec_()
-
     app = QtWidgets.QApplication(sys.argv)
-    # MainWindow = QtWidgets.QMainWindow()
     ui = WidgetSettingUsers()
-    # ui.setupUi(MainWindow)
-    # MainWindow.show()
     sys.exit(app.exec_())

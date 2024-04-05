@@ -12,12 +12,12 @@ class DialogWidgetSelectDepartment(QDialog):
         self.selected_department = None
         self.id_department_delete = id_department_delete
 
-        self.setWindowTitle("Выбор отдела для перемещения пользователей")
         self.show()
         self.__setupUi()
 
     def __setupUi(self):
         self.show()
+        self.setWindowTitle("Выбор отдела для перемещения пользователей")
 
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
@@ -34,7 +34,6 @@ class DialogWidgetSelectDepartment(QDialog):
 
         self.label_instruction = QtWidgets.QLabel(self)
         self.label_instruction.setAlignment(QtCore.Qt.AlignCenter)
-        # self.label_instruction.setFont(font)
         self.label_instruction.setText("Выберите, к какому отделу необходимо прикрепить людей из удаляемого отдела:")
         self.verticalLayout.addWidget(self.label_instruction)
 
@@ -63,13 +62,11 @@ class DialogWidgetSelectDepartment(QDialog):
     def __save_answer(self):
         try:
             department = self.group.checkedButton().objectName()  # получаем выбранную радиобаттон
-            print(department)
             self.selected_department = department
             self.close()
         except Exception as ex:
             self.dialog_window = QtWidgets.QMessageBox().warning(self, "Выбор отдела",
                                                                  "Выберите отдел!")
-            print("[Error] save_answer (dialog_select_department.py)\n", ex)
 
     def get_selected_answer(self):
         return self.selected_department
@@ -81,9 +78,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     Dialog_add_user = QtWidgets.QWidget()
     Dialog_add_user.show()
-
-    Dialog_add_user.setWindowTitle("TRGGFFG")
-    # print(Dialog_add_user.windowTitle())
 
     ui = DialogWidgetSelectDepartment(Dialog_add_user)
 

@@ -109,8 +109,7 @@ class DialogAddDocument(QDialog):
         self.label_date.setObjectName("label_date")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_date)
 
-        self.frame_for_drop = DropFrame(parent=self.main_frame, main_widget=self)  # QtWidgets.QFrame(self.main_frame)
-        # self.frame_for_drop.setAcceptDrops(False)
+        self.frame_for_drop = DropFrame(parent=self.main_frame, main_widget=self)
         self.frame_for_drop.setStyleSheet("background-color: rgb(255, 230, 154);\n"
                                           "border-radius: 5px;\n"
                                           "")
@@ -242,8 +241,6 @@ class DialogAddDocument(QDialog):
 
 class DropFrame(QtWidgets.QFrame):
     def __init__(self, parent=None, main_widget=None):
-        print(f"{parent=}")
-        print(f"{main_widget=}")
         super().__init__(parent)
         self.setAcceptDrops(True)
         self.main_widget = main_widget

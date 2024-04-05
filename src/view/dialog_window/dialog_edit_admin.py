@@ -25,7 +25,6 @@ class DialogWidgetEditAdmin(QDialog):
         self.setObjectName("Dialog_add_user")
         self.resize(550, 250)
         self.setMinimumSize(QtCore.QSize(320, 250))
-        # self.setMaximumSize(QtCore.QSize(400, 380))
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -190,7 +189,6 @@ if __name__ == "__main__":
     Dialog_add_admin.show()
 
     Dialog_add_admin.setWindowTitle("TRGGFFG")
-    # print(Dialog_add_user.windowTitle())
 
     ui = DialogWidgetEditAdmin(Dialog_add_admin)
 

@@ -1,4 +1,3 @@
-import datetime
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -11,19 +10,19 @@ from src.view.dialog_window.dialog_password_change import DialogWidgetChangePass
 class WindowUser(QtWidgets.QMainWindow):
     def __init__(self):
         super(WindowUser, self).__init__()
-        self.setObjectName("MainWindow")
-        self.resize(1110, 706)
-        self.setMinimumSize(900, 706)
-        path_to_images = Path(Path().cwd().parent.parent, "pictures")
-        print("path in user = ", (str(Path(path_to_images, "logo.png"))))
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.setWindowIcon(icon)
+
         self.setupUi()
         self.show()
         self.check_needs_password_change()
 
     def setupUi(self):
+        self.resize(1110, 706)
+        self.setMinimumSize(900, 706)
+        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
+
         self.centralwidget = QtWidgets.QWidget(self)
 
         font = QtGui.QFont()
@@ -95,7 +94,7 @@ class WindowUser(QtWidgets.QMainWindow):
         self.login.show()
         self.close()
 
-    def check_needs_password_change(self):  # вся логика должна быть в модели
+    def check_needs_password_change(self):
         need_change = controller.check_needs_password_change()
         if need_change:
             self.dialog = DialogWidgetChangePassword(self)

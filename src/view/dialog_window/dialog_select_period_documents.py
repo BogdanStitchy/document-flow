@@ -18,7 +18,6 @@ class DialogSelectDate(QDialog):
         font = QtGui.QFont()
         font.setFamily("Monospac821 BT")
         font.setPointSize(9)
-        # font.setBold(True)
         font.setWeight(75)
 
         font_dash = QtGui.QFont()

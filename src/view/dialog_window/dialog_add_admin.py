@@ -9,16 +9,14 @@ class DialogWidgetAddAdmin(QDialog):
         self.dialog_window = None
         self.setModal(True)
         self.main_window = main_window
-        self.setWindowTitle("Добавление админа")
         self.show()
         self.setupUi()
 
     def setupUi(self):
-        self.show()
+        self.setWindowTitle("Добавление админа")
         self.setObjectName("Dialog_add_user")
         self.resize(550, 250)
         self.setMinimumSize(QtCore.QSize(320, 250))
-        # self.setMaximumSize(QtCore.QSize(400, 380))
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -175,9 +173,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     Dialog_add_user = QtWidgets.QWidget()
     Dialog_add_user.show()
-
-    Dialog_add_user.setWindowTitle("TRGGFFG")
-    # print(Dialog_add_user.windowTitle())
 
     ui = DialogWidgetAddAdmin(Dialog_add_user)
 

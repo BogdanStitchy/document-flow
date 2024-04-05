@@ -22,7 +22,6 @@ class DialogWidgetChangePassword(QDialog):
         self.setObjectName("Dialog")
         self.resize(400, 300)
         self.setStyleSheet("background-color: rgb(146, 180, 236);")
-        # self.setFont(font)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame = QtWidgets.QFrame(self)

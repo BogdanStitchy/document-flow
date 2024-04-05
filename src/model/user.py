@@ -25,7 +25,10 @@ class User:
         self.DATE_LAST_CHANGES_PASSWORD = None
 
     def get_role(self):
-        return self.role
+        return self.role.name
+
+    def get_id(self):
+        return self.CURRENT_ID
 
     def get_lvl_access(self):
         return self.LVL_ACCESS
@@ -61,17 +64,17 @@ class User:
         data_user: {} = UserDB.check_password(login)
 
         if data_user is None:
-            raise ClientNotFoundError("Пользователь с указанным логином не найден в базе!\n"
+            raise ClientNotFoundError(f"Пользователь с логином '{login}' не найден в базе!\n"
                                       "Проверьте логин и выбранную роль пользователя")
 
         if not data_user['active']:
-            raise ClientActiveError("Учетная запись пользователя с указанными данными деактивирована.\n"
+            raise ClientActiveError(f"Учетная запись пользователя '{login}' с указанными данными деактивирована.\n"
                                     "Для активации учетной записи обратитесь к администратору.")
 
         password = tools.create_hash_password(password, data_user['salt'])
 
         if password != bytes(data_user['password']):
-            raise ClientPasswordError("Указан неправильный пароль")
+            raise ClientPasswordError(f"Для пользователя '{login}' указан неправильный пароль")
 
         if setting_received_data:
             self.set_self_data(data_user=data_user, login_user=login)

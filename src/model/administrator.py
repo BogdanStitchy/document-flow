@@ -37,17 +37,17 @@ class Administrator(User):
         data_about_admin: {} = AdminMethodsDB.check_password(login)
 
         if data_about_admin is None:
-            raise ClientNotFoundError("Администратор с указанным логином не найден в базе!\n"
+            raise ClientNotFoundError(f"Администратор '{login}' не найден в базе!\n"
                                       "Проверьте логин и выбранную роль пользователя")
 
         if not data_about_admin['active']:
-            raise ClientActiveError("Учетная запись администратора с указанными данными деактивирована.\n"
+            raise ClientActiveError(f"Учетная запись администратора '{login}' деактивирована.\n"
                                     "Для активации учетной записи обратитесь к супер администратору.")
 
         password = tools.create_hash_password(password, data_about_admin["salt"])
 
         if password != bytes(data_about_admin['password']):
-            raise ClientPasswordError("Указан неправильный пароль")
+            raise ClientPasswordError(f"Для администратора '{login}' указан неправильный пароль")
 
         # admin successful login in system
         if setting_received_data:

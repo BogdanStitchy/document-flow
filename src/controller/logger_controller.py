@@ -6,8 +6,9 @@ from src.db.models.logs import Logs
 
 # Настройка логгера
 controller_logger = logger.bind(client_id="", role="")
-controller_logger.add("logs.log",
-                      format="{time} {level} role={extra[role]} client_id={extra[client_id]} method={extra[method]} -> {message}")
+controller_logger.add("logs/logs.log",
+                      format="{time} {level} role={extra[role]} client_id={extra[client_id]} method={extra[method]} -> {message}",
+                      rotation="5 MB", compression="zip")
 
 
 def write_log_to_database(message):

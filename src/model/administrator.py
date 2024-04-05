@@ -95,12 +95,10 @@ class Administrator(User):
 
     @staticmethod
     def search_string_in_documents(search_string: str):
-        # return db_helper.search_string_in_documents_for_admin(search_string)
         return AdminMethodsDB.find_documents_words(search_string)
 
     @staticmethod
     def search_string_in_users(search_string: str):
-        # return db_helper.search_string_in_users(search_string)
         return AdminMethodsDB.find_users_words(search_string)
 
     def apply_period_searching_documents(self, flag_date_output: bool, flag_date_download: bool,
@@ -160,7 +158,6 @@ class Administrator(User):
     @staticmethod
     def change_activation_status(id_user: int):
         AdminMethodsDB.change_user_activity_status(id_user)
-        # db_helper.change_activation_status_user(id_user)
 
 
 if __name__ == '__main__':

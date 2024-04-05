@@ -30,7 +30,6 @@ class SuperAdmin(Administrator):
 
     @staticmethod
     def get_data_about_admins():
-        # return db_helper.get_data_about_admins()
         return SuperAdminMethodsDB.get_all_admins()
 
     @staticmethod
@@ -42,7 +41,6 @@ class SuperAdmin(Administrator):
         start_date_creating = datetime.strptime(start_date_creating, "%d.%m.%Y")
         end_date_creating = datetime.strptime(end_date_creating, "%d.%m.%Y")
         return SuperAdminMethodsDB.find_admins_period(start_date_creating, end_date_creating)
-        # return db_helper.apply_period_searching_registration_admins(start_date_download, end_date_download)
 
     @staticmethod
     def change_activation_status_admin(id_admin: int):

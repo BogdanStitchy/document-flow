@@ -1,13 +1,26 @@
 from typing import Tuple, Optional
 
+from src.controller import logger_controller
+
 from src.model.user import User
 from src.model.administrator import Administrator
 from src.model.super_admin import SuperAdmin
-from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, FileNotWrittenError
+from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveError, ClientNotFoundError, \
+    FileNotWrittenError
 from src.config.types_role import Role
 
+client = SuperAdmin
 
-client = SuperAdmin  # Client("admin").client
+
+def __setup_logger(role: Role, id_client: int, database_entry=False):
+    """
+    needed to explicitly specify logging settings. Called when the user is authorized
+    :param role:
+    :param id_client:
+    :param database_entry:
+    :return:
+    """
+    logger_controller.set_setting_logger(role, id_client, database_entry=database_entry)
 
 
 def authenticate(login: str, password: str, role: Role) -> Tuple[Optional[str], Optional[str]]:
@@ -24,10 +37,10 @@ def authenticate(login: str, password: str, role: Role) -> Tuple[Optional[str], 
     except (ClientActiveError, ClientNotFoundError, ClientPasswordError) as ex:
         return None, str(ex)
     except Exception as ex:
-        # log
         return None, f"Неизвестная ошибка, обратитесь к разработчикам. \nКод ошибки: 001"
 
 
+@logger_controller.log
 def __check_login(login: str, password: str, role: Role):
     """
 
@@ -42,19 +55,21 @@ def __check_login(login: str, password: str, role: Role):
 
     if role == Role.ADMIN:
         client = Administrator()
-        result = client.check_password(login, password)  # superAdmin or Admin
-        if result == role.SUPERADMIN:
-            client = SuperAdmin()
-        return result
 
     elif role == Role.USER:
         client = User()
-        result = client.check_password(login, password)
-        return result
+
+    result = client.check_password(login, password)
+
+    if result == role.SUPERADMIN:
+        client = SuperAdmin()
+
+    __setup_logger(client.get_role(), client.get_id())
+
+    return result
 
 
 def save_hierarchy(list_hierarchy: list):
-    # log
     client.save_hierarchy(list_hierarchy)
 
 
@@ -97,6 +112,7 @@ def delete_document(id_document: int):
     client.delete_document(id_document)
 
 
+@logger_controller.log
 def edit_document(id_document: int, name_document: str, inner_number: str, output_number: str,
                   output_date, type_document: str):
     # log

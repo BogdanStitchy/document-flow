@@ -13,4 +13,4 @@ class Logs(Base):
     client_id = mapped_column(Integer, nullable=False)
     role = mapped_column(String(100), nullable=False)
     method = mapped_column(String(150), nullable=False)
-    message = mapped_column(String(250), nullable=False)
+    status = mapped_column(String(250), nullable=False)

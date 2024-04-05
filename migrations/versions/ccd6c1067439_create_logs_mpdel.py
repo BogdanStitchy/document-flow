@@ -23,12 +23,13 @@ def upgrade() -> None:
     op.create_table(
         'logs',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+        sa.PrimaryKeyConstraint('id'),
         sa.Column('time', sa.DateTime(), nullable=False),
         sa.Column('level', sa.String(length=100), nullable=False),
         sa.Column('client_id', sa.Integer(), nullable=False),
         sa.Column('role', sa.String(length=100), nullable=False),
         sa.Column('method', sa.String(length=150), nullable=False),
-        sa.Column('message', sa.String(length=250), nullable=False),
+        sa.Column('status', sa.String(length=250), nullable=False),
     )
     # ### end Alembic commands ###
 

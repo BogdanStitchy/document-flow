@@ -309,9 +309,10 @@ class WidgetDocuments(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Скачать"))
 
     def press_button_add_document(self):
-        if controller.get_role() != Role.USER:
+        if controller.get_role() != Role.USER.name:
             QtWidgets.QMessageBox.warning(self, "Предупреждение",
                                           "Добавлять документы могут только пользователи, не администраторы!")
+            self.pushButton_add.setEnabled(False)
             return
         self.dialog_window = dialog_add_document.DialogAddDocument(self)
 
@@ -376,7 +377,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.critical(self, "Ошибка", potential_error)
 
     def press_button_delete_document(self):
-        if controller.get_role() == Role.USER:
+        if controller.get_role() == Role.USER.name:
             QtWidgets.QMessageBox.information(self, "Ошибка доступа",
                                               "Удалять документы могут только администраторы!\n"
                                               "Для удаления документа обратитесь к администратору.")
@@ -396,7 +397,7 @@ class WidgetDocuments(QtWidgets.QMainWindow):
                                                                  "(крайний левый стоблец).")
 
     def press_button_edit_document(self):
-        if controller.get_role() == Role.USER:
+        if controller.get_role() == Role.USER.name:
             QtWidgets.QMessageBox.information(self, "Ошибка доступа",
                                               "Редактировать документы могут тольуо администраторы!\n"
                                               "Для редактирования документа обратитесь к администратору.")

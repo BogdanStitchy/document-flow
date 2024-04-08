@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QButtonGroup
+from PyQt5.QtWidgets import QDialog
 from src.model.for_data_base.db_helper_for_hierarchy_derartments import get_all_departments
 from src.controller import controller_main_window as controller
 

@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QButtonGroup
+from PyQt5.QtWidgets import QDialog
 from src.controller import controller_main_window as controller
 
 

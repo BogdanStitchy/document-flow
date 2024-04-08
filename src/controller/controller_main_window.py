@@ -259,5 +259,10 @@ def get_all_departments_without_one(id_exempt_department: int):
 
 
 @logger_controller.log
+def get_all_departments():
+    return client.get_all_departments()
+
+
+@logger_controller.log
 def get_number_department():
     return client.get_number_department()

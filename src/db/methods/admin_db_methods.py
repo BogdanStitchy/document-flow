@@ -157,6 +157,15 @@ class AdminMethodsDB:
 
     @staticmethod
     @pydantic.validate_call
+    def get_all_departments() -> [{}, {}]:
+        with session_factory() as session:
+            result = session.execute(select(Departments.id,
+                                            Departments.number_department, Departments.name_department))
+            departments = result.mappings().fetchall()
+            return departments
+
+    @staticmethod
+    @pydantic.validate_call
     def get_all_documents() -> [{}, {}]:
         with session_factory() as session:
             result = session.execute(select(

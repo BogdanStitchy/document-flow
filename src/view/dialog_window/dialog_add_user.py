@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
-from src.model.for_data_base.db_helper_for_hierarchy_derartments import get_all_departments
 from src.controller import controller_main_window as controller
 
 
@@ -166,10 +165,10 @@ class DialogWidgetAddUser(QDialog):
         self.pushButton_cancel.setText(_translate("Dialog_add_user", "Отмена"))
 
     def add_radiobutton(self):
-        departments = get_all_departments()
+        departments = controller.get_all_departments()
         for department in departments:
-            radio_button = QtWidgets.QRadioButton(f"{department[2]} - {department[1]}")
-            radio_button.setObjectName(str(department[0]))
+            radio_button = QtWidgets.QRadioButton(f"{department.number_department} - {department.name_department}")
+            radio_button.setObjectName(str(department.id))
             self.verticalLayout_2.addWidget(radio_button)
             self.group.addButton(radio_button)
 

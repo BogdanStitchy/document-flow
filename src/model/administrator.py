@@ -131,6 +131,10 @@ class Administrator(User):
     def get_data_about_users():
         return AdminMethodsDB.get_all_users()
 
+    @staticmethod
+    def get_all_departments():
+        return AdminMethodsDB.get_all_departments()
+
     @pydantic.validate_call
     def add_user(self, last_name: str, name: str, patronymic: str, login: str, password: str,
                  id_department: int):

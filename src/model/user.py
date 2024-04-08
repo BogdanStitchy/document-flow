@@ -8,9 +8,10 @@ from src.model.utils.custom_exceptions import ClientPasswordError, ClientActiveE
     FileNotWrittenError
 
 from src.db.methods.user_db_methods import UserDB
+from src.model.singleton_meta import SingletonMeta
 
 
-class User:
+class User(metaclass=SingletonMeta):
     role = Role.USER
 
     def __init__(self):

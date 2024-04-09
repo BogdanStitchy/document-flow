@@ -72,7 +72,16 @@ class SuperAdminMethodsDB(AdminMethodsDB):
     def get_one_admin(id_admin: int) -> {}:
         with session_factory() as session:
             result = session.execute(
-                select(Admins.__table__).where(Admins.__table__.c.id == id_admin))
+                select(Admins.__table__).where(Admins.id == id_admin))
+            admin = result.mappings().fetchone()
+            return admin
+
+    @staticmethod
+    @pydantic.validate_call
+    def get_super_admin() -> {}:
+        with session_factory() as session:
+            result = session.execute(
+                select(Admins.__table__).where(Admins.super_admin_flag is True))
             admin = result.mappings().fetchone()
             return admin
 

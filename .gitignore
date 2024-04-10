@@ -1,6 +1,7 @@
 .idea/
 venv
-pictures
+pictures/variables
+src/view/pictures/
 .env
 src/view/client.py
 src/model/server

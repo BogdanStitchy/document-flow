@@ -18,7 +18,7 @@ class WindowSuperAdmin(QtWidgets.QMainWindow):
         self.setObjectName("MainWindow")
         self.resize(1110, 706)
         self.setMinimumSize(900, 706)
-        path_to_images = Path(Path().cwd().parent.parent, "pictures")
+        path_to_images = Path(Path().cwd(), "pictures")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(str(Path(path_to_images, "logo.png"))), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)

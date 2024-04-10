@@ -1,6 +1,7 @@
 ![Static Badge](https://img.shields.io/badge/Python-%2350C878?style=for-the-badge&logo=python)
 ![Static Badge](https://img.shields.io/badge/PyQt-%2350C878?style=for-the-badge&logo=qt&logoColor=black)
 ![Static Badge](https://img.shields.io/badge/sqlalchemy-%2350C878?style=for-the-badge&logo=sqlalchemy&logoColor=black)
+![Static Badge](https://img.shields.io/badge/pydantic-%2350C878?style=for-the-badge&logo=pydantic&logoColor=black)
 ![Static Badge](https://img.shields.io/badge/alembic-%2350C878?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/pytest-%2350C878?style=for-the-badge&logo=pytest&logoColor=black)
 ![Static Badge](https://img.shields.io/badge/loguru-%2350C878?style=for-the-badge)
